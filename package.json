@@ -4,6 +4,8 @@
   "description": "The Odin Project: Battleship",
   "private": "true",
   "scripts": {
+    "build-watch": "webpack --watch",
+    "test-watch": "jest --watch",
     "build-dev": "webpack --mode development",
     "build-prod": "webpack --mode production",
     "test": "jest"
