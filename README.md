@@ -1,2 +1,2 @@
-# -Battleship
+# Battleship
 The Odin Project: Battleship
