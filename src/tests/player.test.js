@@ -32,3 +32,9 @@ test('Player: Attack (Miss)', () => {
 
   expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
 });
+
+test('Computer: Attack', () => {
+  const enemyBoard = playerHuman.gameboard;
+
+  expect(playerComputer.attack(enemyBoard)).toMatch(/(Hit!)|(Miss!)/g);
+});

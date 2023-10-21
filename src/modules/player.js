@@ -1,9 +1,21 @@
 import createGameboard from './gameboard';
 import createShip from './ship';
 
+const getRandomCoordinates = (markedFields) => {
+  const randomX = Math.floor(Math.random() * 10);
+  const randomY = Math.floor(Math.random() * 10);
+  let randomCoord = [randomX, randomY];
+
+  while (markedFields.includes(randomCoord)) {
+    randomCoord = getRandomCoordinates(markedFields);
+  }
+
+  return randomCoord;
+};
+
 const createPlayer = (name, isHuman = true) => {
   const gameboard = createGameboard();
-
+  const markedFields = [];
   const storedShips = {
     AircraftCarrier: { ship: createShip(5), quantity: 1 },
     Battleship: { ship: createShip(4), quantity: 1 },
@@ -12,12 +24,10 @@ const createPlayer = (name, isHuman = true) => {
     Submarine1: { ship: createShip(1), quantity: 2 },
   };
 
-  const madeShots = [];
-
   return {
+    name,
     storedShips,
     gameboard,
-    madeShots,
     placeShip(shipName, coordinates) {
       const current = storedShips[shipName];
 
@@ -31,7 +41,12 @@ const createPlayer = (name, isHuman = true) => {
       return current;
     },
     attack(enemyBoard, coordinates) {
-      return enemyBoard.receiveAttack(coordinates);
+      const correctCoordinates = isHuman
+        ? coordinates
+        : getRandomCoordinates(markedFields);
+
+      markedFields.push(correctCoordinates);
+      return enemyBoard.receiveAttack(correctCoordinates);
     },
   };
 };
