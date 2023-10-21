@@ -1,7 +1,7 @@
 import createGameboard from './gameboard';
 import createShip from './ship';
 
-const createPlayer = (name, isReal = true) => {
+const createPlayer = (name, isHuman = true) => {
   const gameboard = createGameboard();
 
   const storedShips = {

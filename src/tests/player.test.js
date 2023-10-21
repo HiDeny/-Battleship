@@ -9,14 +9,26 @@ test('Player: have board', () => {
 });
 
 test('Player: Place ship', () => {
-  playerHuman.placeShip('AircraftCarrier', [9, 4]);
+  playerHuman.placeShip('AircraftCarrier', [4, 4, true]);
 
   expect(playerHuman.gameboard.shipsOnBoard.length).toBeGreaterThan(0);
 });
 
-test('Player: Attack', () => {
+test('Player: Place ship (fail)', () => {
+  expect(() =>
+    playerHuman.placeShip('AircraftCarrier', [4, 4, true])
+  ).toThrow();
+});
+
+test('Player: Attack (Hit)', () => {
   const enemyBoard = playerComputer.gameboard;
-  enemyBoard.placeShip('Battleship', [1, 8, true]);
+  playerComputer.placeShip('Battleship', [0, 1, true]);
+
+  expect(playerHuman.attack(enemyBoard, [1, 1])).toBe('Hit!');
+});
+
+test('Player: Attack (Miss)', () => {
+  const enemyBoard = playerComputer.gameboard;
 
   expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
 });
