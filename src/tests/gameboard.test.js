@@ -12,7 +12,7 @@ test('Gameboard: Place ships at specific coordinates', () => {
   testGameboard.placeShip(testShip, coordinates);
 
   for (let i = coordinates[1]; i < coordinates[1] + testShip.length; i += 1) {
-    expect(board[coordinates[0]][i].haveBoat).toHaveProperty('length');
+    expect(board[coordinates[0]][i].boat).toHaveProperty('length');
   }
 });
 
@@ -24,7 +24,7 @@ test('Gameboard: Place ships at specific coordinates', () => {
   testGameboard.placeShip(testShip, coordinates);
 
   for (let i = coordinates[1]; i < coordinates[1] + testShip.length; i += 1) {
-    expect(board[coordinates[0]][i].haveBoat).toHaveProperty('length');
+    expect(board[coordinates[0]][i].boat).toHaveProperty('length');
   }
 });
 
@@ -50,11 +50,11 @@ test.todo('Gameboard: keep track of missed attacks');
 
 test('Gameboard: report whether if all ships sunk (no ships)', () => {
   const testGameboard2 = createGameboard();
-  expect(testGameboard2.allSunk()).toBe('No ships on board yet.');
+  expect(testGameboard2.checkShips()).toBe('No ships on board');
 });
 
 test('Gameboard: report whether if all sunk (not all sunk)', () => {
-  expect(testGameboard.allSunk()).toBe('Living ships on board');
+  expect(testGameboard.checkShips()).toBe('Active ships on board');
 });
 
 test('Gameboard: report whether if all sunk (all sunk)', () => {
@@ -64,5 +64,5 @@ test('Gameboard: report whether if all sunk (all sunk)', () => {
 
   testGameboard.receiveAttack([9, 2]);
 
-  expect(testGameboard.allSunk()).toBe('All ships sunk');
+  expect(testGameboard.checkShips()).toBe('All ships destroyed');
 });
