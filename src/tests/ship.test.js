@@ -1,4 +1,5 @@
-import createShip from '../ship';
+/* eslint-disable no-undef */
+import createShip from '../modules/ship';
 
 const testShip = createShip(3);
 
