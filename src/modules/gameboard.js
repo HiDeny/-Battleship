@@ -27,8 +27,8 @@ const field = (coordinates) => {
 const createGameboard = () => {
   const rows = 10;
   const columns = 10;
-  const board = [];
 
+  const board = [];
   const activeShips = [];
 
   for (let i = 0; i < rows; i += 1) {
@@ -38,16 +38,40 @@ const createGameboard = () => {
     }
   }
 
+  const checkCoordinates = (coordinates, length) => {
+    const [dynamicDir, fixedDir] = coordinates;
+
+    if (dynamicDir + length > 9 || fixedDir > 9) {
+      throw new Error('Out of board!');
+    }
+
+    for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
+      const currentField = board[fixedDir][i];
+      if (currentField.haveBoat) return false;
+    }
+
+    return true;
+  };
+
   return {
     getBoard() {
       return board;
     },
     placeShip(newShip, coordinates) {
-      // Update placement strategy 
-      const [row, column, dir] = coordinates;
+      const [row, column, isVertical] = coordinates;
+      // Dir === True  (ship will be placed vertically)
+      const dynamicDir = isVertical ? row : column;
+      const fixedDir = isVertical ? column : row;
 
-      for (let i = column; i < column + newShip.length; i += 1) {
-        const currentField = board[row][i];
+      // Update placement strategy
+      const isAvailable = checkCoordinates(
+        [dynamicDir, fixedDir],
+        newShip.length
+      );
+      if (!isAvailable) throw new Error('Place Ship: Wrong coordinates!');
+
+      for (let i = dynamicDir; i < dynamicDir + newShip.length; i += 1) {
+        const currentField = board[fixedDir][i];
         currentField.setBoat(newShip);
       }
       activeShips.push(newShip);
@@ -57,6 +81,7 @@ const createGameboard = () => {
       }`;
     },
     receiveAttack(coordinates) {
+      if (!activeShips.length) return 'No ships on board yet.';
       const [row, column] = coordinates;
       const currentField = board[row][column];
       const gotHit = currentField.markHit();

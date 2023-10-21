@@ -20,6 +20,9 @@ const createPlayer = (name, isReal = true) => {
     storedShips,
     gameboard,
     madeShots,
+    attack(enemyBoard, coordinates) {
+      return enemyBoard.receiveAttack(coordinates);
+    },
   };
 };
 
