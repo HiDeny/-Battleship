@@ -1,19 +1,21 @@
 const field = (coordinates) => {
   let mark = null;
-  let boat = null;
+  let ship = null;
 
   return {
     coordinates,
-
-    boat(newBoat) {
-      if (newBoat && !boat) boat = newBoat;
-      return boat;
+    get ship() {
+      return ship;
+    },
+    set ship(newShip) {
+      if (ship) throw new Error('Ship already set!');
+      ship = newShip;
     },
     markField() {
       if (mark !== null) throw new Error(`Already marked!`);
 
-      if (boat) boat.hit();
-      mark = boat ? 'Hit!' : 'Miss!';
+      if (ship) ship.hit();
+      mark = ship ? 'Hit!' : 'Miss!';
 
       return mark;
     },
@@ -49,7 +51,7 @@ const createGameboard = () => {
 
     for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
       const currentField = board[fixedDir][i];
-      if (currentField.haveBoat) {
+      if (currentField.ship) {
         throw new Error('Check coordinates: Field Occupied!');
       }
     }
@@ -58,9 +60,7 @@ const createGameboard = () => {
   };
 
   return {
-    getBoard() {
-      return board;
-    },
+    board,
     placeShip(newShip, coordinates) {
       const [row, column, isVertical] = coordinates;
 
@@ -72,7 +72,7 @@ const createGameboard = () => {
 
       for (let i = dynamicDir; i < dynamicDir + newShip.length; i += 1) {
         const currentField = board[fixedDir][i];
-        currentField.boat(newShip);
+        currentField.ship = newShip;
       }
       shipsOnBoard.push(newShip);
 

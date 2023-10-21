@@ -6,25 +6,49 @@ const testGameboard = createGameboard();
 
 test('Gameboard: Place ships at specific coordinates', () => {
   const testShip = createShip(2);
-  const coordinates = [9, 1, false];
-  const board = testGameboard.getBoard();
+  const coordinates = [9, 1];
+  const { board } = testGameboard;
 
   testGameboard.placeShip(testShip, coordinates);
 
   for (let i = coordinates[1]; i < coordinates[1] + testShip.length; i += 1) {
-    expect(board[coordinates[0]][i].boat).toHaveProperty('length');
+    expect(board[coordinates[0]][i].ship).toHaveProperty('length');
   }
 });
 
-test('Gameboard: Place ships at specific coordinates', () => {
+test('Gameboard: Place ships at specific coordinates (horizontal)', () => {
   const testShip = createShip(3);
   const coordinates = [8, 1];
-  const board = testGameboard.getBoard();
+  const { board } = testGameboard;
 
   testGameboard.placeShip(testShip, coordinates);
 
   for (let i = coordinates[1]; i < coordinates[1] + testShip.length; i += 1) {
-    expect(board[coordinates[0]][i].boat).toHaveProperty('length');
+    expect(board[coordinates[0]][i].ship).toHaveProperty('length');
+  }
+});
+
+test('Gameboard: Place ships at specific coordinates (vertical)', () => {
+  const testShip = createShip(3);
+  const coordinates = [6, 1, true];
+  const { board } = testGameboard;
+
+  testGameboard.placeShip(testShip, coordinates);
+
+  for (let i = coordinates[1]; i < coordinates[1] + testShip.length; i += 1) {
+    expect(board[coordinates[0]][i].ship).toHaveProperty('length');
+  }
+});
+
+test('Gameboard: Place ships at specific coordinates (fail)', () => {
+  const testShip = createShip(3);
+  const coordinates = [8, 1];
+  const { board } = testGameboard;
+
+  testGameboard.placeShip(testShip, coordinates);
+
+  for (let i = coordinates[1]; i < coordinates[1] + testShip.length; i += 1) {
+    expect(board[coordinates[0]][i].ship).toHaveProperty('length');
   }
 });
 

@@ -8,14 +8,15 @@ test('Player: have board', () => {
   expect(playerHuman.gameboard).toBeDefined();
 });
 
-test.skip('Player: Place ship', () => {
-  const enemyBoard = playerComputer.gameboard;
-  console.log(playerComputer.storedShips);
-  expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
+test('Player: Place ship', () => {
+  playerHuman.placeShip('AircraftCarrier', [9, 4]);
+
+  expect(playerHuman.gameboard.shipsOnBoard.length).toBeGreaterThan(0);
 });
 
-test.skip('Player: Attack', () => {
+test('Player: Attack', () => {
   const enemyBoard = playerComputer.gameboard;
-  console.log(playerComputer.storedShips);
+  enemyBoard.placeShip('Battleship', [1, 8, true]);
+
   expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
 });
