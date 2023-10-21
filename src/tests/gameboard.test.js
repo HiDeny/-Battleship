@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import createGameboard from '../gameboard';
-import createShip from '../ship';
+import createGameboard from '../modules/gameboard';
+import createShip from '../modules/ship';
 
 const testGameboard = createGameboard();
 
