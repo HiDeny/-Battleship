@@ -1,8 +1,18 @@
-const field = (name) => {
+const field = (coordinates) => {
+  let haveBoat = false;
+  // let isHit = null;
+
   return {
-    name,
-    haveBoat: null,
-    isHit: null,
+    coordinates,
+    haveBoat,
+    // setBoat() {
+    //   haveBoat = !haveBoat;
+    //   return haveBoat;
+    // },
+    markHit() {
+      isHit = haveBoat ? 'Hit' : 'Miss';
+      return isHit;
+    },
   };
 };
 
@@ -22,16 +32,22 @@ const createGameboard = () => {
     getBoard() {
       return board;
     },
-    placeShip(ship, start) {
-      for (let i = start; i < start + ship.legth; i += 1) {
-        const currentField = board[i];
-        currentField.haveBoat = true;
+    placeShip(ship, arr) {
+      const row = arr[0];
+      const column = arr[1];
+
+      for (let i = column; i < column + ship.length; i += 1) {
+        const currentField = board[row][i];
+        currentField.haveBoat = ship;
       }
-      return 'Ship placed';
+
+      return `Start: X:${row}, Y:${column} End: X:${row}, Y:${
+        column + (ship.length - 1)
+      }`;
     },
   };
 };
 
 const test = createGameboard();
-console.log(test.getBoard());
+// console.log(test.getBoard());
 export default createGameboard;
