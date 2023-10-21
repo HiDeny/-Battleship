@@ -17,7 +17,7 @@ test('Gameboard: Place ships at specific coordinates', () => {
 });
 
 test('Gameboard: Place ships at specific coordinates', () => {
-  const testShip = createShip(4);
+  const testShip = createShip(3);
   const coordinates = [8, 1];
   const board = testGameboard.getBoard();
 
@@ -48,4 +48,21 @@ test('Gameboard: receiveAttack (Error)', () => {
 
 test.todo('Gameboard: keep track of missed attacks');
 
-test.todo('Gameboard: report whether if all ships have been sunk.');
+test('Gameboard: report whether if all ships sunk (no ships)', () => {
+  const testGameboard2 = createGameboard();
+  expect(testGameboard2.allSunk()).toBe('No ships on board yet.');
+});
+
+test('Gameboard: report whether if all sunk (not all sunk)', () => {
+  expect(testGameboard.allSunk()).toBe('Living ships on board');
+});
+
+test('Gameboard: report whether if all sunk (all sunk)', () => {
+  testGameboard.receiveAttack([8, 1]);
+  testGameboard.receiveAttack([8, 2]);
+  testGameboard.receiveAttack([8, 3]);
+
+  testGameboard.receiveAttack([9, 2]);
+
+  expect(testGameboard.allSunk()).toBe('All ships sunk');
+});

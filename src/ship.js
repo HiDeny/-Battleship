@@ -13,6 +13,7 @@ const createShip = (length) => {
     },
     hit() {
       health -= 1;
+      if (health < 1) return this.isSunk();
       return 'Got hit';
     },
   };
