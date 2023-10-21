@@ -6,7 +6,7 @@ const testGameboard = createGameboard();
 
 test('Gameboard: Place ships at specific coordinates', () => {
   const testShip = createShip(2);
-  const coordinates = [9, 1];
+  const coordinates = [9, 1, false];
   const board = testGameboard.getBoard();
 
   testGameboard.placeShip(testShip, coordinates);

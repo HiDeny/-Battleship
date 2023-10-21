@@ -8,4 +8,14 @@ test('Player: have board', () => {
   expect(playerHuman.gameboard).toBeDefined();
 });
 
-test.todo('Player: Can attack');
+test.skip('Player: Place ship', () => {
+  const enemyBoard = playerComputer.gameboard;
+  console.log(playerComputer.storedShips);
+  expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
+});
+
+test.skip('Player: Attack', () => {
+  const enemyBoard = playerComputer.gameboard;
+  console.log(playerComputer.storedShips);
+  expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
+});
