@@ -44,13 +44,14 @@ const createGameboard = () => {
   const board = initBoard();
   const shipsOnBoard = [];
 
-  const checkCoordinates = (length, dynamicDir, fixedDir) => {
+  const checkCoordinates = (length, dynamicDir, fixedDir, isVertical) => {
     if (dynamicDir + length > 9 || fixedDir > 9) {
       throw new Error('Out of board!');
     }
 
     for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
-      const currentField = board[fixedDir][i];
+      const currentField = isVertical ? board[i][fixedDir] : board[fixedDir][i];
+
       if (currentField.ship) {
         throw new Error('Check coordinates: Field Occupied!');
       }
@@ -68,10 +69,12 @@ const createGameboard = () => {
       const dynamicDir = isVertical ? row : column;
       const fixedDir = isVertical ? column : row;
 
-      checkCoordinates(newShip.length, dynamicDir, fixedDir);
+      checkCoordinates(newShip.length, dynamicDir, fixedDir, isVertical);
 
       for (let i = dynamicDir; i < dynamicDir + newShip.length; i += 1) {
-        const currentField = board[fixedDir][i];
+        const currentField = isVertical
+          ? board[i][fixedDir]
+          : board[fixedDir][i];
         currentField.ship = newShip;
       }
       shipsOnBoard.push(newShip);
