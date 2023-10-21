@@ -1,17 +1,25 @@
 const field = (coordinates) => {
-  let haveBoat = false;
-  // let isHit = null;
+  let hit = null;
+  let boat = null;
 
   return {
     coordinates,
-    haveBoat,
-    // setBoat() {
-    //   haveBoat = !haveBoat;
-    //   return haveBoat;
-    // },
+
+    setBoat(newBoat) {
+      if (boat) throw new Error('SetBoat: Field Occupied!');
+      boat = newBoat;
+      return boat;
+    },
     markHit() {
-      isHit = haveBoat ? 'Hit' : 'Miss';
-      return isHit;
+      if (hit === 'Hit!' || hit === 'Miss!') throw new Error(`Already marked!`);
+
+      hit = boat ? 'Hit!' : 'Miss!';
+      if (boat) boat.hit();
+
+      return hit;
+    },
+    get haveBoat() {
+      return boat;
     },
   };
 };
@@ -32,22 +40,27 @@ const createGameboard = () => {
     getBoard() {
       return board;
     },
-    placeShip(ship, arr) {
-      const row = arr[0];
-      const column = arr[1];
+    placeShip(newShip, coordinates) {
+      const [row, column, dir] = coordinates;
 
-      for (let i = column; i < column + ship.length; i += 1) {
+      for (let i = column; i < column + newShip.length; i += 1) {
         const currentField = board[row][i];
-        currentField.haveBoat = ship;
+        currentField.setBoat(newShip);
       }
 
       return `Start: X:${row}, Y:${column} End: X:${row}, Y:${
-        column + (ship.length - 1)
+        column + (newShip.length - 1)
       }`;
+    },
+    receiveAttack(coordinates) {
+      const [row, column] = coordinates;
+      const currentField = board[row][column];
+      const gotHit = currentField.markHit();
+
+      console.log(currentField);
+      return gotHit;
     },
   };
 };
 
-const test = createGameboard();
-// console.log(test.getBoard());
 export default createGameboard;
