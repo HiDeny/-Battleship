@@ -21,7 +21,7 @@ const createPlayer = (name, isHuman = true) => {
     Battleship: { ship: createShip(4), quantity: 1 },
     Cruiser: { ship: createShip(3), quantity: 1 },
     Destroyer: { ship: createShip(2), quantity: 2 },
-    Submarine1: { ship: createShip(1), quantity: 2 },
+    Submarine: { ship: createShip(1), quantity: 2 },
   };
 
   return {
@@ -40,6 +40,11 @@ const createPlayer = (name, isHuman = true) => {
 
       return current;
     },
+    // placeShipsAtRandom() {
+    //   for (const key of Object.keys(storedShips)) {
+
+    //   };
+    // },
     attack(enemyBoard, coordinates) {
       const correctCoordinates = isHuman
         ? coordinates
