@@ -2,7 +2,7 @@
 import createPlayer from '../modules/player';
 
 const playerHuman = createPlayer('Mark');
-const playerComputer = createPlayer('John', false);
+const playerComputer = createPlayer('John', true);
 
 test('Player: have board', () => {
   expect(playerHuman.gameboard).toBeDefined();
@@ -37,4 +37,13 @@ test('Computer: Attack', () => {
   const enemyBoard = playerHuman.gameboard;
 
   expect(playerComputer.attack(enemyBoard)).toMatch(/(Hit!)|(Miss!)/g);
+});
+
+test('Set ships at random', () => {
+  const newTestPlayer = createPlayer('Hamid');
+  newTestPlayer.placeShipsAtRandom();
+
+  Object.keys(newTestPlayer.storedShips).forEach((shipName) => {
+    expect(newTestPlayer.storedShips[shipName].quantity).toBe(0);
+  });
 });

@@ -1,21 +1,17 @@
 import createGameboard from './gameboard';
 import createShip from './ship';
 
-const getRandomCoordinates = (markedFields) => {
+const getRandomCoordinates = () => {
   const randomX = Math.floor(Math.random() * 10);
   const randomY = Math.floor(Math.random() * 10);
-  let randomCoord = [randomX, randomY];
 
-  while (markedFields.includes(randomCoord)) {
-    randomCoord = getRandomCoordinates(markedFields);
-  }
-
-  return randomCoord;
+  return [randomX, randomY];
 };
 
-const createPlayer = (name, isHuman = true) => {
+const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
   const markedFields = [];
+  const shipsOnBoard = [];
   const storedShips = {
     AircraftCarrier: { ship: createShip(5), quantity: 1 },
     Battleship: { ship: createShip(4), quantity: 1 },
@@ -28,11 +24,11 @@ const createPlayer = (name, isHuman = true) => {
     name,
     storedShips,
     gameboard,
-    placeShip(shipName, coordinates) {
-      const current = storedShips[shipName];
+    placeShip(shipType, coordinates) {
+      const current = storedShips[shipType];
 
       if (current.quantity <= 0) {
-        throw new Error(`No more ${shipName} in storage`);
+        throw new Error(`No more ${shipType} in storage`);
       }
 
       current.quantity -= 1;
@@ -40,18 +36,55 @@ const createPlayer = (name, isHuman = true) => {
 
       return current;
     },
-    // placeShipsAtRandom() {
-    //   for (const key of Object.keys(storedShips)) {
+    placeShipsAtRandom() {
+      // Add vertical placing
 
-    //   };
-    // },
+      Object.keys(storedShips).forEach((type) => {
+        const currentShipType = storedShips[type];
+        const shipLength = currentShipType.ship.length;
+
+        while (currentShipType.quantity > 0) {
+          let randomCoord = getRandomCoordinates();
+
+          while (
+            randomCoord[1] + shipLength > 9 ||
+            shipsOnBoard.includes(`${randomCoord[0]}, ${randomCoord[1]}`) ||
+            shipsOnBoard.includes(
+              `${randomCoord[0]}, ${randomCoord[1] + shipLength}`
+            )
+          ) {
+            randomCoord = getRandomCoordinates();
+          }
+
+          const row = randomCoord[0];
+          const column = randomCoord[1];
+
+          let columnStart = column;
+          const columnEnd = column + shipLength;
+
+          while (columnStart < columnEnd) {
+            const nextField = `${row}, ${columnStart}`;
+            shipsOnBoard.push(nextField);
+            columnStart += 1;
+          }
+
+          this.placeShip(type, randomCoord);
+        }
+      });
+
+      return shipsOnBoard;
+      // this.placeShip('AircraftCarrier', [0, 0, true]);
+    },
     attack(enemyBoard, coordinates) {
-      const correctCoordinates = isHuman
-        ? coordinates
-        : getRandomCoordinates(markedFields);
-
-      markedFields.push(correctCoordinates);
-      return enemyBoard.receiveAttack(correctCoordinates);
+      if (isComputer) {
+        let randomShot = getRandomCoordinates();
+        while (markedFields.includes(`${randomShot[0]}, ${randomShot[1]}`)) {
+          randomShot = getRandomCoordinates();
+        }
+        markedFields.push(`${randomShot[0]}, ${randomShot[1]}`);
+        return enemyBoard.receiveAttack(randomShot);
+      }
+      return enemyBoard.receiveAttack(coordinates);
     },
   };
 };
