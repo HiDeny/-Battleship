@@ -94,13 +94,13 @@ const createGameboard = () => {
     },
     activeShips() {
       if (!shipsOnBoard.length) return false;
-      let livingShips = 0;
+      let livingShips = shipsOnBoard.length;
 
       shipsOnBoard.forEach((ship) => {
-        livingShips += ship.health > 0 ? 1 : 0;
+        livingShips -= ship.isSunk() ? 1 : 0;
       });
 
-      return !!livingShips;
+      return livingShips > 0;
     },
     shipsOnBoard,
   };

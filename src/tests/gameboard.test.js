@@ -40,12 +40,12 @@ test('Gameboard: Place ships at specific coordinates (fail)', () => {
 test('Gameboard: receiveAttack (Hit)', () => {
   const coordinates = [6, 1];
 
-  expect(testGameboard.receiveAttack(coordinates)).toBe('Hit!');
+  expect(testGameboard.receiveAttack(coordinates)).toBe('hit');
 });
 
 test('Gameboard: receiveAttack (Miss)', () => {
   const coordinates = [6, 0];
-  expect(testGameboard.receiveAttack(coordinates)).toBe('Miss!');
+  expect(testGameboard.receiveAttack(coordinates)).toBe('miss');
 });
 
 test('Gameboard: receiveAttack (Error - already hit)', () => {
@@ -68,12 +68,15 @@ test('Gameboard: report whether if all sunk (not all sunk)', () => {
 });
 
 test('Gameboard: report whether if all sunk (all sunk)', () => {
-  testGameboard.receiveAttack([8, 1]);
-  testGameboard.receiveAttack([8, 2]);
-  testGameboard.receiveAttack([8, 3]);
+  const isSunkTest = createGameboard();
+  isSunkTest.placeShip(createShip(2), [8, 1, false]);
 
-  testGameboard.receiveAttack([5, 1]);
-  testGameboard.receiveAttack([7, 1]);
+  isSunkTest.receiveAttack([8, 1]);
+  isSunkTest.receiveAttack([8, 2]);
 
-  expect(testGameboard.activeShips()).toBe(false);
+  isSunkTest.shipsOnBoard.forEach((ship) => {
+    console.log(ship.getHealth());
+  });
+
+  expect(isSunkTest.activeShips()).toBe(false);
 });

@@ -8,17 +8,17 @@ test('Ship: have length', () => {
 });
 
 test('Ship: been hit', () => {
-  expect(testShip.health).toBe(testShip.length);
-  expect(testShip.hit()).toBe('Got hit');
-  expect(testShip.health).toBe(testShip.length - 1);
+  expect(testShip.getHealth()).toBe(testShip.length);
+  expect(testShip.hit()).toBe(true);
+  expect(testShip.getHealth()).toBe(testShip.length - 1);
 });
 
 test('Ship: is sunk', () => {
-  expect(testShip.isSunk()).toBe(testShip.health);
+  expect(testShip.isSunk()).toBe(false);
   testShip.hit();
   testShip.hit();
   testShip.hit();
-  expect(testShip.isSunk()).toBe('Ship sunk!');
+  expect(testShip.isSunk()).toBe(true);
 });
 
 test.todo('Ship: is sunk');

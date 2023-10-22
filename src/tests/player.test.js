@@ -24,19 +24,19 @@ test('Player: Attack (Hit)', () => {
   const enemyBoard = playerComputer.gameboard;
   playerComputer.placeShip('Battleship', [0, 1, true]);
 
-  expect(playerHuman.attack(enemyBoard, [1, 1])).toBe('Hit!');
+  expect(playerHuman.attack(enemyBoard, [1, 1])).toBe('hit');
 });
 
 test('Player: Attack (Miss)', () => {
   const enemyBoard = playerComputer.gameboard;
 
-  expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('Miss!');
+  expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('miss');
 });
 
 test('Computer: Attack', () => {
   const enemyBoard = playerHuman.gameboard;
 
-  expect(playerComputer.randomAttack(enemyBoard)).toMatch(/(Hit!)|(Miss!)/g);
+  expect(playerComputer.randomAttack(enemyBoard)).toMatch(/(hit)|(miss)/g);
 });
 
 test('Set ships at random', () => {

@@ -24,7 +24,7 @@ test('Setup: Ships', () => {
 });
 
 test('Play turn by turn', () => {
-  console.log(testGame.playRound());
+  testGame.playRound();
 });
 
 test.todo('Ending conditions');

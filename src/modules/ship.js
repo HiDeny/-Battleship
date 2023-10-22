@@ -1,20 +1,17 @@
 const createShip = (length) => {
-  let health = length;
+  let hits = 0;
 
   return {
     length,
-    get health() {
-      if (health < 1) return this.isSunk();
-      return health;
+    getHealth() {
+      return length - hits;
     },
     isSunk() {
-      if (health < 1) return 'Ship sunk!';
-      return health;
+      return length - hits < 1;
     },
     hit() {
-      health -= 1;
-      if (health < 1) return this.isSunk();
-      return 'Got hit';
+      hits += 1;
+      return true;
     },
   };
 };
