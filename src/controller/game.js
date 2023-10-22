@@ -13,19 +13,16 @@ const GameController = () => {
       player2.placeShipsAtRandom();
     },
     playRound(activePlayer = player1) {
+      const shipsP1 = player1.gameboard.activeShips();
+      const shipsP2 = player2.gameboard.activeShips();
       const inActivePlayer = activePlayer === player1 ? player2 : player1;
 
-      while (
-        player1.gameboard.activeShips() &&
-        player2.gameboard.activeShips()
-      ) {
-        round += 1
-        activePlayer.randomAttack(inActivePlayer.gameboard);
-        this.playRound(inActivePlayer);
-      }
-      return !player2.gameboard.activeShips()
-        ? 'Player 1 WIN!'
-        : 'Player 2 WIN!';
+      if (!shipsP1) return 'Player 2 WIN!';
+      if (!shipsP2) return 'Player 1 WIN!';
+
+      round += 1;
+      activePlayer.randomAttack(inActivePlayer.gameboard);
+      return this.playRound(inActivePlayer);
     },
   };
 };
