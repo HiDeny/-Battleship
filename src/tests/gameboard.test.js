@@ -60,11 +60,11 @@ test('Gameboard: receiveAttack (Error - out Of Board)', () => {
 
 test('Gameboard: report whether if all ships sunk (no ships)', () => {
   const testGameboard2 = createGameboard();
-  expect(testGameboard2.checkShips()).toBe('No ships on board');
+  expect(testGameboard2.activeShips()).toBe(false);
 });
 
 test('Gameboard: report whether if all sunk (not all sunk)', () => {
-  expect(testGameboard.checkShips()).toBe('Active ships on board');
+  expect(testGameboard.activeShips()).toBe(true);
 });
 
 test('Gameboard: report whether if all sunk (all sunk)', () => {
@@ -75,5 +75,5 @@ test('Gameboard: report whether if all sunk (all sunk)', () => {
   testGameboard.receiveAttack([5, 1]);
   testGameboard.receiveAttack([7, 1]);
 
-  expect(testGameboard.checkShips()).toBe('All ships destroyed');
+  expect(testGameboard.activeShips()).toBe(false);
 });

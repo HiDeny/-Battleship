@@ -36,7 +36,7 @@ test('Player: Attack (Miss)', () => {
 test('Computer: Attack', () => {
   const enemyBoard = playerHuman.gameboard;
 
-  expect(playerComputer.attack(enemyBoard)).toMatch(/(Hit!)|(Miss!)/g);
+  expect(playerComputer.randomAttack(enemyBoard)).toMatch(/(Hit!)|(Miss!)/g);
 });
 
 test('Set ships at random', () => {

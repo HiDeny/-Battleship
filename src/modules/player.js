@@ -76,16 +76,17 @@ const createPlayer = (name, isComputer = false) => {
       // this.placeShip('AircraftCarrier', [0, 0, true]);
     },
     attack(enemyBoard, coordinates) {
-      if (isComputer) {
-        let randomShot = getRandomCoordinates();
-        while (markedFields.includes(`${randomShot[0]}, ${randomShot[1]}`)) {
-          randomShot = getRandomCoordinates();
-        }
-        markedFields.push(`${randomShot[0]}, ${randomShot[1]}`);
-        return enemyBoard.receiveAttack(randomShot);
-      }
       return enemyBoard.receiveAttack(coordinates);
     },
+    randomAttack(enemyBoard) {
+      let randomShot = getRandomCoordinates();
+      while (markedFields.includes(`${randomShot[0]}, ${randomShot[1]}`)) {
+        randomShot = getRandomCoordinates();
+      }
+      markedFields.push(`${randomShot[0]}, ${randomShot[1]}`);
+      return enemyBoard.receiveAttack(randomShot);
+    },
+    isComputer
   };
 };
 

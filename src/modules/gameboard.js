@@ -92,15 +92,15 @@ const createGameboard = () => {
 
       return markField;
     },
-    checkShips() {
-      if (!shipsOnBoard.length) return 'No ships on board';
-      let activeShips = 0;
+    activeShips() {
+      if (!shipsOnBoard.length) return false;
+      let livingShips = 0;
 
       shipsOnBoard.forEach((ship) => {
-        activeShips += ship.health > 0 ? 1 : 0;
+        livingShips += ship.health > 0 ? 1 : 0;
       });
 
-      return !activeShips ? 'All ships destroyed' : 'Active ships on board';
+      return !!livingShips;
     },
     shipsOnBoard,
   };

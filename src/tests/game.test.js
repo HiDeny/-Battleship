@@ -11,8 +11,20 @@ test('Setup: Players', () => {
   expect(testGame.player2.storedShips).toBeDefined();
 });
 
-test.todo('Setup: Ships');
+test('Setup: Ships', () => {
+  testGame.setShips();
 
-test.todo('Play turn by turn');
+  Object.keys(testGame.player1.storedShips).forEach((ship) => {
+    expect(testGame.player1.storedShips[ship].quantity).toBe(0);
+  });
+
+  Object.keys(testGame.player2.storedShips).forEach((ship) => {
+    expect(testGame.player2.storedShips[ship].quantity).toBe(0);
+  });
+});
+
+test('Play turn by turn', () => {
+  console.log(testGame.playRound());
+});
 
 test.todo('Ending conditions');
