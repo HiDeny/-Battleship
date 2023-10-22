@@ -59,12 +59,18 @@ const createPlayer = (name, isComputer = false) => {
           const row = randomCoord[0];
           const column = randomCoord[1];
 
-          let columnStart = column;
-          const columnEnd = column + shipLength;
+          let columnStart = column - 1;
+          const columnEnd = column + shipLength + 1;
 
           while (columnStart < columnEnd) {
+            const oneUpField = `${row + 1}, ${columnStart}`;
             const nextField = `${row}, ${columnStart}`;
+            const oneDownField = `${row - 1}, ${columnStart}`;
+
+            shipsOnBoard.push(oneUpField);
             shipsOnBoard.push(nextField);
+            shipsOnBoard.push(oneDownField);
+
             columnStart += 1;
           }
 
@@ -86,7 +92,7 @@ const createPlayer = (name, isComputer = false) => {
       markedFields.push(`${randomShot[0]}, ${randomShot[1]}`);
       return enemyBoard.receiveAttack(randomShot);
     },
-    isComputer
+    isComputer,
   };
 };
 
