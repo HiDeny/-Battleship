@@ -2,3 +2,45 @@ h1 {
   color: white;
   background-color: black;
 }
+
+body {
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+.board-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+
+  aspect-ratio: 1/1;
+  height: 500px;
+}
+
+.row {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.board-field {
+  border: 0.5px solid gray;
+  width: 100%;
+  height: 100%;
+}
+
+.ship {
+  background-color: black;
+}
+
+.miss {
+  background-color: blue;
+}
+
+.hit {
+  background-color: red;
+}

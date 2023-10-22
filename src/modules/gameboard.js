@@ -15,7 +15,7 @@ const field = (coordinates) => {
       if (mark !== null) throw new Error(`Already marked!`);
 
       if (ship) ship.hit();
-      mark = ship ? 'Hit!' : 'Miss!';
+      mark = ship ? 'hit' : 'miss';
 
       return mark;
     },
