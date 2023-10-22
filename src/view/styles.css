@@ -13,6 +13,7 @@ body {
 }
 
 .board-container {
+  position: relative;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
@@ -43,4 +44,16 @@ body {
 
 .hit {
   background-color: red;
+}
+
+.player1::before {
+  top: -1rem;
+  position: absolute;
+  content: 'Player 1';
+}
+
+.player2::before {
+  top: -1rem;
+  position: absolute;
+  content: 'Player 2';
 }
