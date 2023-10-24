@@ -1,4 +1,5 @@
 import createPlayer from '../modules/player';
+import PubSub from '../modules/pubsub';
 
 const GameController = () => {
   let round = 0;
@@ -7,6 +8,7 @@ const GameController = () => {
 
   let activePlayer = player1;
   let opponentPlayer = player2;
+
   const switchTurns = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
     opponentPlayer = opponentPlayer === player2 ? player1 : player2;
@@ -26,15 +28,23 @@ const GameController = () => {
       player1.placeShipsAtRandom();
       player2.placeShipsAtRandom();
     },
-    playRound(coordinates) {
+    playRound(coordinates, randomAttack = false) {
       const isGameOver = gameOver();
-      if (isGameOver) return isGameOver;
-      player1.attack(player2.gameboard, coordinates);
+      if (isGameOver) {
+        PubSub.publish('game-round', isGameOver);
+        return isGameOver;
+      }
 
-      setTimeout(() => {
-        player2.randomAttack(player1.gameboard);
-      }, 1000);
+      if (randomAttack) {
+        activePlayer.randomAttack(opponentPlayer.gameboard);
+      } else {
+        activePlayer.attack(opponentPlayer.gameboard, coordinates);
+      }
 
+      round += 1;
+      PubSub.publish('game-round', round);
+
+      switchTurns();
       return false;
     },
     // playGameRandom(activePlayer = player1) {
