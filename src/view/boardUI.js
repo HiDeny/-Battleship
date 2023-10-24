@@ -1,14 +1,22 @@
+import testPubSub from '../modules/pubsub';
+
 const createFieldUI = (field) => {
-  const container = document.createElement('div');
-  container.classList.add('board-field');
-  if (field.ship) container.classList.add('ship');
-  if (field.mark) container.classList.add(`${field.mark}`);
+  const fieldButton = document.createElement('button');
+  fieldButton.classList.add('board-field');
+  if (field.ship) fieldButton.classList.add('ship');
+  if (field.mark) fieldButton.classList.add(`${field.mark}`);
 
   const [row, column] = field.coordinates;
-  container.dataset.row = row;
-  container.dataset.column = column;
+  fieldButton.dataset.row = row;
+  fieldButton.dataset.column = column;
 
-  return container;
+  fieldButton.onclick = (event) => {
+    // console.log(event.target);
+    const coordinates = [event.target.dataset.row, event.target.dataset.column];
+    testPubSub.publish('field-click', coordinates);
+  };
+
+  return fieldButton;
 };
 
 const createRowUI = () => {

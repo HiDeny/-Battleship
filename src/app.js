@@ -6,6 +6,12 @@ import renderBoardUI from './view/boardUI';
 import createGameboard from './modules/gameboard';
 import GameController from './controller/game';
 
+import testPubSub from './modules/pubsub';
+
+const testSub = testPubSub.subscribe('field-click', (coordinates) => {
+  console.log(coordinates);
+});
+
 const testGame = GameController();
 testGame.setShips();
 console.log(testGame.playRound([1, 1]));
