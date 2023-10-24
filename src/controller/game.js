@@ -12,6 +12,12 @@ const GameController = () => {
     opponentPlayer = opponentPlayer === player2 ? player1 : player2;
   };
 
+  const gameOver = () => {
+    if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
+    if (!player2.gameboard.activeShips()) return 'Player 1 WIN!';
+    return false;
+  };
+
   return {
     player1,
     player2,
@@ -21,25 +27,26 @@ const GameController = () => {
       player2.placeShipsAtRandom();
     },
     playRound(coordinates) {
-      const move1 = player1.attack(player2.gameboard, coordinates);
-      let move2;
+      const isGameOver = gameOver();
+      if (isGameOver) return isGameOver;
+      player1.attack(player2.gameboard, coordinates);
 
       setTimeout(() => {
-        move2 = player2.randomAttack(player1.gameboard);
-      }, 2000);
+        player2.randomAttack(player1.gameboard);
+      }, 1000);
 
-      return [move1, move2];
+      return false;
     },
-    playGameRandom(activePlayer = player1) {
-      if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
-      if (!player2.gameboard.activeShips()) return 'Player 1 WIN!';
+    // playGameRandom(activePlayer = player1) {
+    //   if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
+    //   if (!player2.gameboard.activeShips()) return 'Player 1 WIN!';
 
-      const inActivePlayer = activePlayer === player1 ? player2 : player1;
+    //   const inActivePlayer = activePlayer === player1 ? player2 : player1;
 
-      round += 1;
-      activePlayer.randomAttack(inActivePlayer.gameboard);
-      return this.playGameRandom(inActivePlayer);
-    },
+    //   round += 1;
+    //   activePlayer.randomAttack(inActivePlayer.gameboard);
+    //   return this.playGameRandom(inActivePlayer);
+    // },
   };
 };
 

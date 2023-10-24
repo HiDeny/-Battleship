@@ -94,18 +94,17 @@ const createGameboard = () => {
       const [row, column] = coordinates;
       const currentField = board[row][column];
       const markField = currentField.markField();
-      console.log(coordinates);
 
       return markField;
     },
     activeShips() {
-      if (!shipsOnBoard.length) return false;
       let livingShips = shipsOnBoard.length;
 
       shipsOnBoard.forEach((ship) => {
         livingShips -= ship.isSunk() ? 1 : 0;
       });
 
+      console.log(livingShips);
       return livingShips > 0;
     },
     shipsOnBoard,

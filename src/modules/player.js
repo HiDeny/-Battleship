@@ -13,28 +13,22 @@ const createPlayer = (name, isComputer = false) => {
   const markedFields = [];
 
   const storedShips = {
-    AircraftCarrier: { ship: createShip(5), quantity: 1 },
-    Battleship: { ship: createShip(4), quantity: 1 },
-    Cruiser: { ship: createShip(3), quantity: 1 },
-    Destroyer: { ship: createShip(2), quantity: 2 },
-    Submarine: { ship: createShip(1), quantity: 2 },
+    AircraftCarrier: { shipLength: 5, quantity: 1 },
+    Battleship: { shipLength: 4, quantity: 1 },
+    Cruiser: { shipLength: 3, quantity: 1 },
+    Destroyer: { shipLength: 2, quantity: 2 },
+    Submarine: { shipLength: 1, quantity: 2 },
   };
 
   return {
     name,
     storedShips,
     gameboard,
-    placeShip(shipType, coordinates) {
-      const current = storedShips[shipType];
+    placeShip(shipLength, coordinates) {
+      const newShip = createShip(shipLength);
+      gameboard.placeShip(newShip, coordinates);
 
-      if (current.quantity <= 0) {
-        throw new Error(`No more ${shipType} in storage`);
-      }
-
-      current.quantity -= 1;
-      gameboard.placeShip(current.ship, coordinates);
-
-      return current;
+      return newShip;
     },
     placeShipsAtRandom() {
       const shipsOnBoard = [];
@@ -42,7 +36,7 @@ const createPlayer = (name, isComputer = false) => {
 
       Object.keys(storedShips).forEach((type) => {
         const currentShipType = storedShips[type];
-        const shipLength = currentShipType.ship.length;
+        const { shipLength } = currentShipType;
 
         while (currentShipType.quantity > 0) {
           let randomCoord = getRandomCoordinates();
@@ -75,12 +69,12 @@ const createPlayer = (name, isComputer = false) => {
             columnStart += 1;
           }
 
-          this.placeShip(type, randomCoord);
+          this.placeShip(shipLength, randomCoord);
+          currentShipType.quantity -= 1;
         }
       });
 
       return shipsOnBoard;
-      // this.placeShip('AircraftCarrier', [0, 0, true]);
     },
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);

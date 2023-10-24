@@ -35,11 +35,11 @@ const createRowUI = () => {
   return container;
 };
 
-const renderBoardUI = (player, isEnemy = false) => {
+const renderBoardUI = (board, isEnemy = false) => {
   const container = document.createElement('div');
   container.classList.add('board-container');
 
-  player.gameboard.board.forEach((row) => {
+  board.forEach((row) => {
     const newRow = createRowUI();
     container.append(newRow);
 
