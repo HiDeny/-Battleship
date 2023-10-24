@@ -1,3 +1,5 @@
+import PubSub from './pubsub';
+
 const field = (coordinates) => {
   let mark = null;
   let ship = null;
@@ -10,6 +12,8 @@ const field = (coordinates) => {
     set ship(newShip) {
       if (ship) throw new Error('Ship already set!');
       ship = newShip;
+
+      PubSub.publish('field-ship', coordinates);
     },
     markField() {
       if (mark !== null) throw new Error(`Already marked!`);
@@ -17,6 +21,7 @@ const field = (coordinates) => {
       if (ship) ship.hit();
       mark = ship ? 'hit' : 'miss';
 
+      PubSub.publish('field-mark', coordinates, mark);
       return mark;
     },
     get mark() {

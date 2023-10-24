@@ -1,10 +1,21 @@
-import testPubSub from '../modules/pubsub';
+import PubSub from '../modules/pubsub';
 
 const createFieldUI = (field) => {
   const fieldButton = document.createElement('button');
   fieldButton.classList.add('board-field');
-  if (field.ship) fieldButton.classList.add('ship');
-  if (field.mark) fieldButton.classList.add(`${field.mark}`);
+
+  PubSub.subscribe('field-ship', (coordinates) => {
+    if (coordinates === field.coordinates) {
+      fieldButton.classList.add('ship');
+    }
+  });
+
+  PubSub.subscribe('field-mark', (coordinates, mark) => {
+    if (coordinates === field.coordinates) fieldButton.classList.add(mark);
+  });
+
+  // if (field.ship) fieldButton.classList.add('ship');
+  // if (field.mark) fieldButton.classList.add(`${field.mark}`);
 
   const [row, column] = field.coordinates;
   fieldButton.dataset.row = row;
@@ -13,7 +24,7 @@ const createFieldUI = (field) => {
   fieldButton.onclick = (event) => {
     // console.log(event.target);
     const coordinates = [event.target.dataset.row, event.target.dataset.column];
-    testPubSub.publish('field-click', coordinates);
+    PubSub.publish('field-click', coordinates);
   };
 
   return fieldButton;

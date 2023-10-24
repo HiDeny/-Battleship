@@ -1,4 +1,4 @@
-const PubSub = () => {
+const createPubSub = () => {
   const tracker = {
     // key: eventName, value: [ funcs ]
   };
@@ -28,6 +28,6 @@ const PubSub = () => {
   };
 };
 
-const testPubSub = PubSub();
+const PubSub = createPubSub();
 
-export default testPubSub;
+export default PubSub;

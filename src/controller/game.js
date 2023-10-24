@@ -21,8 +21,12 @@ const GameController = () => {
       player2.placeShipsAtRandom();
     },
     playRound(coordinates) {
-      activePlayer.attack(opponentPlayer.gameboard, coordinates);
+      const currentShot = activePlayer.attack(
+        opponentPlayer.gameboard,
+        coordinates
+      );
       switchTurns();
+      return currentShot;
     },
     playGameRandom(activePlayer = player1) {
       if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
