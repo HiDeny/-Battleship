@@ -1,8 +1,19 @@
 import PubSub from '../modules/pubsub';
 
-const createFieldUI = (field) => {
+const handleClickField = (event) => {
+  const { row, column } = event.target.dataset;
+  PubSub.publish('field-click', [row, column]);
+};
+
+const createFieldUI = (field, isEnemy) => {
   const fieldButton = document.createElement('button');
+  const [row, column] = field.coordinates;
+
+  fieldButton.dataset.row = row;
+  fieldButton.dataset.column = column;
   fieldButton.classList.add('board-field');
+
+  if (isEnemy) fieldButton.onclick = handleClickField;
 
   PubSub.subscribe('field-ship', (coordinates) => {
     if (coordinates === field.coordinates) {
@@ -14,19 +25,6 @@ const createFieldUI = (field) => {
     if (coordinates === field.coordinates) fieldButton.classList.add(mark);
   });
 
-  // if (field.ship) fieldButton.classList.add('ship');
-  // if (field.mark) fieldButton.classList.add(`${field.mark}`);
-
-  const [row, column] = field.coordinates;
-  fieldButton.dataset.row = row;
-  fieldButton.dataset.column = column;
-
-  fieldButton.onclick = (event) => {
-    // console.log(event.target);
-    const coordinates = [event.target.dataset.row, event.target.dataset.column];
-    PubSub.publish('field-click', coordinates);
-  };
-
   return fieldButton;
 };
 
@@ -37,7 +35,7 @@ const createRowUI = () => {
   return container;
 };
 
-const renderBoardUI = (player) => {
+const renderBoardUI = (player, isEnemy = false) => {
   const container = document.createElement('div');
   container.classList.add('board-container');
 
@@ -46,7 +44,7 @@ const renderBoardUI = (player) => {
     container.append(newRow);
 
     row.forEach((field) => {
-      const fieldUI = createFieldUI(field);
+      const fieldUI = createFieldUI(field, isEnemy);
       newRow.append(fieldUI);
     });
   });

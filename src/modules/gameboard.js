@@ -94,6 +94,7 @@ const createGameboard = () => {
       const [row, column] = coordinates;
       const currentField = board[row][column];
       const markField = currentField.markField();
+      console.log(coordinates);
 
       return markField;
     },

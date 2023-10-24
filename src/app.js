@@ -11,7 +11,7 @@ const testGame = GameController();
 const player1Board = renderBoardUI(testGame.player1);
 player1Board.classList.add('player1');
 
-const player2Board = renderBoardUI(testGame.player2);
+const player2Board = renderBoardUI(testGame.player2, true);
 player2Board.classList.add('player2');
 
 document.body.append(player1Board);
@@ -24,7 +24,3 @@ const testSub = PubSub.subscribe('field-click', (coordinates) => {
   console.log(coordinates);
   console.log(testGame.playRound(coordinates));
 });
-
-
-
-

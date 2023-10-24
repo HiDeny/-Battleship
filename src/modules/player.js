@@ -11,7 +11,7 @@ const getRandomCoordinates = () => {
 const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
   const markedFields = [];
-  const shipsOnBoard = [];
+
   const storedShips = {
     AircraftCarrier: { ship: createShip(5), quantity: 1 },
     Battleship: { ship: createShip(4), quantity: 1 },
@@ -37,6 +37,7 @@ const createPlayer = (name, isComputer = false) => {
       return current;
     },
     placeShipsAtRandom() {
+      const shipsOnBoard = [];
       // Add vertical placing
 
       Object.keys(storedShips).forEach((type) => {
