@@ -8,13 +8,13 @@ import GameController from './controller/game';
 
 const testGame = GameController();
 testGame.setShips();
-console.log(testGame.playRound());
+console.log(testGame.playRound([1, 1]));
 const uiTestGameboard = createGameboard();
 
-const player1Board = renderBoardUI(testGame.player1.gameboard.board);
+const player1Board = renderBoardUI(testGame.player1);
 player1Board.classList.add('player1');
 
-const player2Board = renderBoardUI(testGame.player2.gameboard.board);
+const player2Board = renderBoardUI(testGame.player2);
 player2Board.classList.add('player2');
 
 document.body.append(player1Board);

@@ -33,7 +33,7 @@ const initBoard = () => {
   for (let i = 0; i < rows; i += 1) {
     board[i] = [];
     for (let j = 0; j < columns; j += 1) {
-      board[i][j] = field(`X:${i}, Y:${j}`);
+      board[i][j] = field([i, j]);
     }
   }
 

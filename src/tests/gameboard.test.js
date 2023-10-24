@@ -70,9 +70,15 @@ test('Gameboard: report whether if all sunk (not all sunk)', () => {
 test('Gameboard: report whether if all sunk (all sunk)', () => {
   const isSunkTest = createGameboard();
   isSunkTest.placeShip(createShip(2), [8, 1, false]);
+  isSunkTest.placeShip(createShip(1), [1, 1, false]);
+  isSunkTest.placeShip(createShip(1), [5, 1, false]);
 
   isSunkTest.receiveAttack([8, 1]);
   isSunkTest.receiveAttack([8, 2]);
+
+  isSunkTest.receiveAttack([1, 1]);
+  isSunkTest.receiveAttack([5, 1]);
+
 
   isSunkTest.shipsOnBoard.forEach((ship) => {
     console.log(ship.getHealth());

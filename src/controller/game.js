@@ -1,28 +1,38 @@
 import createPlayer from '../modules/player';
 
 const GameController = () => {
+  let round = 0;
   const player1 = createPlayer('Player');
   const player2 = createPlayer('Computer', false);
-  let round = 0;
+
+  let activePlayer = player1;
+  let opponentPlayer = player2;
+  const switchTurns = () => {
+    activePlayer = activePlayer === player1 ? player2 : player1;
+    opponentPlayer = opponentPlayer === player2 ? player1 : player2;
+  };
 
   return {
     player1,
     player2,
+    round,
     setShips() {
       player1.placeShipsAtRandom();
       player2.placeShipsAtRandom();
     },
-    playRound(activePlayer = player1) {
-      const shipsP1 = player1.gameboard.activeShips();
-      const shipsP2 = player2.gameboard.activeShips();
-      const inActivePlayer = activePlayer === player1 ? player2 : player1;
+    playRound(coordinates) {
+      activePlayer.attack(opponentPlayer.gameboard, coordinates);
+      switchTurns();
+    },
+    playGameRandom(activePlayer = player1) {
+      if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
+      if (!player2.gameboard.activeShips()) return 'Player 1 WIN!';
 
-      if (!shipsP1) return 'Player 2 WIN!';
-      if (!shipsP2) return 'Player 1 WIN!';
+      const inActivePlayer = activePlayer === player1 ? player2 : player1;
 
       round += 1;
       activePlayer.randomAttack(inActivePlayer.gameboard);
-      return this.playRound(inActivePlayer);
+      return this.playGameRandom(inActivePlayer);
     },
   };
 };
