@@ -6,11 +6,14 @@ h1 {
 body {
   height: 100vh;
 
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: 1fr 3fr 2.5fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.25rem;
   align-items: center;
-  gap: 50px;
-  flex-direction: column;
+  justify-items: center;
+
+  margin: auto;
 }
 
 .board-container {
@@ -19,6 +22,7 @@ body {
   grid-template-columns: auto;
   grid-template-rows: auto;
 
+  height: 90%;
   aspect-ratio: 1/1;
 }
 
@@ -47,23 +51,28 @@ body {
   background-color: red;
 }
 
-.player1 {
+.userBoard {
   pointer-events: none;
-  height: 300px;
+  grid-row: 3;
+  grid-column: 2;
 }
 
-.player1::before {
-  top: -1rem;
-  position: absolute;
+.userBoard::before {
   content: 'You';
-}
-
-.player2 {
-  height: 500px;
-}
-
-.player2::before {
   top: -1rem;
   position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.enemyBoard {
+  grid-column: 2;
+}
+
+.enemyBoard::before {
   content: 'Enemy';
+  top: -1rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }

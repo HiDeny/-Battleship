@@ -37,7 +37,9 @@ const createRowUI = () => {
 
 const renderBoardUI = (board, isEnemy = false) => {
   const container = document.createElement('div');
+  const playerClass = isEnemy ? 'enemyBoard' : 'userBoard';
   container.classList.add('board-container');
+  container.classList.add(playerClass);
 
   board.forEach((row) => {
     const newRow = createRowUI();

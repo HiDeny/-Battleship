@@ -29,7 +29,7 @@ const createNamesUI = (player1, player2) => {
   return container;
 };
 
-const createResultUI = (player1, player2) => {
+const createResultUI = () => {
   const result = document.createElement('div');
   result.classList.add('hud-result');
 

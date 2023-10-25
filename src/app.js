@@ -35,8 +35,7 @@ document.body.append(player2BoardUI);
 testGame.setShips();
 
 PubSub.subscribe('field-click', (coordinates) => {
-  console.log(coordinates);
-  console.log(testGame.playRound(coordinates));
+  testGame.playRound(coordinates);
 
   setTimeout(() => {
     testGame.playRound(null, true);
