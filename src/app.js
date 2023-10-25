@@ -25,7 +25,7 @@ document.body.append(result);
 document.body.append(player1GameBoard);
 document.body.append(player2GameBoard);
 
-testGame.setShips();
+// testGame.setShips();
 
 PubSub.subscribe('field-click', (coordinates) => {
   testGame.playRound(coordinates);
@@ -33,4 +33,11 @@ PubSub.subscribe('field-click', (coordinates) => {
   setTimeout(() => {
     testGame.playRound(null, true);
   }, 1000);
+});
+
+PubSub.subscribe('field-ship-drag', (data) => {
+  const { length, coordinates } = data;
+  console.log(length);
+  console.log(coordinates);
+  player1.placeShip(length, coordinates);
 });

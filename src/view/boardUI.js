@@ -5,6 +5,42 @@ const handleClickField = (event) => {
   PubSub.publish('field-click', [row, column]);
 };
 
+let beingDragged;
+
+const handleDragStart = (event) => {
+  console.log(event.target);
+  beingDragged = event.target;
+  event.target.classList.add('dragging');
+};
+
+const handleDragEnd = (event) => {
+  console.log(event.target);
+  event.target.classList.remove('dragging');
+};
+
+const handleDragOver = (event) => {
+  event.preventDefault();
+  event.target.classList.add('draggingOver');
+};
+
+const handleDragLeave = (event) => {
+  event.preventDefault();
+  event.target.classList.remove('draggingOver');
+};
+
+const handleDragDrop = (event) => {
+  event.preventDefault();
+  event.target.classList.remove('draggingOver');
+  
+  const { length } = beingDragged.dataset;
+  const { row, column } = event.target.dataset;
+
+  PubSub.publish('field-ship-drag', {
+    length,
+    coordinates: [row, column, false],
+  });
+};
+
 const createFieldUI = (field) => {
   const fieldButton = document.createElement('button');
   const [row, column] = field.coordinates;
@@ -14,7 +50,11 @@ const createFieldUI = (field) => {
   fieldButton.dataset.row = row;
 
   fieldButton.onclick = handleClickField;
+  fieldButton.addEventListener('dragover', handleDragOver);
+  fieldButton.addEventListener('dragleave', handleDragLeave);
+  fieldButton.addEventListener('drop', handleDragDrop);
 
+  // Need Fix
   PubSub.subscribe('field-ship', (coordinates) => {
     if (coordinates === field.coordinates) {
       fieldButton.classList.add('ship');
@@ -36,12 +76,12 @@ const createRowUI = () => {
 };
 
 const renderBoardUI = (board) => {
-  const container = document.createElement('div');
-  container.classList.add('board-container');
+  const boardUI = document.createElement('div');
+  boardUI.classList.add('board-container');
 
   board.forEach((row) => {
     const newRow = createRowUI();
-    container.append(newRow);
+    boardUI.append(newRow);
 
     row.forEach((field) => {
       const fieldUI = createFieldUI(field);
@@ -49,7 +89,7 @@ const renderBoardUI = (board) => {
     });
   });
 
-  return container;
+  return boardUI;
 };
 
 const renderShipStorageUI = (shipStorage) => {
@@ -63,8 +103,12 @@ const renderShipStorageUI = (shipStorage) => {
     for (let j = 0; j < currentShipType.quantity; j += 1) {
       const shipContainer = document.createElement('div');
       shipContainer.classList.add(`ship-storage`);
-      shipContainer.classList.add(`length${shipLength}`);
+
+      shipContainer.dataset.length = shipLength;
       shipContainer.draggable = true;
+
+      shipContainer.addEventListener('dragstart', handleDragStart);
+      shipContainer.addEventListener('dragend', handleDragEnd);
 
       for (let i = 0; i < shipLength; i += 1) {
         const shipBlock = document.createElement('div');
@@ -85,10 +129,10 @@ const renderPlayerGameboard = (player, isEnemy = false) => {
   const shipsUI = renderShipStorageUI(storedShips);
   const playerClass = isEnemy ? 'enemyBoard' : 'userBoard';
 
-  // document.documentElement.style.setProperty
   gameboardUI.classList.add('gameboard');
   gameboardUI.classList.add(playerClass);
-  if (!isEnemy) boardUI.style['pointer-events'] = 'none';
+
+  // if (!isEnemy) boardUI.style['pointer-events'] = 'none';
 
   gameboardUI.append(boardUI);
   gameboardUI.append(shipsUI);

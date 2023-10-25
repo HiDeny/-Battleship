@@ -1,3 +1,7 @@
+html {
+  font-family: Helvetica;
+}
+
 h1 {
   color: white;
   background-color: black;
@@ -16,6 +20,15 @@ body {
   margin: auto;
 }
 
+/* HUD */
+
+.hud-rounds {
+  grid-column: 2;
+  font-size: 2rem;
+  font-family: Helvetica;
+}
+
+/* GAMEBOARD */
 .gameboard {
   position: relative;
   grid-column: 1/-1;
@@ -80,6 +93,7 @@ body {
 
   border: 1px solid whitesmoke;
   border-radius: 1rem;
+  overflow: hidden;
 }
 
 .ship-block {
@@ -89,7 +103,7 @@ body {
 }
 
 .miss {
-  background-color: blue;
+  background-color: rgb(19, 154, 244);
 }
 
 .hit {
@@ -121,4 +135,12 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.draggingOver {
+  background-color: pink;
 }

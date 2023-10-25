@@ -12,8 +12,6 @@ const field = (coordinates) => {
     set ship(newShip) {
       if (ship) throw new Error('Ship already set!');
       ship = newShip;
-
-      PubSub.publish('field-ship', coordinates);
     },
     markField() {
       if (mark !== null) throw new Error(`Already marked!`);
@@ -50,11 +48,15 @@ const createGameboard = () => {
   const shipsOnBoard = [];
 
   const checkCoordinates = (length, dynamicDir, fixedDir, isVertical) => {
-    if (dynamicDir + length > 9 || fixedDir > 9) {
+    if (Number(dynamicDir) + Number(length - 1) > 9 || Number(fixedDir) > 9) {
       throw new Error('Out of board!');
     }
 
-    for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
+    for (
+      let i = Number(dynamicDir);
+      i < Number(dynamicDir) + Number(length);
+      i += 1
+    ) {
       const currentField = isVertical ? board[i][fixedDir] : board[fixedDir][i];
 
       if (currentField.ship) {
@@ -76,11 +78,18 @@ const createGameboard = () => {
 
       checkCoordinates(newShip.length, dynamicDir, fixedDir, isVertical);
 
-      for (let i = dynamicDir; i < dynamicDir + newShip.length; i += 1) {
+      for (
+        let i = Number(dynamicDir);
+        i < Number(dynamicDir) + Number(newShip.length);
+        i += 1
+      ) {
+        console.log(dynamicDir);
+        console.log(fixedDir);
         const currentField = isVertical
           ? board[i][fixedDir]
           : board[fixedDir][i];
         currentField.ship = newShip;
+        PubSub.publish('field-ship', currentField.coordinates);
       }
       shipsOnBoard.push(newShip);
 
@@ -104,7 +113,6 @@ const createGameboard = () => {
         livingShips -= ship.isSunk() ? 1 : 0;
       });
 
-      console.log(livingShips);
       return livingShips > 0;
     },
     shipsOnBoard,
