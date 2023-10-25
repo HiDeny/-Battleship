@@ -24,6 +24,7 @@ const createPlayer = (name, isComputer = false) => {
     name,
     storedShips,
     gameboard,
+    isComputer,
     placeShip(shipLength, coordinates) {
       const newShip = createShip(shipLength);
       gameboard.placeShip(newShip, coordinates);
@@ -87,7 +88,6 @@ const createPlayer = (name, isComputer = false) => {
       markedFields.push(`${randomShot[0]}, ${randomShot[1]}`);
       return enemyBoard.receiveAttack(randomShot);
     },
-    isComputer,
   };
 };
 

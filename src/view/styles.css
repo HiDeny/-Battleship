@@ -16,14 +16,44 @@ body {
   margin: auto;
 }
 
+.gameboard {
+  position: relative;
+  grid-column: 1/-1;
+  width: 100%;
+  height: 90%;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+
+  justify-items: center;
+  align-items: center;
+
+  grid-row: 3;
+}
+
 .board-container {
   position: relative;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
 
-  height: 90%;
+  border: 1rem solid gray;
+  border-radius: 1rem;
+
+  height: 85%;
   aspect-ratio: 1/1;
+}
+
+.board-ships {
+  grid-column: 1;
+  grid-row: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-self: center;
+  gap: 0.25rem;
 }
 
 .row {
@@ -40,7 +70,22 @@ body {
 }
 
 .ship {
-  background-color: black;
+  background-color: darkgreen;
+}
+
+.ship-storage {
+  display: flex;
+  width: fit-content;
+  gap: 1px;
+
+  border: 1px solid whitesmoke;
+  border-radius: 1rem;
+}
+
+.ship-block {
+  aspect-ratio: 1/1;
+  background-color: darkgreen;
+  height: 35px;
 }
 
 .miss {
@@ -51,10 +96,9 @@ body {
   background-color: red;
 }
 
-.userBoard {
-  pointer-events: none;
+/* USER */
+.gameboard.userBoard {
   grid-row: 3;
-  grid-column: 2;
 }
 
 .userBoard::before {
@@ -65,8 +109,10 @@ body {
   transform: translateX(-50%);
 }
 
-.enemyBoard {
-  grid-column: 2;
+/* ENEMY */
+
+.gameboard.enemyBoard {
+  grid-row: 2;
 }
 
 .enemyBoard::before {
