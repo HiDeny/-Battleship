@@ -1,49 +1,59 @@
 /* eslint-disable no-undef */
 import createPlayer from '../modules/player';
 
-const playerHuman = createPlayer('Mark');
-const playerComputer = createPlayer('John', true);
-
 test('Player: have board', () => {
-  expect(playerHuman.gameboard).toBeDefined();
+  const testPlayer = createPlayer('Mark');
+  expect(testPlayer.gameboard).toBeDefined();
 });
 
 test('Player: Place ship', () => {
-  playerHuman.placeShip('AircraftCarrier', [4, 4, true]);
+  const testPlayer = createPlayer('Mark');
+  const { board } = testPlayer.gameboard;
+  const shipType = 'Destroyer2';
+  const coordinates = [4, 4, true];
 
-  expect(playerHuman.gameboard.shipsOnBoard.length).toBeGreaterThan(0);
-});
-
-test('Player: Place ship (fail)', () => {
-  expect(() =>
-    playerHuman.placeShip('AircraftCarrier', [4, 4, true])
-  ).toThrow();
+  expect(testPlayer.placeShip(shipType, coordinates)).toHaveProperty(
+    'length',
+    2
+  );
+  expect(board[coordinates[0]][coordinates[1]].ship).not.toBe(null);
+  expect(board[coordinates[0] + 1][coordinates[1]].ship).not.toBe(null);
+  expect(board[coordinates[0] + 2][coordinates[1]].ship).toBe(null);
 });
 
 test('Player: Attack (Hit)', () => {
-  const enemyBoard = playerComputer.gameboard;
-  playerComputer.placeShip('Battleship', [0, 1, true]);
+  const testPlayer = createPlayer('Mark');
+  const enemyPlayer = createPlayer('Jack', true);
 
-  expect(playerHuman.attack(enemyBoard, [1, 1])).toBe('hit');
+  const enemyBoard = enemyPlayer.gameboard;
+  enemyPlayer.placeShip('Battleship', [0, 1, true]);
+
+  expect(testPlayer.attack(enemyBoard, [1, 1])).toBe('hit');
 });
 
 test('Player: Attack (Miss)', () => {
-  const enemyBoard = playerComputer.gameboard;
+  const testPlayer = createPlayer('Mark');
+  const enemyPlayer = createPlayer('Jack', true);
 
-  expect(playerHuman.attack(enemyBoard, [1, 2])).toBe('miss');
+  const enemyBoard = enemyPlayer.gameboard;
+  enemyPlayer.placeShip('Battleship', [0, 1, true]);
+
+  expect(testPlayer.attack(enemyBoard, [1, 2])).toBe('miss');
 });
 
-test('Computer: Attack', () => {
-  const enemyBoard = playerHuman.gameboard;
+test('Player: Random Attack', () => {
+  const testPlayer = createPlayer('Mark');
+  const enemyPlayer = createPlayer('Jack', true);
 
-  expect(playerComputer.randomAttack(enemyBoard)).toMatch(/(hit)|(miss)/g);
+  const enemyBoard = enemyPlayer.gameboard;
+  enemyPlayer.placeShip('AircraftCarrier', [4, 4, true]);
+
+  expect(testPlayer.randomAttack(enemyBoard)).toMatch(/(hit)|(miss)/g);
 });
 
 test('Set ships at random', () => {
-  const newTestPlayer = createPlayer('Hamid');
-  newTestPlayer.placeShipsAtRandom();
+  const testPlayer = createPlayer('Hamid');
+  testPlayer.placeShipsAtRandom();
 
-  Object.keys(newTestPlayer.storedShips).forEach((shipName) => {
-    expect(newTestPlayer.storedShips[shipName].quantity).toBe(0);
-  });
+  expect(testPlayer.gameboard.activeShips()).toBe(7);
 });

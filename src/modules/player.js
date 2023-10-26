@@ -2,28 +2,37 @@ import createGameboard from './gameboard';
 import createShip from './ship';
 
 const getRandomCoordinates = () => {
-  const randomX = Math.floor(Math.random() * 10);
-  const randomY = Math.floor(Math.random() * 10);
+  const randomRow = Math.floor(Math.random() * 10);
+  const randomColumn = Math.floor(Math.random() * 10);
   const isVertical = Math.random() < 0.5;
 
-  return [randomX, randomY, isVertical];
+  return [randomRow, randomColumn, isVertical];
 };
 
 const checkCoordinates = (coordinates, shipLength, shipsOnBoard) => {
-  const [row, column, isVertical] = coordinates;
+  const row = Number(coordinates[0]);
+  const column = Number(coordinates[1]);
+  const length = Number(shipLength);
+  const isVertical = coordinates[2];
+  const dynamicDir = isVertical ? row : column;
 
-  const coordinatesStart = `${row}, ${column}`;
-  let coordinatesEnd = `${row}, ${column + shipLength + 1}`;
-  let dynamicDir = column;
+  if (dynamicDir + length > 9) return false;
 
-  if (isVertical) {
-    coordinatesEnd = `${row + shipLength + 1}, ${column}`;
-    dynamicDir = row;
+  for (let i = dynamicDir - 1; i < dynamicDir + length; i += 1) {
+    let oneUpField = `${row + 1},${i}`;
+    let nextField = `${row},${i}`;
+    let oneDownField = `${row - 1},${i}`;
+
+    if (isVertical === true) {
+      oneUpField = `${i},${column + 1}`;
+      nextField = `${i},${column}`;
+      oneDownField = `${i},${column - 1}`;
+    }
+
+    if (shipsOnBoard.includes(oneUpField)) return false;
+    if (shipsOnBoard.includes(nextField)) return false;
+    if (shipsOnBoard.includes(oneDownField)) return false;
   }
-
-  if (dynamicDir + shipLength > 9) return false;
-  if (shipsOnBoard.includes(coordinatesStart)) return false;
-  if (shipsOnBoard.includes(coordinatesEnd)) return false;
 
   return true;
 };
@@ -32,73 +41,78 @@ const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
   const markedFields = [];
 
-  const storedShips = {
-    AircraftCarrier: { shipLength: 5, quantity: 1 },
-    Battleship: { shipLength: 4, quantity: 1 },
-    Cruiser: { shipLength: 3, quantity: 1 },
-    Destroyer: { shipLength: 2, quantity: 2 },
-    Submarine: { shipLength: 1, quantity: 2 },
+  const shipStorage = {
+    AircraftCarrier: createShip(5),
+    Battleship: createShip(4),
+    Cruiser: createShip(3),
+    Destroyer1: createShip(2),
+    Destroyer2: createShip(2),
+    Submarine1: createShip(1),
+    Submarine2: createShip(1),
   };
 
   return {
     name,
-    storedShips,
+    shipStorage,
     gameboard,
     isComputer,
-    placeShip(shipLength, coordinates) {
-      const newShip = createShip(shipLength);
-      gameboard.placeShip(newShip, coordinates);
-
-      return newShip;
-    },
-    placeShipsAtRandom() {
-      const shipsOnBoard = [];
-      // Add vertical placing
-
-      Object.keys(storedShips).forEach((type) => {
-        const currentShipType = storedShips[type];
-        const { shipLength } = currentShipType;
-
-        while (currentShipType.quantity > 0) {
-          let randomCoord = getRandomCoordinates();
-
-          while (!checkCoordinates(randomCoord, shipLength, shipsOnBoard)) {
-            randomCoord = getRandomCoordinates();
-          }
-
-          const [row, column, isVertical] = randomCoord;
-          const dynamicDir = isVertical ? row : column;
-
-          let start = dynamicDir - 1;
-          const end = dynamicDir + shipLength + 1;
-
-          while (start < end) {
-            let oneUpField = `${row + 1}, ${start}`;
-            let nextField = `${row}, ${start}`;
-            let oneDownField = `${row - 1}, ${start}`;
-
-            if (isVertical === true) {
-              oneUpField = `${start}, ${column + 1}`;
-              nextField = `${start}, ${column}`;
-              oneDownField = `${start}, ${column - 1}`;
-            }
-
-            shipsOnBoard.push(oneUpField);
-            shipsOnBoard.push(nextField);
-            shipsOnBoard.push(oneDownField);
-
-            start += 1;
-          }
-
-          this.placeShip(shipLength, randomCoord);
-          currentShipType.quantity -= 1;
-        }
-      });
-
-      return shipsOnBoard;
+    placeShip(shipType, coordinates) {
+      const currentShip = shipStorage[shipType];
+      gameboard.placeShip(currentShip, coordinates);
+      return currentShip;
     },
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);
+    },
+    placeShipsAtRandom() {
+      const shipsOnBoard = [];
+
+      Object.keys(shipStorage).forEach((shipType) => {
+        const currentShip = shipStorage[shipType];
+        const { length } = currentShip;
+
+        let newCoordinates = getRandomCoordinates();
+        let coordinatesCheck = checkCoordinates(
+          newCoordinates,
+          length,
+          shipsOnBoard
+        );
+
+        while (!coordinatesCheck) {
+          newCoordinates = getRandomCoordinates();
+          coordinatesCheck = checkCoordinates(
+            newCoordinates,
+            length,
+            shipsOnBoard
+          );
+        }
+
+        const row = Number(newCoordinates[0]);
+        const column = Number(newCoordinates[1]);
+        const isVertical = newCoordinates[2];
+
+        const dynamicDir = isVertical ? row : column;
+
+        for (let i = dynamicDir - 1; i < dynamicDir + length + 1; i += 1) {
+          let oneUpField = `${row + 1},${i}`;
+          let nextField = `${row},${i}`;
+          let oneDownField = `${row - 1},${i}`;
+
+          if (isVertical === true) {
+            oneUpField = `${i},${column + 1}`;
+            nextField = `${i},${column}`;
+            oneDownField = `${i},${column - 1}`;
+          }
+
+          shipsOnBoard.push(oneUpField);
+          shipsOnBoard.push(nextField);
+          shipsOnBoard.push(oneDownField);
+        }
+
+        return this.placeShip(shipType, newCoordinates);
+      });
+
+      return shipsOnBoard;
     },
     randomAttack(enemyBoard) {
       let randomShot = getRandomCoordinates();

@@ -2,12 +2,10 @@
 import createGameboard from '../modules/gameboard';
 import createShip from '../modules/ship';
 
-const testGameboard = createGameboard();
-
 test('Gameboard: Place ships at specific coordinates (horizontal)', () => {
+  const testGameboard = createGameboard();
   const testShip = createShip(3);
 
-  // Switch to object ?
   const coordinates = [8, 1, false];
   const { board } = testGameboard;
 
@@ -19,6 +17,7 @@ test('Gameboard: Place ships at specific coordinates (horizontal)', () => {
 });
 
 test('Gameboard: Place ships at specific coordinates (vertical)', () => {
+  const testGameboard = createGameboard();
   const testShip = createShip(3);
   const coordinates = [5, 1, true];
   const { board } = testGameboard;
@@ -31,40 +30,73 @@ test('Gameboard: Place ships at specific coordinates (vertical)', () => {
 });
 
 test('Gameboard: Place ships at specific coordinates (fail)', () => {
-  const testShip = createShip(3);
+  const testGameboard = createGameboard();
+  const testShip1 = createShip(3);
+  const testShip2 = createShip(3);
   const coordinates = [6, 0];
 
-  expect(() => testGameboard.placeShip(testShip, coordinates)).toThrow();
+  testGameboard.placeShip(testShip1, coordinates);
+  expect(() => testGameboard.placeShip(testShip2, coordinates)).toThrow();
 });
 
 test('Gameboard: receiveAttack (Hit)', () => {
-  const coordinates = [6, 1];
+  const testGameboard = createGameboard();
+  const testShip1 = createShip(3);
+  const coordinates = [6, 0];
+  testGameboard.placeShip(testShip1, coordinates);
 
   expect(testGameboard.receiveAttack(coordinates)).toBe('hit');
 });
 
 test('Gameboard: receiveAttack (Miss)', () => {
+  const testGameboard = createGameboard();
+  const testShip1 = createShip(3);
   const coordinates = [6, 0];
-  expect(testGameboard.receiveAttack(coordinates)).toBe('miss');
+  testGameboard.placeShip(testShip1, coordinates);
+
+  expect(testGameboard.receiveAttack([7, 1])).toBe('miss');
 });
 
 test('Gameboard: receiveAttack (Error - already hit)', () => {
+  const testGameboard = createGameboard();
+  const testShip1 = createShip(3);
   const coordinates = [6, 0];
+  testGameboard.placeShip(testShip1, coordinates);
+
+  testGameboard.receiveAttack(coordinates);
   expect(() => testGameboard.receiveAttack(coordinates)).toThrow();
 });
 
 test('Gameboard: receiveAttack (Error - out Of Board)', () => {
-  const coordinates = [10, 12];
-  expect(() => testGameboard.receiveAttack(coordinates)).toThrow();
+  const testGameboard = createGameboard();
+  const testShip1 = createShip(3);
+  const coordinates = [6, 0];
+  testGameboard.placeShip(testShip1, coordinates);
+
+  expect(() => testGameboard.receiveAttack([10, 12])).toThrow();
 });
 
 test('Gameboard: report whether if all ships sunk (no ships)', () => {
-  const testGameboard2 = createGameboard();
-  expect(testGameboard2.activeShips()).toBe(false);
+  const testGameboard = createGameboard();
+  expect(testGameboard.activeShips()).toBe(0);
 });
 
 test('Gameboard: report whether if all sunk (not all sunk)', () => {
-  expect(testGameboard.activeShips()).toBe(true);
+  const testGameboard = createGameboard();
+  const testShip1 = createShip(3);
+  const coordinates = [6, 0];
+  const testShip2 = createShip(3);
+  const coordinates2 = [7, 1, true];
+
+  testGameboard.placeShip(testShip1, coordinates);
+  testGameboard.placeShip(testShip2, coordinates2);
+  expect(testGameboard.activeShips()).toBe(2);
+
+  testGameboard.receiveAttack([6, 0]);
+  testGameboard.receiveAttack([6, 1]);
+  testGameboard.receiveAttack([6, 2]);
+
+  expect(testGameboard.activeShips()).toBe(1);
 });
 
 test('Gameboard: report whether if all sunk (all sunk)', () => {
@@ -72,13 +104,14 @@ test('Gameboard: report whether if all sunk (all sunk)', () => {
   isSunkTest.placeShip(createShip(2), [8, 1, false]);
   isSunkTest.placeShip(createShip(1), [1, 1, false]);
   isSunkTest.placeShip(createShip(1), [5, 1, false]);
-  expect(isSunkTest.activeShips()).toBe(true);
+  expect(isSunkTest.activeShips()).toBe(3);
 
   isSunkTest.receiveAttack([8, 1]);
   isSunkTest.receiveAttack([8, 2]);
 
   isSunkTest.receiveAttack([1, 1]);
+  
   isSunkTest.receiveAttack([5, 1]);
 
-  expect(isSunkTest.activeShips()).toBe(false);
+  expect(isSunkTest.activeShips()).toBe(0);
 });

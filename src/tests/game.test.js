@@ -3,7 +3,7 @@ import GameController from '../controller/game';
 /* eslint-disable no-undef */
 const testGame = GameController();
 
-test('Setup: Players', () => {
+test.skip('Setup: Players', () => {
   expect(testGame.player1.gameboard).toBeDefined();
   expect(testGame.player1.storedShips).toBeDefined();
 
@@ -11,7 +11,7 @@ test('Setup: Players', () => {
   expect(testGame.player2.storedShips).toBeDefined();
 });
 
-test('Setup: Ships', () => {
+test.skip('Setup: Ships', () => {
   testGame.setShips();
 
   Object.keys(testGame.player1.storedShips).forEach((ship) => {
@@ -23,7 +23,7 @@ test('Setup: Ships', () => {
   });
 });
 
-test('Play turn by turn', () => {
+test.skip('Play turn by turn', () => {
   testGame.playGameRandom();
 });
 

@@ -58,7 +58,7 @@ const createGameboard = () => {
       let currentField = board[row][i];
       if (isVertical) currentField = board[i][column];
 
-      if (currentField.ship) {
+      if (currentField.ship !== null) {
         throw new Error('Check coordinates: Field Occupied!');
       }
     }
@@ -70,7 +70,9 @@ const createGameboard = () => {
     board,
     shipsOnBoard,
     placeShip(newShip, coordinates) {
-      const [row, column, isVertical] = coordinates;
+      const row = Number(coordinates[0]);
+      const column = Number(coordinates[1]);
+      const isVertical = coordinates[2];
       // Dir === True  (ship will be placed vertically)
       const dynamicDir = isVertical ? row : column;
 
@@ -81,13 +83,9 @@ const createGameboard = () => {
         currentField.ship = newShip;
       }
       shipsOnBoard.push(newShip);
-
-      return `Start: X:${row}, Y:${column} End: X:${row}, Y:${
-        column + (newShip.length - 1)
-      }`;
     },
     receiveAttack(coordinates) {
-      if (!shipsOnBoard.length) return 'No ships on board';
+      if (!shipsOnBoard.length) return false;
 
       const [row, column] = coordinates;
       const currentField = board[row][column];
@@ -102,7 +100,7 @@ const createGameboard = () => {
         livingShips -= ship.isSunk() ? 1 : 0;
       });
 
-      return livingShips > 0;
+      return livingShips;
     },
   };
 };
