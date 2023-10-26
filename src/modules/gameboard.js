@@ -68,6 +68,7 @@ const createGameboard = () => {
 
   return {
     board,
+    shipsOnBoard,
     placeShip(newShip, coordinates) {
       const [row, column, isVertical] = coordinates;
       // Dir === True  (ship will be placed vertically)
@@ -76,9 +77,7 @@ const createGameboard = () => {
       checkCoordinates(newShip.length, row, column, isVertical);
 
       for (let i = dynamicDir; i < dynamicDir + newShip.length; i += 1) {
-        let currentField = board[row][i];
-        if (isVertical) currentField = board[i][column];
-
+        const currentField = isVertical ? board[i][column] : board[row][i];
         currentField.ship = newShip;
       }
       shipsOnBoard.push(newShip);
@@ -105,7 +104,6 @@ const createGameboard = () => {
 
       return livingShips > 0;
     },
-    shipsOnBoard,
   };
 };
 

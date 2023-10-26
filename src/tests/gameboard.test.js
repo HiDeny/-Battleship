@@ -72,6 +72,7 @@ test('Gameboard: report whether if all sunk (all sunk)', () => {
   isSunkTest.placeShip(createShip(2), [8, 1, false]);
   isSunkTest.placeShip(createShip(1), [1, 1, false]);
   isSunkTest.placeShip(createShip(1), [5, 1, false]);
+  expect(isSunkTest.activeShips()).toBe(true);
 
   isSunkTest.receiveAttack([8, 1]);
   isSunkTest.receiveAttack([8, 2]);
