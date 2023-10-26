@@ -13,11 +13,11 @@ const checkCoordinates = (coordinates, shipLength, shipsOnBoard) => {
   const [row, column, isVertical] = coordinates;
 
   const coordinatesStart = `${row}, ${column}`;
-  let coordinatesEnd = `${row}, ${column + shipLength}`;
+  let coordinatesEnd = `${row}, ${column + shipLength + 1}`;
   let dynamicDir = column;
 
   if (isVertical) {
-    coordinatesEnd = `${row + shipLength}, ${column}`;
+    coordinatesEnd = `${row + shipLength + 1}, ${column}`;
     dynamicDir = row;
   }
 
@@ -77,7 +77,7 @@ const createPlayer = (name, isComputer = false) => {
             let nextField = `${row}, ${start}`;
             let oneDownField = `${row - 1}, ${start}`;
 
-            if (isVertical) {
+            if (isVertical === true) {
               oneUpField = `${start}, ${column + 1}`;
               nextField = `${start}, ${column}`;
               oneDownField = `${start}, ${column - 1}`;

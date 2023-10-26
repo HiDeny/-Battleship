@@ -11,7 +11,6 @@ const createShip = (length) => {
     },
     hit() {
       hits += 1;
-      return true;
     },
   };
 };
