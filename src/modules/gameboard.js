@@ -10,8 +10,8 @@ const field = (coordinates) => {
       return ship;
     },
     set ship(newShip) {
-      if (ship) throw new Error('Ship already set!');
       ship = newShip;
+      PubSub.publish('field-ship', coordinates);
     },
     markField() {
       if (mark !== null) throw new Error(`Already marked!`);
@@ -83,13 +83,10 @@ const createGameboard = () => {
         i < Number(dynamicDir) + Number(newShip.length);
         i += 1
       ) {
-        console.log(dynamicDir);
-        console.log(fixedDir);
         const currentField = isVertical
           ? board[i][fixedDir]
           : board[fixedDir][i];
         currentField.ship = newShip;
-        PubSub.publish('field-ship', currentField.coordinates);
       }
       shipsOnBoard.push(newShip);
 

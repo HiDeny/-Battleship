@@ -4,8 +4,28 @@ import createShip from './ship';
 const getRandomCoordinates = () => {
   const randomX = Math.floor(Math.random() * 10);
   const randomY = Math.floor(Math.random() * 10);
+  const isVertical = Math.random() < 0.5;
 
-  return [randomX, randomY];
+  return [randomX, randomY, isVertical];
+};
+
+const checkCoordinates = (coordinates, shipLength, shipsOnBoard) => {
+  const [row, column, isVertical] = coordinates;
+
+  const coordinatesStart = `${row}, ${column}`;
+  let coordinatesEnd = `${row}, ${column + shipLength}`;
+  let dynamicDir = column;
+
+  if (isVertical) {
+    coordinatesEnd = `${row + shipLength}, ${column}`;
+    dynamicDir = row;
+  }
+
+  if (dynamicDir + shipLength > 9) return false;
+  if (shipsOnBoard.includes(coordinatesStart)) return false;
+  if (shipsOnBoard.includes(coordinatesEnd)) return false;
+
+  return true;
 };
 
 const createPlayer = (name, isComputer = false) => {
@@ -42,32 +62,32 @@ const createPlayer = (name, isComputer = false) => {
         while (currentShipType.quantity > 0) {
           let randomCoord = getRandomCoordinates();
 
-          while (
-            randomCoord[1] + shipLength > 9 ||
-            shipsOnBoard.includes(`${randomCoord[0]}, ${randomCoord[1]}`) ||
-            shipsOnBoard.includes(
-              `${randomCoord[0]}, ${randomCoord[1] + shipLength}`
-            )
-          ) {
+          while (!checkCoordinates(randomCoord, shipLength, shipsOnBoard)) {
             randomCoord = getRandomCoordinates();
           }
 
-          const row = randomCoord[0];
-          const column = randomCoord[1];
+          const [row, column, isVertical] = randomCoord;
+          const dynamicDir = isVertical ? row : column;
 
-          let columnStart = column - 1;
-          const columnEnd = column + shipLength + 1;
+          let start = dynamicDir - 1;
+          const end = dynamicDir + shipLength + 1;
 
-          while (columnStart < columnEnd) {
-            const oneUpField = `${row + 1}, ${columnStart}`;
-            const nextField = `${row}, ${columnStart}`;
-            const oneDownField = `${row - 1}, ${columnStart}`;
+          while (start < end) {
+            let oneUpField = `${row + 1}, ${start}`;
+            let nextField = `${row}, ${start}`;
+            let oneDownField = `${row - 1}, ${start}`;
+
+            if (isVertical) {
+              oneUpField = `${start}, ${column + 1}`;
+              nextField = `${start}, ${column}`;
+              oneDownField = `${start}, ${column - 1}`;
+            }
 
             shipsOnBoard.push(oneUpField);
             shipsOnBoard.push(nextField);
             shipsOnBoard.push(oneDownField);
 
-            columnStart += 1;
+            start += 1;
           }
 
           this.placeShip(shipLength, randomCoord);

@@ -4,7 +4,7 @@ import './view/styles.css';
 import GameController from './controller/game';
 import renderPlayerGameboard from './view/boardUI';
 
-import { createNamesUI, createResultUI, createRoundsUI } from './view/hudUI';
+import { createResultUI, createRoundsUI } from './view/hudUI';
 
 import PubSub from './modules/pubsub';
 
@@ -35,9 +35,7 @@ PubSub.subscribe('field-click', (coordinates) => {
   }, 1000);
 });
 
-PubSub.subscribe('field-ship-drag', (data) => {
-  const { length, coordinates } = data;
-  console.log(length);
-  console.log(coordinates);
+player2.placeShipsAtRandom();
+PubSub.subscribe('field-ship-drag', ({ length, coordinates }) => {
   player1.placeShip(length, coordinates);
 });

@@ -8,7 +8,7 @@ const handleClickField = (event) => {
 let beingDragged;
 
 const handleDragStart = (event) => {
-  console.log(event.target);
+  console.log(event.target.field);
   beingDragged = event.target;
   event.target.classList.add('dragging');
 };
@@ -20,6 +20,9 @@ const handleDragEnd = (event) => {
 
 const handleDragOver = (event) => {
   event.preventDefault();
+  const { length } = beingDragged.dataset;
+  const { row, column } = event.target.dataset;
+
   event.target.classList.add('draggingOver');
 };
 
@@ -31,13 +34,13 @@ const handleDragLeave = (event) => {
 const handleDragDrop = (event) => {
   event.preventDefault();
   event.target.classList.remove('draggingOver');
-  
+
   const { length } = beingDragged.dataset;
   const { row, column } = event.target.dataset;
 
   PubSub.publish('field-ship-drag', {
     length,
-    coordinates: [row, column, false],
+    coordinates: [row, column, true],
   });
 };
 
@@ -58,6 +61,9 @@ const createFieldUI = (field) => {
   PubSub.subscribe('field-ship', (coordinates) => {
     if (coordinates === field.coordinates) {
       fieldButton.classList.add('ship');
+      fieldButton.draggable = true;
+      fieldButton.addEventListener('dragstart', handleDragStart);
+      fieldButton.addEventListener('dragend', handleDragEnd);
     }
   });
 
@@ -68,28 +74,39 @@ const createFieldUI = (field) => {
   return fieldButton;
 };
 
-const createRowUI = () => {
-  const container = document.createElement('div');
-  container.classList.add('row');
-
-  return container;
-};
-
 const renderBoardUI = (board) => {
   const boardUI = document.createElement('div');
-  boardUI.classList.add('board-container');
+  boardUI.classList.add('gameboard-board');
 
   board.forEach((row) => {
-    const newRow = createRowUI();
-    boardUI.append(newRow);
-
     row.forEach((field) => {
       const fieldUI = createFieldUI(field);
-      newRow.append(fieldUI);
+      boardUI.append(fieldUI);
     });
   });
 
   return boardUI;
+};
+
+const handleClickRotateButton = ({ target }) => {
+  target.dataset;
+};
+
+const rotateShipButton = () => {
+  const rotateButton = document.createElement('button');
+  rotateButton.classList.add('rotateShip');
+
+  let isVertical = true;
+  rotateButton.textContent = isVertical
+    ? 'Rotate Horizontal'
+    : 'Rotate Vertical';
+
+  rotateButton.addEventListener('click', () => {
+    isVertical = !isVertical;
+    rotateButton.dataset.isVertical = isVertical;
+  });
+
+  return;
 };
 
 const renderShipStorageUI = (shipStorage) => {
@@ -125,17 +142,19 @@ const renderShipStorageUI = (shipStorage) => {
 const renderPlayerGameboard = (player, isEnemy = false) => {
   const { name, storedShips, gameboard } = player;
   const gameboardUI = document.createElement('div');
-  const boardUI = renderBoardUI(gameboard.board);
-  const shipsUI = renderShipStorageUI(storedShips);
   const playerClass = isEnemy ? 'enemyBoard' : 'userBoard';
 
   gameboardUI.classList.add('gameboard');
   gameboardUI.classList.add(playerClass);
 
+  const boardUI = renderBoardUI(gameboard.board);
+  gameboardUI.append(boardUI);
   // if (!isEnemy) boardUI.style['pointer-events'] = 'none';
 
-  gameboardUI.append(boardUI);
-  gameboardUI.append(shipsUI);
+  if (!isEnemy) {
+    const shipsUI = renderShipStorageUI(storedShips);
+    gameboardUI.append(shipsUI);
+  }
 
   return gameboardUI;
 };

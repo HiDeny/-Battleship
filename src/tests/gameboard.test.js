@@ -79,10 +79,5 @@ test('Gameboard: report whether if all sunk (all sunk)', () => {
   isSunkTest.receiveAttack([1, 1]);
   isSunkTest.receiveAttack([5, 1]);
 
-
-  isSunkTest.shipsOnBoard.forEach((ship) => {
-    console.log(ship.getHealth());
-  });
-
   expect(isSunkTest.activeShips()).toBe(false);
 });
