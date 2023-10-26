@@ -15,8 +15,8 @@ const GameController = () => {
   };
 
   const gameOver = () => {
-    if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
-    if (!player2.gameboard.activeShips()) return 'Player 1 WIN!';
+    if (player1.gameboard.activeShips() < 1) return 'Player 2 WIN!';
+    if (player2.gameboard.activeShips() < 1) return 'Player 1 WIN!';
     return false;
   };
 
@@ -36,27 +36,28 @@ const GameController = () => {
       }
 
       if (randomAttack) {
-        activePlayer.randomAttack(opponentPlayer.gameboard);
-      } else {
-        activePlayer.attack(opponentPlayer.gameboard, coordinates);
+        const currentAttack = activePlayer.randomAttack(
+          opponentPlayer.gameboard
+        );
+
+        round += 1;
+        PubSub.publish('game-round', round);
+        
+        switchTurns();
+        return currentAttack;
       }
+
+      const currentAttack = activePlayer.attack(
+        opponentPlayer.gameboard,
+        coordinates
+      );
 
       round += 1;
       PubSub.publish('game-round', round);
 
       switchTurns();
-      return false;
+      return currentAttack;
     },
-    // playGameRandom(activePlayer = player1) {
-    //   if (!player1.gameboard.activeShips()) return 'Player 2 WIN!';
-    //   if (!player2.gameboard.activeShips()) return 'Player 1 WIN!';
-
-    //   const inActivePlayer = activePlayer === player1 ? player2 : player1;
-
-    //   round += 1;
-    //   activePlayer.randomAttack(inActivePlayer.gameboard);
-    //   return this.playGameRandom(inActivePlayer);
-    // },
   };
 };
 
