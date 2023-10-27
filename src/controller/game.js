@@ -29,13 +29,13 @@ const GameController = () => {
       player2.placeShipsAtRandom();
     },
     playRound(coordinates, randomAttack = false) {
-      const isGameOver = gameOver();
-      let currentAttack;
-      if (isGameOver) {
-        PubSub.publish('game-round', isGameOver);
-        return isGameOver;
+      if (gameOver()) {
+        const gameResult = gameOver();
+        PubSub.publish('game-round', gameResult);
+        return gameResult;
       }
 
+      let currentAttack;
       if (randomAttack) {
         currentAttack = activePlayer.randomAttack(opponentPlayer.gameboard);
       } else {

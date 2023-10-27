@@ -112,7 +112,7 @@ const createGameboard = () => {
       shipsOnBoard.push(newShip);
     },
     receiveAttack(coordinates) {
-      if (!shipsOnBoard.length) return false;
+      if (!shipsOnBoard.length) throw new Error('No ships on board!');
 
       const [row, column] = coordinates;
       const currentField = board[row][column];
