@@ -1,41 +1,43 @@
 import createGameboard from './gameboard';
 import createShip from './ship';
 
-const getRandomCoordinates = () => {
-  const randomRow = Math.floor(Math.random() * 10);
-  const randomColumn = Math.floor(Math.random() * 10);
-  const isVertical = Math.random() < 0.5;
+import { getRandomCoordinates, checkCoordinates } from './coordinates';
 
-  return [randomRow, randomColumn, isVertical];
-};
+// const getRandomCoordinates = () => {
+//   const randomRow = Math.floor(Math.random() * 10);
+//   const randomColumn = Math.floor(Math.random() * 10);
+//   const isVertical = Math.random() < 0.5;
 
-const checkCoordinates = (coordinates, shipLength, shipsOnBoard) => {
-  const row = Number(coordinates[0]);
-  const column = Number(coordinates[1]);
-  const length = Number(shipLength);
-  const isVertical = coordinates[2];
-  const dynamicDir = isVertical ? row : column;
+//   return [randomRow, randomColumn, isVertical];
+// };
 
-  if (dynamicDir + length > 9) return false;
+// const checkCoordinates = (coordinates, shipLength, shipsOnBoard) => {
+//   const row = Number(coordinates[0]);
+//   const column = Number(coordinates[1]);
+//   const length = Number(shipLength);
+//   const isVertical = coordinates[2];
+//   const dynamicDir = isVertical ? row : column;
 
-  for (let i = dynamicDir - 1; i < dynamicDir + length; i += 1) {
-    let oneUpField = `${row + 1},${i}`;
-    let nextField = `${row},${i}`;
-    let oneDownField = `${row - 1},${i}`;
+//   if (dynamicDir + length > 9) return false;
 
-    if (isVertical === true) {
-      oneUpField = `${i},${column + 1}`;
-      nextField = `${i},${column}`;
-      oneDownField = `${i},${column - 1}`;
-    }
+//   for (let i = dynamicDir - 1; i < dynamicDir + length; i += 1) {
+//     let oneUpField = `${row + 1},${i}`;
+//     let nextField = `${row},${i}`;
+//     let oneDownField = `${row - 1},${i}`;
 
-    if (shipsOnBoard.includes(oneUpField)) return false;
-    if (shipsOnBoard.includes(nextField)) return false;
-    if (shipsOnBoard.includes(oneDownField)) return false;
-  }
+//     if (isVertical === true) {
+//       oneUpField = `${i},${column + 1}`;
+//       nextField = `${i},${column}`;
+//       oneDownField = `${i},${column - 1}`;
+//     }
 
-  return true;
-};
+//     if (shipsOnBoard.includes(oneUpField)) return false;
+//     if (shipsOnBoard.includes(nextField)) return false;
+//     if (shipsOnBoard.includes(oneDownField)) return false;
+//   }
+
+//   return true;
+// };
 
 const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
@@ -57,9 +59,9 @@ const createPlayer = (name, isComputer = false) => {
     gameboard,
     isComputer,
     placeShip(shipType, coordinates) {
-      const currentShip = shipStorage[shipType];
-      gameboard.placeShip(currentShip, coordinates);
-      return currentShip;
+      const completeShip = { type: shipType, boat: shipStorage[shipType] };
+      gameboard.placeShip(completeShip, coordinates);
+      return completeShip.boat;
     },
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);
@@ -68,46 +70,42 @@ const createPlayer = (name, isComputer = false) => {
       const shipsOnBoard = [];
 
       Object.keys(shipStorage).forEach((shipType) => {
-        const currentShip = shipStorage[shipType];
-        const { length } = currentShip;
+        const boat = shipStorage[shipType];
+        const { length } = boat;
 
         let newCoordinates = getRandomCoordinates();
-        let coordinatesCheck = checkCoordinates(
-          newCoordinates,
-          length,
-          shipsOnBoard
-        );
+        const toCheck = {
+          coordinates: newCoordinates,
+          board: gameboard.board,
+          shipLength: length,
+        };
 
-        while (!coordinatesCheck) {
+        while (!checkCoordinates(toCheck)) {
           newCoordinates = getRandomCoordinates();
-          coordinatesCheck = checkCoordinates(
-            newCoordinates,
-            length,
-            shipsOnBoard
-          );
+          toCheck.coordinates = newCoordinates;
         }
 
-        const row = Number(newCoordinates[0]);
-        const column = Number(newCoordinates[1]);
-        const isVertical = newCoordinates[2];
+        // const row = Number(newCoordinates[0]);
+        // const column = Number(newCoordinates[1]);
+        // const isVertical = newCoordinates[2];
 
-        const dynamicDir = isVertical ? row : column;
+        // const dynamicDir = isVertical ? row : column;
 
-        for (let i = dynamicDir - 1; i < dynamicDir + length + 1; i += 1) {
-          let oneUpField = `${row + 1},${i}`;
-          let nextField = `${row},${i}`;
-          let oneDownField = `${row - 1},${i}`;
+        // for (let i = dynamicDir - 1; i < dynamicDir + length + 1; i += 1) {
+        //   let oneUpField = `${row + 1},${i}`;
+        //   let nextField = `${row},${i}`;
+        //   let oneDownField = `${row - 1},${i}`;
 
-          if (isVertical === true) {
-            oneUpField = `${i},${column + 1}`;
-            nextField = `${i},${column}`;
-            oneDownField = `${i},${column - 1}`;
-          }
+        //   if (isVertical === true) {
+        //     oneUpField = `${i},${column + 1}`;
+        //     nextField = `${i},${column}`;
+        //     oneDownField = `${i},${column - 1}`;
+        //   }
 
-          shipsOnBoard.push(oneUpField);
-          shipsOnBoard.push(nextField);
-          shipsOnBoard.push(oneDownField);
-        }
+        //   shipsOnBoard.push(oneUpField);
+        //   shipsOnBoard.push(nextField);
+        //   shipsOnBoard.push(oneDownField);
+        // }
 
         return this.placeShip(shipType, newCoordinates);
       });

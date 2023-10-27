@@ -10,8 +10,10 @@ const field = (coordinates) => {
       return ship;
     },
     set ship(newShip) {
-      ship = newShip;
-      PubSub.publish('field-ship', coordinates);
+      const { type, boat } = newShip;
+      if (boat === undefined) throw new Error('Fix boat');
+      ship = boat;
+      PubSub.publish('field-ship', [coordinates, type]);
     },
     markField() {
       if (mark !== null) throw new Error(`Already marked!`);
@@ -47,38 +49,38 @@ const createGameboard = () => {
   const board = initBoard();
   const shipsOnBoard = [];
 
-  const checkCoordinates = (length, row, column, isVertical) => {
-    const dynamicDir = isVertical ? row : column;
+  // const checkCoordinates = (...args) => {
+  //   const [length, row, column, isVertical] = args;
+  //   const dynamicDir = isVertical ? row : column;
 
-    if (row > 9 || column > 9 || dynamicDir + length > 10) {
-      throw new Error('Out of board!');
-    }
+  //   if (row > 9 || column > 9 || dynamicDir + length > 10) {
+  //     throw new Error('Out of board!');
+  //   }
 
-    for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
-      let currentField = board[row][i];
-      if (isVertical) currentField = board[i][column];
+  //   for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
+  //     let currentField = board[row][i];
+  //     if (isVertical) currentField = board[i][column];
 
-      if (currentField.ship !== null) {
-        throw new Error('Check coordinates: Field Occupied!');
-      }
-    }
+  //     if (currentField.ship !== null) {
+  //       throw new Error('Check coordinates: Field Occupied!');
+  //     }
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   return {
     board,
     shipsOnBoard,
     placeShip(newShip, coordinates) {
+      const { boat } = newShip;
       const row = Number(coordinates[0]);
       const column = Number(coordinates[1]);
       const isVertical = coordinates[2];
       // Dir === True  (ship will be placed vertically)
       const dynamicDir = isVertical ? row : column;
 
-      checkCoordinates(newShip.length, row, column, isVertical);
-
-      for (let i = dynamicDir; i < dynamicDir + newShip.length; i += 1) {
+      for (let i = dynamicDir; i < dynamicDir + boat.length; i += 1) {
         const currentField = isVertical ? board[i][column] : board[row][i];
         currentField.ship = newShip;
       }
@@ -96,8 +98,8 @@ const createGameboard = () => {
     activeShips() {
       let livingShips = shipsOnBoard.length;
 
-      shipsOnBoard.forEach((ship) => {
-        livingShips -= ship.isSunk() ? 1 : 0;
+      shipsOnBoard.forEach((completeShip) => {
+        livingShips -= completeShip.boat.isSunk() ? 1 : 0;
       });
 
       return livingShips;
