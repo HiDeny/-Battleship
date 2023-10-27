@@ -2,7 +2,7 @@ import GameController from '../controller/game';
 
 /* eslint-disable no-undef */
 
-test.skip('Setup: Players', () => {
+test('Setup: Players', () => {
   const testGame = GameController();
   expect(testGame.player1.gameboard).toBeDefined();
   expect(testGame.player1.shipStorage).toBeDefined();
@@ -11,7 +11,7 @@ test.skip('Setup: Players', () => {
   expect(testGame.player2.shipStorage).toBeDefined();
 });
 
-test.skip('Setup: Ships', () => {
+test('Setup: Ships', () => {
   const testGame = GameController();
   testGame.setShips();
 
@@ -19,7 +19,7 @@ test.skip('Setup: Ships', () => {
   expect(testGame.player2.gameboard.activeShips()).toBe(7);
 });
 
-test.skip('Play turn by turn', () => {
+test('Play turn by turn', () => {
   const testGame = GameController();
   testGame.player1.placeShip('Destroyer2', [1, 1]);
   testGame.player2.placeShip('Destroyer2', [2, 2]);
@@ -30,7 +30,7 @@ test.skip('Play turn by turn', () => {
   expect(testGame.playRound([4, 2])).toBe('miss');
 });
 
-test.skip('Ending conditions (P1 win)', () => {
+test('Ending conditions (P1 win)', () => {
   const testGame = GameController();
   testGame.player1.placeShip('Destroyer2', [1, 1]);
   testGame.player2.placeShip('Destroyer2', [2, 2]);
@@ -40,7 +40,7 @@ test.skip('Ending conditions (P1 win)', () => {
   testGame.playRound([2, 3]);
   expect(testGame.playRound([5, 7])).toBe('Player 1 WIN!');
 });
-test.skip('Ending conditions (P2 win)', () => {
+test('Ending conditions (P2 win)', () => {
   const testGame = GameController();
   testGame.player1.placeShip('Destroyer2', [1, 1]);
   testGame.player2.placeShip('Destroyer2', [2, 2]);

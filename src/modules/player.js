@@ -3,42 +3,6 @@ import createShip from './ship';
 
 import { getRandomCoordinates, checkCoordinates } from './coordinates';
 
-// const getRandomCoordinates = () => {
-//   const randomRow = Math.floor(Math.random() * 10);
-//   const randomColumn = Math.floor(Math.random() * 10);
-//   const isVertical = Math.random() < 0.5;
-
-//   return [randomRow, randomColumn, isVertical];
-// };
-
-// const checkCoordinates = (coordinates, shipLength, shipsOnBoard) => {
-//   const row = Number(coordinates[0]);
-//   const column = Number(coordinates[1]);
-//   const length = Number(shipLength);
-//   const isVertical = coordinates[2];
-//   const dynamicDir = isVertical ? row : column;
-
-//   if (dynamicDir + length > 9) return false;
-
-//   for (let i = dynamicDir - 1; i < dynamicDir + length; i += 1) {
-//     let oneUpField = `${row + 1},${i}`;
-//     let nextField = `${row},${i}`;
-//     let oneDownField = `${row - 1},${i}`;
-
-//     if (isVertical === true) {
-//       oneUpField = `${i},${column + 1}`;
-//       nextField = `${i},${column}`;
-//       oneDownField = `${i},${column - 1}`;
-//     }
-
-//     if (shipsOnBoard.includes(oneUpField)) return false;
-//     if (shipsOnBoard.includes(nextField)) return false;
-//     if (shipsOnBoard.includes(oneDownField)) return false;
-//   }
-
-//   return true;
-// };
-
 const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
   const markedFields = [];
@@ -84,28 +48,6 @@ const createPlayer = (name, isComputer = false) => {
           newCoordinates = getRandomCoordinates();
           toCheck.coordinates = newCoordinates;
         }
-
-        // const row = Number(newCoordinates[0]);
-        // const column = Number(newCoordinates[1]);
-        // const isVertical = newCoordinates[2];
-
-        // const dynamicDir = isVertical ? row : column;
-
-        // for (let i = dynamicDir - 1; i < dynamicDir + length + 1; i += 1) {
-        //   let oneUpField = `${row + 1},${i}`;
-        //   let nextField = `${row},${i}`;
-        //   let oneDownField = `${row - 1},${i}`;
-
-        //   if (isVertical === true) {
-        //     oneUpField = `${i},${column + 1}`;
-        //     nextField = `${i},${column}`;
-        //     oneDownField = `${i},${column - 1}`;
-        //   }
-
-        //   shipsOnBoard.push(oneUpField);
-        //   shipsOnBoard.push(nextField);
-        //   shipsOnBoard.push(oneDownField);
-        // }
 
         return this.placeShip(shipType, newCoordinates);
       });

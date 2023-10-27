@@ -27,15 +27,15 @@ document.body.append(player2GameBoard);
 
 testGame.setShips();
 
-PubSub.subscribe('field-click', (coordinates) => {
-  testGame.playRound(coordinates);
+// PubSub.subscribe('field-click', (coordinates) => {
+//   testGame.playRound(coordinates);
 
-  setTimeout(() => {
-    testGame.playRound(null, true);
-  }, 1000);
-});
+//   setTimeout(() => {
+//     testGame.playRound(null, true);
+//   }, 1000);
+// });
 
-// player2.placeShipsAtRandom();
-PubSub.subscribe('field-ship-drag', ({ length, coordinates }) => {
-  player1.placeShip(length, coordinates);
-});
+// // player2.placeShipsAtRandom();
+// PubSub.subscribe('field-ship-drag', ({ length, coordinates }) => {
+//   player1.placeShip(length, coordinates);
+// });

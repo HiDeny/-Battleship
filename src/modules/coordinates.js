@@ -13,22 +13,31 @@ export const checkCoordinates = (toCheck) => {
   const dynamicDir = isVertical ? Number(row) : Number(column);
 
   if (row > 9 || column > 9 || dynamicDir + shipLength - 1 > 9) {
-    // console.error('Check coordinates: Out of board!');
     return false;
   }
 
-  for (let i = dynamicDir; i < dynamicDir + shipLength; i += 1) {
-    let currentField = board[row][i];
-    if (isVertical) currentField = board[i][column];
+  if (dynamicDir - 1 > -1) {
+    const oneBefore = isVertical
+      ? board[dynamicDir - 1][column]
+      : board[row][dynamicDir - 1];
 
-    if (currentField.ship !== null) {
-      // console.error('Check coordinates: Field Occupied!');
+    if (oneBefore.ship !== null || oneBefore.offset === true) {
+      return false;
+    }
+  }
+
+  const dynamicPlusBoat = dynamicDir + shipLength;
+  if (dynamicPlusBoat < 10) {
+    const oneAfter = isVertical
+      ? board[dynamicPlusBoat][column]
+      : board[row][dynamicPlusBoat];
+
+    if (oneAfter.ship !== null || oneAfter.offset === true) {
       return false;
     }
   }
 
   const start = dynamicDir - 1 >= 0 ? dynamicDir - 1 : dynamicDir;
-
   for (let i = start; i < dynamicDir + shipLength; i += 1) {
     let currentField = board[row][i];
     let oneUpField = row + 1 <= 9 ? board[row + 1][i] : false;
@@ -41,8 +50,12 @@ export const checkCoordinates = (toCheck) => {
     }
 
     if (currentField.ship !== null) return false;
-    if (oneUpField.ship !== null) return false;
-    if (oneDownField.ship !== null) return false;
+    if (oneUpField.ship !== null || oneDownField.offset === true) {
+      return false;
+    }
+    if (oneDownField.ship !== null || oneDownField.offset === true) {
+      return false;
+    }
   }
 
   return true;

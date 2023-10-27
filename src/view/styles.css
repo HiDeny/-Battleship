@@ -83,6 +83,33 @@ body {
   background-color: darkgreen;
 }
 
+.offset {
+  background-color: purple;
+  opacity: 0.3;
+}
+
+.AircraftCarrier {
+  background-color: yellow;
+}
+
+.Battleship {
+  background-color: yellowgreen;
+}
+
+.Cruiser {
+  background-color: green;
+}
+
+.Destroyer1,
+.Destroyer2 {
+  background-color: blue;
+}
+
+.Submarine1,
+.Submarine2 {
+  background-color: aqua;
+}
+
 .ship-storage {
   display: flex;
   width: fit-content;

@@ -107,12 +107,19 @@ const createFieldUI = (field) => {
   // fieldButton.addEventListener('drop', handleDragDrop);
 
   // Need Fix
-  PubSub.subscribe('field-ship', (coordinates) => {
+  PubSub.subscribe('field-ship', (coordinates, type) => {
     if (coordinates === field.coordinates) {
       fieldButton.classList.add('ship');
+      fieldButton.classList.add(type);
       // fieldButton.draggable = true;
       // fieldButton.addEventListener('dragstart', handleDragStart);
       // fieldButton.addEventListener('dragend', handleDragEnd);
+    }
+  });
+
+  PubSub.subscribe('field-ship-offset', (coordinates) => {
+    if (coordinates === field.coordinates) {
+      fieldButton.classList.add('offset');
     }
   });
 
