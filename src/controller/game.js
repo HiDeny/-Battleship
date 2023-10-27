@@ -3,8 +3,8 @@ import PubSub from '../modules/pubsub';
 
 const GameController = () => {
   let round = 0;
-  const player1 = createPlayer('Player');
-  const player2 = createPlayer('Computer', false);
+  const player1 = createPlayer('You');
+  const player2 = createPlayer('Enemy', false);
 
   let activePlayer = player1;
   let opponentPlayer = player2;

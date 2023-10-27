@@ -134,7 +134,7 @@ body {
 }
 
 .user > .board::before {
-  content: 'You';
+  content: attr(name);
   top: -1rem;
   position: absolute;
   left: 50%;
@@ -152,7 +152,7 @@ body {
 }
 
 .enemy > .board::before {
-  content: 'Enemy';
+  content: attr(name);
   top: -1rem;
   position: absolute;
   left: 50%;

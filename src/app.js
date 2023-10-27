@@ -17,7 +17,6 @@ const { player1, player2 } = testGame;
 const player1GameBoard = renderPlayerGameboard(player1);
 const player2GameBoard = renderPlayerGameboard(player2, true);
 
-// document.body.append(nameUI);
 document.body.append(rounds);
 document.body.append(result);
 

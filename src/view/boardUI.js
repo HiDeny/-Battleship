@@ -125,9 +125,10 @@ const createFieldUI = (field, isEnemy) => {
   return fieldButton;
 };
 
-const renderBoardUI = (board, isEnemy) => {
+const renderBoardUI = (board, name, isEnemy) => {
   const boardUI = document.createElement('div');
   boardUI.classList.add('board');
+  boardUI.setAttribute('name', name);
 
   board.forEach((row) => {
     row.forEach((field) => {
@@ -148,7 +149,7 @@ const renderPlayerGameboard = (player, isEnemy = false) => {
   gameboardUI.classList.add('gameboard');
   gameboardUI.classList.add(playerClass);
 
-  const boardUI = renderBoardUI(board, isEnemy);
+  const boardUI = renderBoardUI(board, name, isEnemy);
   gameboardUI.append(boardUI);
 
   if (isEnemy) {
