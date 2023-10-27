@@ -1,10 +1,5 @@
 import PubSub from '../modules/pubsub';
 
-// const handleClickField = (event) => {
-//   const { row, column } = event.target.dataset;
-//   PubSub.publish('field-click', [row, column]);
-// };
-
 // let beingDragged;
 
 // const handleDragStart = (event) => {
@@ -65,43 +60,49 @@ import PubSub from '../modules/pubsub';
 //   return;
 // };
 
-const renderShipStorageUI = (shipStorage) => {
-  const storage = document.createElement('div');
-  storage.classList.add('board-ships');
+// const renderShipStorageUI = (shipStorage) => {
+//   const storage = document.createElement('div');
+//   storage.classList.add('board-ships');
 
-  Object.keys(shipStorage).forEach((shipType) => {
-    const currentShip = shipStorage[shipType];
+//   Object.keys(shipStorage).forEach((shipType) => {
+//     const currentShip = shipStorage[shipType];
 
-    const shipContainer = document.createElement('div');
-    shipContainer.classList.add(`${shipType}`);
+//     const shipContainer = document.createElement('div');
+//     shipContainer.classList.add(`${shipType}`);
 
-    shipContainer.dataset.length = currentShip.length;
-    shipContainer.draggable = true;
+//     shipContainer.dataset.length = currentShip.length;
+//     shipContainer.draggable = true;
 
-    for (let i = 0; i < currentShip.length; i += 1) {
-      const shipBlock = document.createElement('div');
-      shipBlock.classList.add('ship-block');
-      shipContainer.append(shipBlock);
-    }
+//     for (let i = 0; i < currentShip.length; i += 1) {
+//       const shipBlock = document.createElement('div');
+//       shipBlock.classList.add('ship-block');
+//       shipContainer.append(shipBlock);
+//     }
 
-    // shipContainer.addEventListener('dragstart', handleDragStart);
-    // shipContainer.addEventListener('dragend', handleDragEnd);
+//     // shipContainer.addEventListener('dragstart', handleDragStart);
+//     // shipContainer.addEventListener('dragend', handleDragEnd);
 
-    storage.append(shipContainer);
-  });
+//     storage.append(shipContainer);
+//   });
 
-  return storage;
+//   return storage;
+// };
+
+const handleClickField = (event) => {
+  const { row, column } = event.target.dataset;
+  PubSub.publish('field-click', [row, column]);
 };
 
-const createFieldUI = (field) => {
-  const fieldButton = document.createElement('button');
+const createFieldUI = (field, isEnemy) => {
+  const corretElement = isEnemy ? 'button' : 'div';
+  const fieldButton = document.createElement(corretElement);
   const [row, column] = field.coordinates;
 
   fieldButton.classList.add('board-field');
   fieldButton.dataset.column = column;
   fieldButton.dataset.row = row;
 
-  // fieldButton.onclick = handleClickField;
+  if (isEnemy) fieldButton.onclick = handleClickField;
   // fieldButton.addEventListener('dragover', handleDragOver);
   // fieldButton.addEventListener('dragleave', handleDragLeave);
   // fieldButton.addEventListener('drop', handleDragDrop);
@@ -117,12 +118,6 @@ const createFieldUI = (field) => {
     }
   });
 
-  PubSub.subscribe('field-ship-offset', (coordinates) => {
-    if (coordinates === field.coordinates) {
-      fieldButton.classList.add('offset');
-    }
-  });
-
   PubSub.subscribe('field-mark', (coordinates, mark) => {
     if (coordinates === field.coordinates) fieldButton.classList.add(mark);
   });
@@ -130,13 +125,13 @@ const createFieldUI = (field) => {
   return fieldButton;
 };
 
-const renderBoardUI = (board) => {
+const renderBoardUI = (board, isEnemy) => {
   const boardUI = document.createElement('div');
   boardUI.classList.add('board');
 
   board.forEach((row) => {
     row.forEach((field) => {
-      const fieldUI = createFieldUI(field);
+      const fieldUI = createFieldUI(field, isEnemy);
       boardUI.append(fieldUI);
     });
   });
@@ -146,20 +141,30 @@ const renderBoardUI = (board) => {
 
 const renderPlayerGameboard = (player, isEnemy = false) => {
   const { name, shipStorage, gameboard } = player;
+  const { board } = gameboard;
   const gameboardUI = document.createElement('div');
   const playerClass = isEnemy ? 'enemy' : 'user';
 
   gameboardUI.classList.add('gameboard');
   gameboardUI.classList.add(playerClass);
 
-  const boardUI = renderBoardUI(gameboard.board);
+  const boardUI = renderBoardUI(board, isEnemy);
   gameboardUI.append(boardUI);
+
+  if (isEnemy) {
+    PubSub.subscribe('game-currentPlayer', (activePlayer) => {
+      console.log(activePlayer);
+      if (activePlayer === player) boardUI.classList.add('disabled');
+      if (activePlayer !== player) boardUI.classList.remove('disabled');
+    });
+  }
+
   // if (!isEnemy) boardUI.style['pointer-events'] = 'none';
 
-  if (!isEnemy) {
-    const shipsUI = renderShipStorageUI(shipStorage);
-    gameboardUI.append(shipsUI);
-  }
+  // if (!isEnemy) {
+  //   const shipsUI = renderShipStorageUI(shipStorage);
+  //   gameboardUI.append(shipsUI);
+  // }
 
   return gameboardUI;
 };

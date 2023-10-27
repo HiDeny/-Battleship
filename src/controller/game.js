@@ -12,6 +12,7 @@ const GameController = () => {
   const switchTurns = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
     opponentPlayer = opponentPlayer === player2 ? player1 : player2;
+    PubSub.publish('game-currentPlayer', activePlayer);
   };
 
   const gameOver = () => {
@@ -45,10 +46,10 @@ const GameController = () => {
         );
       }
 
+      switchTurns();
+
       round += 1;
       PubSub.publish('game-round', round);
-
-      switchTurns();
       return currentAttack;
     },
   };

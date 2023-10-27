@@ -8,15 +8,14 @@ import { createResultUI, createRoundsUI } from './view/hudUI';
 
 import PubSub from './modules/pubsub';
 
-const testGame = GameController();
+const rounds = createRoundsUI();
+const result = createResultUI();
 
+const testGame = GameController();
 const { player1, player2 } = testGame;
 
 const player1GameBoard = renderPlayerGameboard(player1);
 const player2GameBoard = renderPlayerGameboard(player2, true);
-
-const rounds = createRoundsUI();
-const result = createResultUI();
 
 // document.body.append(nameUI);
 document.body.append(rounds);
@@ -27,13 +26,13 @@ document.body.append(player2GameBoard);
 
 testGame.setShips();
 
-// PubSub.subscribe('field-click', (coordinates) => {
-//   testGame.playRound(coordinates);
+PubSub.subscribe('field-click', (coordinates) => {
+  testGame.playRound(coordinates);
 
-//   setTimeout(() => {
-//     testGame.playRound(null, true);
-//   }, 1000);
-// });
+  setTimeout(() => {
+    testGame.playRound(null, true);
+  }, 2000);
+});
 
 // // player2.placeShipsAtRandom();
 // PubSub.subscribe('field-ship-drag', ({ length, coordinates }) => {

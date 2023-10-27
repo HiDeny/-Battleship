@@ -61,7 +61,6 @@ body {
 }
 
 .board-field {
-  cursor: pointer;
   border: 0.5px solid gray;
   width: 100%;
   height: 100%;
@@ -81,11 +80,6 @@ body {
 
 .ship {
   background-color: darkgreen;
-}
-
-.offset {
-  background-color: purple;
-  opacity: 0.3;
 }
 
 .AircraftCarrier {
@@ -153,6 +147,10 @@ body {
   grid-row: 2;
 }
 
+.enemy > .board > .board-field {
+  cursor: pointer;
+}
+
 .enemy > .board::before {
   content: 'Enemy';
   top: -1rem;
@@ -167,4 +165,8 @@ body {
 
 .draggingOver {
   background-color: pink;
+}
+
+.disabled {
+  pointer-events: none;
 }
