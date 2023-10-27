@@ -6,15 +6,17 @@ export const getRandomCoordinates = () => {
   return [randomRow, randomColumn, isVertical];
 };
 
-export const checkCoordinates = (toCheck) => {
-  const { coordinates, board, shipLength } = toCheck;
-  const [row, column, isVertical] = coordinates;
-
+const checkOutOfBoard = (row, column, isVertical, shipLength) => {
   const dynamicDir = isVertical ? Number(row) : Number(column);
 
   if (row > 9 || column > 9 || dynamicDir + shipLength - 1 > 9) {
-    return false;
+    return true;
   }
+  return false;
+};
+
+const checkOffset = (row, column, isVertical, shipLength, board) => {
+  const dynamicDir = isVertical ? Number(row) : Number(column);
 
   if (dynamicDir - 1 > -1) {
     const oneBefore = isVertical
@@ -22,7 +24,7 @@ export const checkCoordinates = (toCheck) => {
       : board[row][dynamicDir - 1];
 
     if (oneBefore.ship !== null || oneBefore.offset === true) {
-      return false;
+      return true;
     }
   }
 
@@ -33,12 +35,17 @@ export const checkCoordinates = (toCheck) => {
       : board[row][dynamicPlusBoat];
 
     if (oneAfter.ship !== null || oneAfter.offset === true) {
-      return false;
+      return true;
     }
   }
 
-  const start = dynamicDir - 1 >= 0 ? dynamicDir - 1 : dynamicDir;
-  for (let i = start; i < dynamicDir + shipLength; i += 1) {
+  return false;
+};
+
+const checkFields = (row, column, isVertical, shipLength, board) => {
+  const dynamicDir = isVertical ? Number(row) : Number(column);
+
+  for (let i = dynamicDir; i < dynamicDir + shipLength; i += 1) {
     let currentField = board[row][i];
     let oneUpField = row + 1 <= 9 ? board[row + 1][i] : false;
     let oneDownField = row - 1 >= 0 ? board[row - 1][i] : false;
@@ -49,13 +56,34 @@ export const checkCoordinates = (toCheck) => {
       oneDownField = column - 1 >= 0 ? board[i][column - 1] : false;
     }
 
-    if (currentField.ship !== null) return false;
+    if (currentField.ship !== null) {
+      return true;
+    }
     if (oneUpField.ship !== null || oneDownField.offset === true) {
-      return false;
+      return true;
     }
     if (oneDownField.ship !== null || oneDownField.offset === true) {
-      return false;
+      return true;
     }
+  }
+
+  return false;
+};
+
+export const checkCoordinates = (toCheck) => {
+  const { coordinates, board, shipLength } = toCheck;
+  const [row, column, isVertical] = coordinates;
+
+  if (checkOutOfBoard(row, column, isVertical, shipLength)) {
+    return false;
+  }
+
+  if (checkOffset(row, column, isVertical, shipLength, board)) {
+    return false;
+  }
+
+  if (checkFields(row, column, isVertical, shipLength, board)) {
+    return false;
   }
 
   return true;
