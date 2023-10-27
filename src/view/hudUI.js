@@ -35,4 +35,4 @@ const createResultUI = () => {
   return result;
 };
 
-export { createNamesUI, createRoundsUI, createResultUI };
+export { createRoundsUI, createResultUI };

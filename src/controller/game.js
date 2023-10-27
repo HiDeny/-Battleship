@@ -30,12 +30,6 @@ const GameController = () => {
       player2.placeShipsAtRandom();
     },
     playRound(coordinates, randomAttack = false) {
-      if (gameOver()) {
-        const gameResult = gameOver();
-        PubSub.publish('game-round', gameResult);
-        return gameResult;
-      }
-
       let currentAttack;
       if (randomAttack) {
         currentAttack = activePlayer.randomAttack(opponentPlayer.gameboard);
@@ -44,6 +38,12 @@ const GameController = () => {
           opponentPlayer.gameboard,
           coordinates
         );
+      }
+
+      if (gameOver()) {
+        const gameResult = gameOver();
+        PubSub.publish('game-round', gameResult);
+        return gameResult;
       }
 
       switchTurns();

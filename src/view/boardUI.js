@@ -102,25 +102,27 @@ const createFieldUI = (field, isEnemy) => {
   fieldButton.dataset.column = column;
   fieldButton.dataset.row = row;
 
-  if (isEnemy) fieldButton.onclick = handleClickField;
+  PubSub.subscribe('field-mark', (coordinates, mark) => {
+    if (coordinates === field.coordinates) fieldButton.classList.add(mark);
+  });
+
   // fieldButton.addEventListener('dragover', handleDragOver);
   // fieldButton.addEventListener('dragleave', handleDragLeave);
   // fieldButton.addEventListener('drop', handleDragDrop);
 
   // Need Fix
-  PubSub.subscribe('field-ship', (coordinates, type) => {
-    if (coordinates === field.coordinates) {
-      fieldButton.classList.add('ship');
-      fieldButton.classList.add(type);
-      // fieldButton.draggable = true;
-      // fieldButton.addEventListener('dragstart', handleDragStart);
-      // fieldButton.addEventListener('dragend', handleDragEnd);
-    }
-  });
-
-  PubSub.subscribe('field-mark', (coordinates, mark) => {
-    if (coordinates === field.coordinates) fieldButton.classList.add(mark);
-  });
+  if (isEnemy) fieldButton.onclick = handleClickField;
+  if (!isEnemy) {
+    PubSub.subscribe('field-ship', (coordinates, type) => {
+      if (coordinates === field.coordinates) {
+        fieldButton.classList.add('ship');
+        fieldButton.classList.add(type);
+        // fieldButton.draggable = true;
+        // fieldButton.addEventListener('dragstart', handleDragStart);
+        // fieldButton.addEventListener('dragend', handleDragEnd);
+      }
+    });
+  }
 
   return fieldButton;
 };
@@ -154,7 +156,6 @@ const renderPlayerGameboard = (player, isEnemy = false) => {
 
   if (isEnemy) {
     PubSub.subscribe('game-currentPlayer', (activePlayer) => {
-      console.log(activePlayer);
       if (activePlayer === player) boardUI.classList.add('disabled');
       if (activePlayer !== player) boardUI.classList.remove('disabled');
     });
