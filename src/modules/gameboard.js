@@ -57,6 +57,47 @@ const createGameboard = () => {
   const board = initBoard();
   const shipsOnBoard = [];
 
+  const updateOffset = (row, column, isVertical, length) => {
+    const dynamicDir = isVertical ? row : column;
+    const dynamicPlusBoat = dynamicDir + length;
+
+    if (dynamicDir - 1 > -1) {
+      const oneBefore = isVertical
+        ? board[dynamicDir - 1][column]
+        : board[row][dynamicDir - 1];
+
+      oneBefore.offset = true;
+    }
+
+    if (dynamicPlusBoat < 10) {
+      const oneAfter = isVertical
+        ? board[dynamicPlusBoat][column]
+        : board[row][dynamicPlusBoat];
+
+      oneAfter.offset = true;
+    }
+  };
+
+  const populateFields = (newShip, row, column, isVertical) => {
+    const dynamicDir = isVertical ? row : column;
+
+    for (let i = dynamicDir; i < dynamicDir + newShip.boat.length; i += 1) {
+      let currentField = board[row][i];
+      let oneUpField = row + 1 <= 9 ? board[row + 1][i] : false;
+      let oneDownField = row - 1 >= 0 ? board[row - 1][i] : false;
+
+      if (isVertical === true) {
+        currentField = board[i][column];
+        oneUpField = column + 1 <= 9 ? board[i][column + 1] : false;
+        oneDownField = column - 1 >= 0 ? board[i][column - 1] : false;
+      }
+
+      currentField.ship = newShip;
+      if (oneUpField) oneUpField.offset = true;
+      if (oneDownField) oneDownField.offset = true;
+    }
+  };
+
   return {
     board,
     shipsOnBoard,
@@ -65,42 +106,9 @@ const createGameboard = () => {
       const row = Number(coordinates[0]);
       const column = Number(coordinates[1]);
       const isVertical = coordinates[2] || false;
-      // Dir === True  (ship will be placed vertically)
-      const dynamicDir = isVertical ? row : column;
 
-      if (dynamicDir - 1 > -1) {
-        const oneBefore = isVertical
-          ? board[dynamicDir - 1][column]
-          : board[row][dynamicDir - 1];
-
-        oneBefore.offset = true;
-      }
-
-      const dynamicPlusBoat = dynamicDir + boat.length;
-      if (dynamicPlusBoat < 10) {
-        const oneAfter = isVertical
-          ? board[dynamicPlusBoat][column]
-          : board[row][dynamicPlusBoat];
-
-        oneAfter.offset = true;
-      }
-
-      for (let i = dynamicDir; i < dynamicDir + boat.length; i += 1) {
-        let currentField = board[row][i];
-        let oneUpField = row + 1 <= 9 ? board[row + 1][i] : false;
-        let oneDownField = row - 1 >= 0 ? board[row - 1][i] : false;
-
-        if (isVertical === true) {
-          currentField = board[i][column];
-          oneUpField = column + 1 <= 9 ? board[i][column + 1] : false;
-          oneDownField = column - 1 >= 0 ? board[i][column - 1] : false;
-        }
-
-        currentField.ship = newShip;
-        if (oneUpField) oneUpField.offset = true;
-        if (oneDownField) oneDownField.offset = true;
-      }
-
+      updateOffset(row, column, isVertical, boat.length);
+      populateFields(newShip, row, column, isVertical);
       shipsOnBoard.push(newShip);
     },
     receiveAttack(coordinates) {

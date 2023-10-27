@@ -30,27 +30,20 @@ const GameController = () => {
     },
     playRound(coordinates, randomAttack = false) {
       const isGameOver = gameOver();
+      let currentAttack;
       if (isGameOver) {
         PubSub.publish('game-round', isGameOver);
         return isGameOver;
       }
 
       if (randomAttack) {
-        const currentAttack = activePlayer.randomAttack(
-          opponentPlayer.gameboard
+        currentAttack = activePlayer.randomAttack(opponentPlayer.gameboard);
+      } else {
+        currentAttack = activePlayer.attack(
+          opponentPlayer.gameboard,
+          coordinates
         );
-
-        round += 1;
-        PubSub.publish('game-round', round);
-        
-        switchTurns();
-        return currentAttack;
       }
-
-      const currentAttack = activePlayer.attack(
-        opponentPlayer.gameboard,
-        coordinates
-      );
 
       round += 1;
       PubSub.publish('game-round', round);
