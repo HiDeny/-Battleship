@@ -23,7 +23,11 @@ const createPlayer = (name, isComputer = false) => {
     gameboard,
     isComputer,
     placeShip(shipType, coordinates) {
-      const completeShip = { type: shipType, boat: shipStorage[shipType] };
+      const completeShip = {
+        type: shipType,
+        boat: shipStorage[shipType],
+        offset: [],
+      };
       gameboard.placeShip(completeShip, coordinates);
       return completeShip.boat;
     },
