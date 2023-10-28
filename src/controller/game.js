@@ -32,7 +32,7 @@ const GameController = () => {
     playRound(coordinates, randomAttack = false) {
       let currentAttack;
       if (randomAttack) {
-        currentAttack = activePlayer.randomAttack(opponentPlayer.gameboard);
+        currentAttack = activePlayer.aiAttack(opponentPlayer.gameboard);
       } else {
         currentAttack = activePlayer.attack(
           opponentPlayer.gameboard,

@@ -71,6 +71,7 @@ body {
   grid-row: 1;
 
   display: flex;
+  align-items: baseline;
   justify-self: center;
   align-self: center;
   gap: 0.25rem;
@@ -116,7 +117,8 @@ body {
 
 .ship-block {
   aspect-ratio: 1/1;
-  background-color: darkgreen;
+  background-color: white;
+  opacity: 0.3;
   height: 35px;
 }
 

@@ -2,7 +2,7 @@ import 'normalize.css';
 import './view/styles.css';
 
 import GameController from './controller/game';
-import renderPlayerGameboard from './view/boardUI';
+import renderGameboard from './view/gameBoardUI';
 
 import { createResultUI, createRoundsUI } from './view/hudUI';
 
@@ -14,8 +14,8 @@ const result = createResultUI();
 const testGame = GameController();
 const { player1, player2 } = testGame;
 
-const player1GameBoard = renderPlayerGameboard(player1);
-const player2GameBoard = renderPlayerGameboard(player2, true);
+const player1GameBoard = renderGameboard(player1);
+const player2GameBoard = renderGameboard(player2, true);
 
 document.body.append(rounds);
 document.body.append(result);
