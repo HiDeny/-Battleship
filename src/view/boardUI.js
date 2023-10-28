@@ -112,17 +112,27 @@ const createFieldUI = (field, isEnemy) => {
 
   // Need Fix
   if (isEnemy) fieldButton.onclick = handleClickField;
-  if (!isEnemy) {
-    PubSub.subscribe('field-ship', (coordinates, type) => {
-      if (coordinates === field.coordinates) {
-        fieldButton.classList.add('ship');
-        fieldButton.classList.add(type);
-        // fieldButton.draggable = true;
-        // fieldButton.addEventListener('dragstart', handleDragStart);
-        // fieldButton.addEventListener('dragend', handleDragEnd);
-      }
-    });
-  }
+  // if (!isEnemy) {
+  //   PubSub.subscribe('field-ship', (coordinates, type) => {
+  //     if (coordinates === field.coordinates) {
+  //       fieldButton.classList.add('ship');
+  //       fieldButton.classList.add(type);
+  //       // fieldButton.draggable = true;
+  //       // fieldButton.addEventListener('dragstart', handleDragStart);
+  //       // fieldButton.addEventListener('dragend', handleDragEnd);
+  //     }
+  //   });
+  // }
+
+  PubSub.subscribe('field-ship', (coordinates, type) => {
+    if (coordinates === field.coordinates) {
+      fieldButton.classList.add('ship');
+      fieldButton.classList.add(type);
+      // fieldButton.draggable = true;
+      // fieldButton.addEventListener('dragstart', handleDragStart);
+      // fieldButton.addEventListener('dragend', handleDragEnd);
+    }
+  });
 
   return fieldButton;
 };

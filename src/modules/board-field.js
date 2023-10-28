@@ -5,6 +5,11 @@ export const field = (coordinates) => {
   let ship = null;
   let offset = null;
 
+  // const revealOffset = () => {
+  //   mark = 'miss';
+  //   PubSub.publish('field-mark', coordinates, mark);
+  // };
+
   return {
     coordinates,
     get ship() {
@@ -22,16 +27,14 @@ export const field = (coordinates) => {
       offset = value;
     },
 
-    markField() {
-      if (mark !== null) throw new Error(`Already marked!`);
+    markField(isOffset = false) {
+      if (mark !== null && !isOffset) throw new Error(`Already marked!`);
 
       if (ship) {
         ship.hit();
 
         if (ship.isSunk()) {
-          // ship.offset.forEach(coordinates.markField());
-          console.log('Ship Sunk');
-          console.log(ship);
+          ship.offset.forEach((offsetField) => offsetField.markField(true));
         }
       }
       mark = ship ? 'hit' : 'miss';
