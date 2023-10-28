@@ -11,10 +11,9 @@ export const field = (coordinates) => {
       return ship;
     },
     set ship(newShip) {
-      const { type, boat } = newShip;
       if (ship !== null) throw new Error('Field Occupied!');
-      ship = boat;
-      PubSub.publish('field-ship', coordinates, type);
+      ship = newShip;
+      PubSub.publish('field-ship', coordinates, newShip.type);
     },
     get offset() {
       return offset;
@@ -32,6 +31,7 @@ export const field = (coordinates) => {
         if (ship.isSunk()) {
           // ship.offset.forEach(coordinates.markField());
           console.log('Ship Sunk');
+          console.log(ship);
         }
       }
       mark = ship ? 'hit' : 'miss';
@@ -45,10 +45,9 @@ export const field = (coordinates) => {
   };
 };
 
-export const populateFields = (board, newShip, row, column, isVertical) => {
-  const { length } = newShip.boat;
+const offsetFront = (board, newShip, coordinates) => {
+  const [row, column, isVertical] = coordinates;
   const dynamicDir = isVertical ? row : column;
-  const dynamicPlusBoat = dynamicDir + length;
 
   if (dynamicDir - 1 > -1) {
     const oneBefore = isVertical
@@ -56,19 +55,40 @@ export const populateFields = (board, newShip, row, column, isVertical) => {
       : board[row][dynamicDir - 1];
 
     oneBefore.offset = true;
-    // newShip.offset.push(oneBefore);
+    newShip.offset.push(oneBefore);
   }
+};
 
-  if (dynamicPlusBoat < 10) {
+const offsetBack = (board, newShip, coordinates) => {
+  const [row, column, isVertical] = coordinates;
+  const { length } = newShip;
+
+  const dynamicDir = isVertical ? row : column;
+  const dynamicPlusShip = dynamicDir + length;
+
+  if (dynamicPlusShip < 10) {
     const oneAfter = isVertical
-      ? board[dynamicPlusBoat][column]
-      : board[row][dynamicPlusBoat];
+      ? board[dynamicPlusShip][column]
+      : board[row][dynamicPlusShip];
 
     oneAfter.offset = true;
-    // newShip.offset.push(oneAfter);
+    newShip.offset.push(oneAfter);
   }
+};
 
-  for (let i = dynamicDir; i < dynamicDir + newShip.boat.length; i += 1) {
+export const populateFields = (board, newShip, coordinates) => {
+  const [row, column, isVertical] = coordinates;
+  // const row = Number(coordinates[0]);
+  // const column = Number(coordinates[1]);
+  // const isVertical = coordinates[2] || false;
+  const { length } = newShip;
+
+  const dynamicDir = isVertical ? row : column;
+
+  offsetFront(board, newShip, coordinates);
+  offsetBack(board, newShip, coordinates);
+
+  for (let i = dynamicDir; i < dynamicDir + length; i += 1) {
     let currentField = board[row][i];
     let oneUpField = row + 1 <= 9 ? board[row + 1][i] : false;
     let oneDownField = row - 1 >= 0 ? board[row - 1][i] : false;
@@ -83,12 +103,12 @@ export const populateFields = (board, newShip, row, column, isVertical) => {
 
     if (oneUpField) {
       oneUpField.offset = true;
-      // newShip.offset.push(oneUpField);
+      newShip.offset.push(oneUpField);
     }
 
     if (oneDownField) {
       oneDownField.offset = true;
-      // newShip.offset.push(oneDownField);
+      newShip.offset.push(oneDownField);
     }
   }
 };

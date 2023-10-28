@@ -1,8 +1,14 @@
-const createShip = (length) => {
+const createShip = (length, shipType) => {
+  const type = shipType;
+  const coordinates = [];
+  const offset = [];
   let hits = 0;
 
   return {
     length,
+    coordinates,
+    offset,
+    type,
     getHealth() {
       return length - hits;
     },

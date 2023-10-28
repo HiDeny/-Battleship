@@ -28,11 +28,11 @@ const checkOffset = (row, column, isVertical, shipLength, board) => {
     }
   }
 
-  const dynamicPlusBoat = dynamicDir + shipLength;
-  if (dynamicPlusBoat < 10) {
+  const dynamicPlusShip = dynamicDir + shipLength;
+  if (dynamicPlusShip < 10) {
     const oneAfter = isVertical
-      ? board[dynamicPlusBoat][column]
-      : board[row][dynamicPlusBoat];
+      ? board[dynamicPlusShip][column]
+      : board[row][dynamicPlusShip];
 
     if (oneAfter.ship !== null || oneAfter.offset === true) {
       return true;

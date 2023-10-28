@@ -1,4 +1,4 @@
-import { field, populateFields } from './field';
+import { field, populateFields } from './board-field';
 
 const initBoard = () => {
   const board = [];
@@ -23,11 +23,7 @@ const createGameboard = () => {
     board,
     shipsOnBoard,
     placeShip(newShip, coordinates) {
-      const row = Number(coordinates[0]);
-      const column = Number(coordinates[1]);
-      const isVertical = coordinates[2] || false;
-
-      populateFields(board, newShip, row, column, isVertical);
+      populateFields(board, newShip, coordinates);
       shipsOnBoard.push(newShip);
     },
     receiveAttack(coordinates) {
@@ -43,7 +39,7 @@ const createGameboard = () => {
       let livingShips = shipsOnBoard.length;
 
       shipsOnBoard.forEach((completeShip) => {
-        livingShips -= completeShip.boat.isSunk() ? 1 : 0;
+        livingShips -= completeShip.isSunk() ? 1 : 0;
       });
 
       return livingShips;

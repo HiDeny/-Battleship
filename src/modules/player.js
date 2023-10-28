@@ -8,13 +8,13 @@ const createPlayer = (name, isComputer = false) => {
   const markedFields = [];
 
   const shipStorage = {
-    AircraftCarrier: createShip(5),
-    Battleship: createShip(4),
-    Cruiser: createShip(3),
-    Destroyer1: createShip(2),
-    Destroyer2: createShip(2),
-    Submarine1: createShip(1),
-    Submarine2: createShip(1),
+    AircraftCarrier: createShip(5, 'AircraftCarrier'),
+    Battleship: createShip(4, 'Battleship'),
+    Cruiser: createShip(3, 'Cruiser'),
+    Destroyer1: createShip(2, 'Destroyer1'),
+    Destroyer2: createShip(2, 'Destroyer2'),
+    Submarine1: createShip(1, 'Submarine1'),
+    Submarine2: createShip(1, 'Submarine2'),
   };
 
   return {
@@ -23,13 +23,10 @@ const createPlayer = (name, isComputer = false) => {
     gameboard,
     isComputer,
     placeShip(shipType, coordinates) {
-      const completeShip = {
-        type: shipType,
-        boat: shipStorage[shipType],
-        offset: [],
-      };
+      const completeShip = shipStorage[shipType];
+
       gameboard.placeShip(completeShip, coordinates);
-      return completeShip.boat;
+      return completeShip;
     },
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);
@@ -38,8 +35,8 @@ const createPlayer = (name, isComputer = false) => {
       const shipsOnBoard = [];
 
       Object.keys(shipStorage).forEach((shipType) => {
-        const boat = shipStorage[shipType];
-        const { length } = boat;
+        const ship = shipStorage[shipType];
+        const { length } = ship;
 
         let newCoordinates = getRandomCoordinates();
         const toCheck = {
