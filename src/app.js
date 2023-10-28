@@ -30,7 +30,7 @@ PubSub.subscribe('field-click', (coordinates) => {
 
   setTimeout(() => {
     testGame.playRound(null, true);
-  }, 2000);
+  }, 500);
 });
 
 // // player2.placeShipsAtRandom();

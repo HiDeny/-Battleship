@@ -4,16 +4,18 @@ import createShip from './ship';
 import { getRandomCoordinates, checkCoordinates } from './coordinates';
 
 const possibleShots = (coordinates) => ({
-  up: [coordinates[0] + 1, coordinates[1]],
   down: [coordinates[0] - 1, coordinates[1]],
-  left: [coordinates[0], coordinates[1] + 1],
-  right: [coordinates[0] + 1, coordinates[1] - 1],
+  left: [coordinates[0], coordinates[1] - 1],
+  up: [coordinates[0] + 1, coordinates[1]],
+  right: [coordinates[0], coordinates[1] + 1],
 });
 
 const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
+  const fieldHits = new Map();
   const markedFields = new Set();
-  const possibleHits = [];
+  let possibleHits = [];
+  let highProbabilityShot = [];
 
   const shipStorage = {
     AircraftCarrier: createShip(5, 'AircraftCarrier'),
@@ -72,19 +74,24 @@ const createPlayer = (name, isComputer = false) => {
       return enemyBoard.receiveAttack(randomShot);
     },
     aiAttack(enemyBoard) {
-      let currentShot = possibleHits.length
-        ? possibleHits.shift()
-        : getRandomCoordinates();
+      let currentShot = null;
 
-      if (!possibleHits.length) {
+      if (highProbabilityShot.length > 0) {
+        currentShot = highProbabilityShot.shift();
+      } else if (possibleHits.length > 0 && highProbabilityShot.length < 1) {
+        currentShot = possibleHits.shift();
+      } else {
+        let randomShot = getRandomCoordinates();
+        currentShot = [randomShot[0], randomShot[1]];
+
         while (markedFields.has(`${currentShot[0]},${currentShot[1]}`)) {
-          currentShot = getRandomCoordinates();
+          randomShot = getRandomCoordinates();
+          currentShot = [randomShot[0], randomShot[1]];
         }
       }
 
-      console.log(possibleHits);
       const result = enemyBoard.receiveAttack(currentShot);
-      // offsets
+      const currentShotStr = `${currentShot[0]},${currentShot[1]}`;
 
       if (result === 'miss') {
         const missedShotStr = `${currentShot[0]},${currentShot[1]}`;
@@ -92,25 +99,66 @@ const createPlayer = (name, isComputer = false) => {
       }
 
       if (result === 'hit') {
-        const nextPossibleHits = Object.values(possibleShots(currentShot));
+        const nextPossibleHits = possibleShots(currentShot);
+        fieldHits.set(currentShotStr, currentShot);
 
-        nextPossibleHits.forEach((possibleHit) => {
-          const nextX = possibleHit[0];
-          const nextY = possibleHit[1];
+        Object.keys(nextPossibleHits).forEach((key) => {
+          const nextShot = nextPossibleHits[key];
+          const nextX = nextShot[0];
+          const nextY = nextShot[1];
           const nextPossibleHitStr = `${nextX},${nextY}`;
 
+          if (fieldHits.has(nextPossibleHitStr)) {
+            if (key === 'up') {
+              highProbabilityShot.push(nextPossibleHits.down);
+            }
+            if (key === 'left') {
+              highProbabilityShot.push(nextPossibleHits.right);
+            }
+            if (key === 'right') {
+              highProbabilityShot.push(nextPossibleHits.left);
+            }
+            if (key === 'down') {
+              highProbabilityShot.push(nextPossibleHits.up);
+            }
+          }
+
           if (
-            nextX < 9 &&
-            nextY < 9 &&
+            nextX <= 9 &&
+            nextY <= 9 &&
             nextX >= 0 &&
             nextY >= 0 &&
             !markedFields.has(nextPossibleHitStr)
           ) {
-            possibleHits.push(possibleHit);
-            markedFields.add(currentShot);
+            possibleHits.push(nextShot);
+            markedFields.add(currentShotStr);
           }
         });
       }
+
+      if (result === 'ship sunk') {
+        // offsets
+        fieldHits.set(currentShotStr, currentShot);
+        markedFields.add(currentShotStr);
+
+        fieldHits.values().forEach((position) => {
+          const offsetFields = possibleShots(position);
+
+          Object.values(offsetFields).forEach((offset) => {
+            const offsetStr = `${offset[0]},${offset[1]}`;
+
+            if (!markedFields.has(offsetStr)) {
+              markedFields.add(offsetStr);
+            }
+          });
+        });
+
+        possibleHits = [];
+        highProbabilityShot = [];
+      }
+
+      // console.log(highProbabilityShot);
+      // console.log(possibleHits);
 
       return result;
     },
@@ -118,3 +166,33 @@ const createPlayer = (name, isComputer = false) => {
 };
 
 export default createPlayer;
+
+// Map(3) {size: 3, 7,9 => ship sunk, 5,2 => {up: Array(2), …}, 5,1 => {…}}
+
+// 0:
+// {"7,9" => "ship sunk"}
+// 1:
+// {"5,2" => Object}
+// key:
+// '5,2'
+// value:
+// {up: Array(2), down: Array(2), left: Array(2), right: Array(2)}
+// 2:
+// {"5,1" => Object}
+// key:
+// '5,1'
+
+// down:
+// (2) [4, 1]
+// left:
+// (2) [5, 0]
+// right:
+// (2) [5, 2]
+// up:
+// (2) [6, 1]
+// [[Prototype]]:
+// Object
+// size:
+// 3
+// [[Prototype]]:
+// Map
