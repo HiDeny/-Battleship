@@ -75,8 +75,15 @@ body {
   justify-self: center;
   align-self: center;
   gap: 0.25rem;
+  rotate: 0deg;
 
   height: 80%;
+  transition: rotate 1s ease;
+}
+
+.horizontal {
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .ship {

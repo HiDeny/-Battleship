@@ -1,21 +1,17 @@
-// const rotateShipButton = () => {
-//   const rotateButton = document.createElement('button');
-//   rotateButton.classList.add('rotateShip');
+export const crateRotateShipButton = () => {
+  const rotateButton = document.createElement('button');
+  rotateButton.classList.add('rotateShipBtn');
+  rotateButton.textContent = 'Rotate Ships';
+  rotateButton.dataset.isVertical = true;
 
-//   let isVertical = true;
-//   rotateButton.textContent = isVertical
-//     ? 'Rotate Horizontal'
-//     : 'Rotate Vertical';
+  rotateButton.addEventListener('click', () => {
+    rotateButton.dataset.isVertical = false;
+    const storedShipsUI = document.querySelector('.board-ships');
+    storedShipsUI.classList.toggle('horizontal');
+  });
 
-//   rotateButton.addEventListener('click', () => {
-//     isVertical = !isVertical;
-//     rotateButton.dataset.isVertical = isVertical;
-//   });
-
-//   return;
-// };
-
-// let beingDragged;
+  return rotateButton;
+};
 
 const handleDragStart = (event) => {
   event.target.classList.add('dragging');

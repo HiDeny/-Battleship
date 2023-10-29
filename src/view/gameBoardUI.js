@@ -1,6 +1,6 @@
 import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
-import renderShipStorage from './shipStorageUI';
+import renderShipStorage, { crateRotateShipButton } from './shipStorageUI';
 
 // const handleClickRotateButton = ({ target }) => {
 //   target.dataset;
@@ -20,7 +20,9 @@ const renderGameboard = (player, isEnemy = false) => {
 
   if (!isEnemy) {
     const shipsUI = renderShipStorage(shipStorage);
+    const rotateButton = crateRotateShipButton();
     gameboardUI.append(shipsUI);
+    gameboardUI.append(rotateButton);
   }
 
   PubSub.subscribe('game-currentPlayer', (activePlayer) => {
