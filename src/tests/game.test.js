@@ -20,7 +20,7 @@ test('Setup: Ships', () => {
 });
 
 test('Play turn by turn', () => {
-  const testGame = GameController();
+  const testGame = GameController(true);
   testGame.player1.placeShip('Destroyer2', [1, 1]);
   testGame.player2.placeShip('Destroyer2', [2, 2]);
 
@@ -31,7 +31,7 @@ test('Play turn by turn', () => {
 });
 
 test('Ending conditions (P1 win)', () => {
-  const testGame = GameController();
+  const testGame = GameController(true);
   testGame.player1.placeShip('Destroyer2', [1, 1]);
   testGame.player2.placeShip('Destroyer2', [2, 2]);
 
@@ -41,7 +41,7 @@ test('Ending conditions (P1 win)', () => {
   expect(testGame.playRound([5, 7])).toBe('Player 1 WIN!');
 });
 test('Ending conditions (P2 win)', () => {
-  const testGame = GameController();
+  const testGame = GameController(true);
   testGame.player1.placeShip('Destroyer2', [1, 1]);
   testGame.player2.placeShip('Destroyer2', [2, 2]);
 

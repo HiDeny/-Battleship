@@ -2,10 +2,12 @@ import createPlayer from '../modules/player';
 import createAiPlayer from '../modules/Ai/aiPlayer';
 import PubSub from '../modules/pubsub';
 
-const GameController = () => {
+const GameController = (twoPlayers = false) => {
   let round = 0;
   const player1 = createPlayer('You');
-  const player2 = createAiPlayer('Enemy');
+  const player2 = twoPlayers
+    ? createPlayer('Player2')
+    : createAiPlayer('Enemy');
 
   let activePlayer = player1;
   let opponentPlayer = player2;
@@ -27,7 +29,7 @@ const GameController = () => {
     player2,
     round,
     setShips() {
-      player1.placeShipsAtRandom();
+      // player1.placeShipsAtRandom();
       player2.placeShips();
     },
     playRound(coordinates, aiPlayer = false) {

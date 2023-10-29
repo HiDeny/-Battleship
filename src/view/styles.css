@@ -162,7 +162,7 @@ body {
 }
 
 .dragging {
-  opacity: 0.5;
+  opacity: 0.1;
 }
 
 .draggingOver {
@@ -171,4 +171,8 @@ body {
 
 .disabled {
   pointer-events: none;
+}
+
+.placed { 
+  background-color: fuchsia;
 }

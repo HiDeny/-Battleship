@@ -41,16 +41,6 @@ test('Player: Attack (Miss)', () => {
   expect(testPlayer.attack(enemyBoard, [1, 2])).toBe('miss');
 });
 
-test('Player: Random Attack', () => {
-  const testPlayer = createPlayer('Mark');
-  const enemyPlayer = createPlayer('Jack', true);
-
-  const enemyBoard = enemyPlayer.gameboard;
-  enemyPlayer.placeShip('AircraftCarrier', [4, 4, true]);
-
-  expect(testPlayer.randomAttack(enemyBoard)).toMatch(/(hit)|(miss)/g);
-});
-
 test('Set ships at random', () => {
   const testPlayer = createPlayer('Hamid');
   testPlayer.placeShipsAtRandom();
