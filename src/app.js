@@ -25,6 +25,22 @@ document.body.append(player2GameBoard);
 
 testGame.setShips();
 
+// const playQuickGame = (round = 0) => {
+//   const currentRound = testGame.playRound(null, true);
+//   if (
+//     currentRound !== 'hit' &&
+//     currentRound !== 'miss' &&
+//     currentRound !== 'ship sunk'
+//   )
+//     return false;
+
+//   setTimeout(() => {
+//     playQuickGame(round);
+//   }, 300);
+// };
+
+// playQuickGame();
+
 PubSub.subscribe('field-click', (coordinates) => {
   testGame.playRound(coordinates);
 

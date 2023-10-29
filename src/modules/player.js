@@ -27,6 +27,20 @@ const createPlayer = (name, isComputer = false) => {
     Submarine2: createShip(1, 'Submarine2'),
   };
 
+  const checkNextMark = (nextMark) => {
+    const markX = nextMark[0];
+    const markY = nextMark[1];
+    const nextMarkStr = `${markX},${markY}`;
+
+    const isInsideX = markX >= 0 && markX <= 9;
+    const isInsideY = markY >= 0 && markY <= 9;
+    const isInside = isInsideX && isInsideY;
+
+    const alreadyMarked = markedFields.has(nextMarkStr);
+
+    return !alreadyMarked && isInside;
+  };
+
   return {
     name,
     shipStorage,
@@ -67,7 +81,7 @@ const createPlayer = (name, isComputer = false) => {
     },
     randomAttack(enemyBoard) {
       let randomShot = getRandomCoordinates();
-      while (markedFields.has(`${randomShot[0]},${randomShot[1]}`)) {
+      while (!checkNextMark(randomShot)) {
         randomShot = getRandomCoordinates();
       }
       markedFields.add(`${randomShot[0]},${randomShot[1]}`);
@@ -77,14 +91,14 @@ const createPlayer = (name, isComputer = false) => {
       let currentShot = null;
 
       if (highProbabilityShot.length > 0) {
-        currentShot = highProbabilityShot.shift();
+        currentShot = highProbabilityShot.pop();
       } else if (possibleHits.length > 0 && highProbabilityShot.length < 1) {
         currentShot = possibleHits.shift();
       } else {
         let randomShot = getRandomCoordinates();
         currentShot = [randomShot[0], randomShot[1]];
 
-        while (markedFields.has(`${currentShot[0]},${currentShot[1]}`)) {
+        while (!checkNextMark(randomShot)) {
           randomShot = getRandomCoordinates();
           currentShot = [randomShot[0], randomShot[1]];
         }
@@ -93,10 +107,7 @@ const createPlayer = (name, isComputer = false) => {
       const result = enemyBoard.receiveAttack(currentShot);
       const currentShotStr = `${currentShot[0]},${currentShot[1]}`;
 
-      if (result === 'miss') {
-        const missedShotStr = `${currentShot[0]},${currentShot[1]}`;
-        markedFields.add(missedShotStr);
-      }
+      if (result === 'miss') markedFields.add(currentShotStr);
 
       if (result === 'hit') {
         const nextPossibleHits = possibleShots(currentShot);
@@ -106,30 +117,27 @@ const createPlayer = (name, isComputer = false) => {
           const nextShot = nextPossibleHits[key];
           const nextX = nextShot[0];
           const nextY = nextShot[1];
-          const nextPossibleHitStr = `${nextX},${nextY}`;
+          const nextShotStr = `${nextX},${nextY}`;
 
-          if (fieldHits.has(nextPossibleHitStr)) {
-            if (key === 'up') {
-              highProbabilityShot.push(nextPossibleHits.down);
+          if (fieldHits.has(nextShotStr)) {
+            const lastHit = fieldHits.get(nextShotStr);
+            const oneExtra = possibleShots(lastHit)[key];
+            let oppositeDir;
+
+            if (key === 'up') oppositeDir = nextPossibleHits.down;
+            if (key === 'left') oppositeDir = nextPossibleHits.right;
+            if (key === 'right') oppositeDir = nextPossibleHits.left;
+            if (key === 'down') oppositeDir = nextPossibleHits.up;
+
+            if (checkNextMark(oppositeDir)) {
+              highProbabilityShot.push(oppositeDir);
             }
-            if (key === 'left') {
-              highProbabilityShot.push(nextPossibleHits.right);
-            }
-            if (key === 'right') {
-              highProbabilityShot.push(nextPossibleHits.left);
-            }
-            if (key === 'down') {
-              highProbabilityShot.push(nextPossibleHits.up);
+            if (checkNextMark(oneExtra)) {
+              highProbabilityShot.unshift(oneExtra);
             }
           }
 
-          if (
-            nextX <= 9 &&
-            nextY <= 9 &&
-            nextX >= 0 &&
-            nextY >= 0 &&
-            !markedFields.has(nextPossibleHitStr)
-          ) {
+          if (checkNextMark(nextShot)) {
             possibleHits.push(nextShot);
             markedFields.add(currentShotStr);
           }
@@ -137,7 +145,6 @@ const createPlayer = (name, isComputer = false) => {
       }
 
       if (result === 'ship sunk') {
-        // offsets
         fieldHits.set(currentShotStr, currentShot);
         markedFields.add(currentShotStr);
 
@@ -157,42 +164,9 @@ const createPlayer = (name, isComputer = false) => {
         highProbabilityShot = [];
       }
 
-      // console.log(highProbabilityShot);
-      // console.log(possibleHits);
-
       return result;
     },
   };
 };
 
 export default createPlayer;
-
-// Map(3) {size: 3, 7,9 => ship sunk, 5,2 => {up: Array(2), …}, 5,1 => {…}}
-
-// 0:
-// {"7,9" => "ship sunk"}
-// 1:
-// {"5,2" => Object}
-// key:
-// '5,2'
-// value:
-// {up: Array(2), down: Array(2), left: Array(2), right: Array(2)}
-// 2:
-// {"5,1" => Object}
-// key:
-// '5,1'
-
-// down:
-// (2) [4, 1]
-// left:
-// (2) [5, 0]
-// right:
-// (2) [5, 2]
-// up:
-// (2) [6, 1]
-// [[Prototype]]:
-// Object
-// size:
-// 3
-// [[Prototype]]:
-// Map
