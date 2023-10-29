@@ -47,7 +47,7 @@ PubSub.subscribe('field-click', (coordinates) => {
   }, 500);
 });
 
-// // player2.placeShipsAtRandom();
-// PubSub.subscribe('field-ship-drag', ({ length, coordinates }) => {
-//   player1.placeShip(length, coordinates);
-// });
+// player2.placeShipsAtRandom();
+PubSub.subscribe('field-ship-drag', (type, coordinates) => {
+  player1.placeShip(type, coordinates);
+});

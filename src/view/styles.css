@@ -173,6 +173,14 @@ body {
   pointer-events: none;
 }
 
-.placed { 
-  background-color: fuchsia;
+.offset-test {
+  background-color: plum;
+}
+
+.available {
+  background-color: greenyellow;
+}
+
+.not-available {
+  background-color: red;
 }

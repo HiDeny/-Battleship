@@ -2,22 +2,6 @@ import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
 import renderShipStorage from './shipStorageUI';
 
-
-// const handleDragOver = (event) => {
-//   event.preventDefault();
-//   const { length } = beingDragged.dataset;
-//   const { row, column } = event.target.dataset;
-
-//   event.target.classList.add('draggingOver');
-// };
-
-// const handleDragLeave = (event) => {
-//   event.preventDefault();
-//   event.target.classList.remove('draggingOver');
-// };
-
-
-
 // const handleClickRotateButton = ({ target }) => {
 //   target.dataset;
 // };

@@ -20,6 +20,7 @@ export const field = (coordinates) => {
     },
     set offset(value) {
       offset = value;
+      PubSub.publish('field-ship-offset', coordinates);
     },
 
     markField(isOffset = false) {
@@ -78,9 +79,7 @@ const offsetBack = (board, newShip, coordinates) => {
 
 export const populateFields = (board, newShip, coordinates) => {
   const [row, column, isVertical] = coordinates;
-  // const row = Number(coordinates[0]);
-  // const column = Number(coordinates[1]);
-  // const isVertical = coordinates[2] || false;
+
   const { length } = newShip;
 
   const dynamicDir = isVertical ? row : column;
