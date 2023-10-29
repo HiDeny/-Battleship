@@ -34,9 +34,7 @@ testGame.setShips();
 //   )
 //     return false;
 
-//   setTimeout(() => {
-//     playQuickGame(round);
-//   }, 300);
+//   playQuickGame(round);
 // };
 
 // playQuickGame();

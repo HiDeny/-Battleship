@@ -70,7 +70,7 @@ const checkFields = (row, column, isVertical, shipLength, board) => {
   return false;
 };
 
-export const checkCoordinates = (toCheck) => {
+export const checkShipCoordinates = (toCheck) => {
   const { coordinates, board, shipLength } = toCheck;
   const [row, column, isVertical] = coordinates;
 
@@ -87,4 +87,33 @@ export const checkCoordinates = (toCheck) => {
   }
 
   return true;
+};
+
+export const possibleShots = (coordinates) => ({
+  down: [coordinates[0] - 1, coordinates[1]],
+  left: [coordinates[0], coordinates[1] - 1],
+  up: [coordinates[0] + 1, coordinates[1]],
+  right: [coordinates[0], coordinates[1] + 1],
+});
+
+export const checkNextShot = (markedFields, nextMark) => {
+  const markX = nextMark[0];
+  const markY = nextMark[1];
+  const nextMarkStr = `${markX},${markY}`;
+
+  const isInsideX = markX >= 0 && markX <= 9;
+  const isInsideY = markY >= 0 && markY <= 9;
+  const isInside = isInsideX && isInsideY;
+
+  const alreadyMarked = markedFields.has(nextMarkStr);
+
+  return !alreadyMarked && isInside;
+};
+
+export const getRandomNextShot = (markedFields) => {
+  let randomShot = getRandomCoordinates();
+  while (!checkNextShot(markedFields, randomShot)) {
+    randomShot = getRandomCoordinates();
+  }
+  return randomShot;
 };
