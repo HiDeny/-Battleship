@@ -75,15 +75,21 @@ body {
   justify-self: center;
   align-self: center;
   gap: 0.25rem;
-  rotate: 0deg;
+  width: 300px;
+  flex-wrap: wrap;
 
   height: 80%;
   transition: rotate 1s ease;
 }
 
-.horizontal {
+.board-ships > div {
+  display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  border-radius: 1rem;
+}
+
+div[data-direction='horizontal'] {
+  flex-direction: row;
 }
 
 .ship {
@@ -170,6 +176,7 @@ body {
 
 .dragging {
   opacity: 0.1;
+  border-radius: 1rem;
 }
 
 .draggingOver {

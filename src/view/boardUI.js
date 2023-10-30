@@ -8,33 +8,27 @@ const handleClickField = (event) => {
 const handleDragDrop = (event) => {
   event.preventDefault();
   const dragged = document.querySelector('.dragging');
-  const { length, type } = dragged.dataset;
+  const [type] = dragged.classList;
+  const { length, direction } = dragged.dataset;
   const { row, column } = event.target.dataset;
-  const shipEndX = Number(row) + Number(length - 1);
-  const shipEndY = Number(column) + Number(length - 1);
-  const coordinates = [Number(row), Number(column), true];
+  const isVertical = direction === 'vertical';
+
+  const dynamicDir = isVertical ? Number(row) : Number(column);
+  const shipEnd = dynamicDir + Number(length - 1);
+  const coordinates = [Number(row), Number(column), isVertical];
   let availableFields = 0;
 
-  if (shipEndX <= 9 && shipEndX >= 0) {
-    for (let i = Number(row); i <= shipEndX; i += 1) {
-      const currentElement = document.querySelector(
-        `div[data-row='${i}'][data-column='${column}']`
-      );
-      if (!currentElement.dataset.ship && !currentElement.dataset.offset) {
-        availableFields += 1;
-      }
+  if (shipEnd <= 9 && shipEnd >= 0) {
+    for (let i = dynamicDir; i <= shipEnd; i += 1) {
+      const rowDir = isVertical ? i : Number(row);
+      const columnDir = isVertical ? Number(column) : i;
+      const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
+      const element = document.querySelector(selector);
+      const { ship, offset } = element.dataset;
+      if (!ship && !offset) availableFields += 1;
     }
   }
 
-  // if (shipEndY <= 9 && shipEndY >= 0) {
-  //   for (let i = Number(column); i <= shipEndY; i += 1) {
-  //     const currentElement = document.querySelector(
-  //       `div[data-row='${row}'][data-column='${i}']`
-  //     );
-  //     currentElement.classList.add('placed');
-  //     dragged.remove();
-  //   }
-  // }
   if (availableFields === Number(length)) {
     PubSub.publish('field-ship-drag', type, coordinates);
     dragged.remove();
@@ -44,45 +38,38 @@ const handleDragDrop = (event) => {
 const handleDragOver = (event) => {
   event.preventDefault();
   const dragged = document.querySelector('.dragging');
-  const { length } = dragged.dataset;
+  const { length, direction } = dragged.dataset;
   const { row, column } = event.target.dataset;
-  const shipEndX = Number(row) + Number(length - 1);
-  const shipEndY = Number(column) + Number(length - 1);
+  const isVertical = direction === 'vertical';
+  const dynamicDir = isVertical ? Number(row) : Number(column);
+  const shipEnd = dynamicDir + Number(length - 1);
 
-  if (shipEndX <= 9 && shipEndX >= 0) {
-    for (let i = Number(row); i <= shipEndX; i += 1) {
-      const currentElement = document.querySelector(
-        `div[data-row='${i}'][data-column='${column}']`
-      );
-      if (!currentElement.dataset.ship && !currentElement.dataset.offset) {
-        currentElement.classList.add('available');
+  if (shipEnd <= 9 && shipEnd >= 0) {
+    for (let i = dynamicDir; i <= shipEnd; i += 1) {
+      const rowDir = isVertical ? i : row;
+      const columnDir = isVertical ? column : i;
+      const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
+      const element = document.querySelector(selector);
+      const { ship, offset } = element.dataset;
+
+      if (!ship && !offset) {
+        element.classList.add('available');
       } else {
-        currentElement.classList.add('not-available');
+        element.classList.add('not-available');
       }
     }
   }
-
-  // if (shipEndY <= 9 && shipEndY >= 0) {
-  //   for (let i = Number(column); i <= shipEndY; i += 1) {
-  //     const currentElement = document.querySelector(
-  //       `div[data-row='${row}'][data-column='${i}']`
-  //     );
-  //     currentElement.classList.add('draggingOver');
-  //   }
-  // }
 };
 
 const handleDragLeave = (event) => {
   event.preventDefault();
-  const wasOver = document.querySelectorAll('.draggingOver');
-  const wasAvailable = document.querySelectorAll('.available');
-  const wasNotAvailable = document.querySelectorAll('.not-available');
+  const over = document.querySelectorAll('.draggingOver');
+  const available = document.querySelectorAll('.available');
+  const notAvailable = document.querySelectorAll('.not-available');
 
-  wasOver.forEach((element) => element.classList.remove('draggingOver'));
-  wasAvailable.forEach((element) => element.classList.remove('available'));
-  wasNotAvailable.forEach((element) => {
-    element.classList.remove('not-available');
-  });
+  over.forEach((element) => element.classList.remove('draggingOver'));
+  available.forEach((element) => element.classList.remove('available'));
+  notAvailable.forEach((element) => element.classList.remove('not-available'));
 };
 
 const createFieldUI = (field, isEnemy) => {

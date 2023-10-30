@@ -2,12 +2,15 @@ export const crateRotateShipButton = () => {
   const rotateButton = document.createElement('button');
   rotateButton.classList.add('rotateShipBtn');
   rotateButton.textContent = 'Rotate Ships';
-  rotateButton.dataset.isVertical = true;
 
   rotateButton.addEventListener('click', () => {
-    rotateButton.dataset.isVertical = false;
     const storedShipsUI = document.querySelector('.board-ships');
-    storedShipsUI.classList.toggle('horizontal');
+    storedShipsUI.childNodes.forEach((ship) => {
+      const { direction } = ship.dataset;
+      const newDirection = direction === 'vertical' ? 'horizontal' : 'vertical';
+      ship.dataset.direction = newDirection;
+      ship.classList.toggle('horizontal');
+    });
   });
 
   return rotateButton;
@@ -34,9 +37,9 @@ const renderShip = (newShip) => {
   const shipContainer = document.createElement('div');
   const { length, type } = newShip;
   shipContainer.classList.add(`${type}`);
-
-  shipContainer.dataset.type = type;
   shipContainer.dataset.length = length;
+  shipContainer.dataset.direction = 'vertical';
+
   shipContainer.draggable = true;
   shipContainer.addEventListener('dragstart', handleDragStart);
   shipContainer.addEventListener('dragend', handleDragEnd);
