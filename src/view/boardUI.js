@@ -16,7 +16,7 @@ const handleDragDrop = (event) => {
   const dynamicDir = isVertical ? Number(row) : Number(column);
   const shipEnd = dynamicDir + Number(length - 1);
   const coordinates = [Number(row), Number(column), isVertical];
-  let availableFields = 0;
+  const availableFields = [];
 
   if (shipEnd <= 9 && shipEnd >= 0) {
     for (let i = dynamicDir; i <= shipEnd; i += 1) {
@@ -25,13 +25,21 @@ const handleDragDrop = (event) => {
       const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
       const element = document.querySelector(selector);
       const { ship, offset } = element.dataset;
-      if (!ship && !offset) availableFields += 1;
+      if (ship !== 'true') availableFields.push(element);
+      // if (!ship && !offset) availableFields += 1;
     }
   }
 
-  if (availableFields === Number(length)) {
-    PubSub.publish('field-ship-drag', type, coordinates);
-    dragged.remove();
+  if (availableFields.length === Number(length)) {
+    event.target.append(dragged);
+    dragged.dataset.row = row;
+    dragged.dataset.column = column;
+    availableFields.forEach((field) => {
+      field.dataset.ship = true;
+    });
+
+    // PubSub.publish('field-ship-drag', type, coordinates);
+    // dragged.remove();
   }
 };
 
@@ -52,7 +60,7 @@ const handleDragOver = (event) => {
       const element = document.querySelector(selector);
       const { ship, offset } = element.dataset;
 
-      if (!ship && !offset) {
+      if (ship !== 'true' && !offset) {
         element.classList.add('available');
       } else {
         element.classList.add('not-available');
@@ -67,9 +75,15 @@ const handleDragLeave = (event) => {
   const available = document.querySelectorAll('.available');
   const notAvailable = document.querySelectorAll('.not-available');
 
-  over.forEach((element) => element.classList.remove('draggingOver'));
-  available.forEach((element) => element.classList.remove('available'));
-  notAvailable.forEach((element) => element.classList.remove('not-available'));
+  over.forEach((element) => {
+    element.classList.remove('draggingOver');
+  });
+  available.forEach((element) => {
+    element.classList.remove('available');
+  });
+  notAvailable.forEach((element) => {
+    element.classList.remove('not-available');
+  });
 };
 
 const createFieldUI = (field, isEnemy) => {
@@ -84,7 +98,6 @@ const createFieldUI = (field, isEnemy) => {
     if (coordinates === field.coordinates) fieldButton.classList.add(mark);
   });
 
-  // Need Fix
   if (isEnemy) fieldButton.onclick = handleClickField;
   if (!isEnemy) {
     fieldButton.addEventListener('dragover', handleDragOver);
@@ -92,7 +105,7 @@ const createFieldUI = (field, isEnemy) => {
     fieldButton.addEventListener('drop', handleDragDrop);
   }
   // Remove isEnemy
-  if (!isEnemy || isEnemy) {
+  if (!isEnemy) {
     PubSub.subscribe('field-ship', (coordinates, type) => {
       if (coordinates === field.coordinates) {
         fieldButton.dataset.ship = true;
