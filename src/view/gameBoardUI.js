@@ -19,8 +19,7 @@ const renderGameboard = (player, isEnemy = false) => {
   gameboardUI.append(boardUI);
 
   if (!isEnemy) {
-    const shipsUI = renderShipStorage(shipStorage);
-    gameboardUI.append(shipsUI);
+    renderShipStorage(shipStorage, boardUI);
   }
 
   PubSub.subscribe('game-currentPlayer', (activePlayer) => {
