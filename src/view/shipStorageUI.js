@@ -1,12 +1,39 @@
-import { handleDragStart, handleDragEnd } from './drag-and-drop';
+import { handleDragStart, handleDragEnd, getFields } from './drag-and-drop';
+
+const handleClickShipRotate = (event) => {
+  const { direction, row, column, length } = event.target.dataset;
+  const isVertical = direction === 'vertical';
+  const newDir = isVertical ? 'horizontal' : 'vertical';
+
+  const fieldsToClear = getFields(row, column, length, direction);
+  const fieldsToPopulate = getFields(row, column, length, newDir);
+  let allAvailable = true;
+
+  if (fieldsToPopulate.length > Number(length) * 3) {
+    fieldsToPopulate.forEach((div) => {
+      const oldRow = Number(div.dataset.row);
+      const oldColumn = Number(div.dataset.column);
+      const isSame = oldRow === Number(row) && oldColumn === Number(column);
+
+      const { ship, offset } = div.dataset;
+      if (ship === 'true' && !isSame) allAvailable = false;
+    });
+
+    if (allAvailable) {
+      event.target.dataset.direction = newDir;
+      fieldsToClear.forEach((div) => (div.dataset.ship = false));
+      fieldsToPopulate.forEach((div) => (div.dataset.ship = true));
+    }
+  }
+};
 
 const renderShip = (newShip) => {
   const shipContainer = document.createElement('div');
   const { length, type } = newShip;
   const dir = Math.random() < 0.5 ? 'vertical' : 'horizontal';
 
-  shipContainer.classList.add(`${type}`);
   shipContainer.classList.add('ship');
+  shipContainer.classList.add(`${type}`);
   shipContainer.dataset.length = length;
   shipContainer.dataset.direction = dir;
   shipContainer.dataset.row = null;
@@ -15,50 +42,11 @@ const renderShip = (newShip) => {
   shipContainer.draggable = true;
   shipContainer.addEventListener('dragstart', handleDragStart);
   shipContainer.addEventListener('dragend', handleDragEnd);
-  shipContainer.addEventListener('click', () => {
-    const { direction, row, column } = shipContainer.dataset;
-    const isVertical = direction === 'vertical';
-    const addShip = isVertical ? Number(column) : Number(row);
-    const removeShip = isVertical ? Number(row) : Number(column);
-    const shipEnd = addShip + Number(length - 1);
-    const fieldsToClear = [];
-    const fieldsToPopulate = [];
-
-    if (row && column && shipEnd <= 9 && shipEnd >= 0) {
-      for (
-        let i = removeShip + 1;
-        i <= removeShip + Number(length - 1);
-        i += 1
-      ) {
-        const rowDir = isVertical ? i : Number(row);
-        const columnDir = isVertical ? Number(column) : i;
-        const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
-        const element = document.querySelector(selector);
-        fieldsToClear.push(element);
-      }
-
-      for (let i = addShip + 1; i <= addShip + Number(length - 1); i += 1) {
-        const rowDir = isVertical ? Number(row) : i;
-        const columnDir = isVertical ? i : Number(column);
-        const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
-        const element = document.querySelector(selector);
-        const { ship, offset } = element.dataset;
-        if (ship !== 'true') fieldsToPopulate.push(element);
-      }
-    }
-
-    if (fieldsToPopulate.length === Number(length - 1)) {
-      shipContainer.dataset.direction =
-        direction === 'vertical' ? 'horizontal' : 'vertical';
-      fieldsToClear.forEach((element) => (element.dataset.ship = false));
-      fieldsToPopulate.forEach((element) => (element.dataset.ship = true));
-    }
-  });
+  shipContainer.addEventListener('click', handleClickShipRotate);
 
   for (let i = 0; i < length; i += 1) {
     const shipBlock = document.createElement('div');
     shipBlock.classList.add('ship-block');
-    shipBlock.draggable = false;
     shipContainer.append(shipBlock);
   }
 
@@ -76,21 +64,19 @@ const renderShipStorage = (shipStorage, boardUI) => {
     let newRow = Math.floor(Math.random() * 10);
     let newColumn = Math.floor(Math.random() * 10);
     let coordinatesString = `${newRow},${newColumn}`;
-    let isOnBoard = shipsOnBoard.has(coordinatesString);
+    let occupied = shipsOnBoard.has(coordinatesString);
     let isOutOfBoardRow = newRow + (length - 1) > 9;
     let isOutOfBoardColumn = newColumn + (length - 1) > 9;
     let availableFields = [];
     let keepGoing = true;
 
-    // Check other fields if they are occupied
-    // While occupied, get new location
     while (keepGoing) {
-      while (isOnBoard || isOutOfBoardRow || isOutOfBoardColumn) {
+      while (occupied || isOutOfBoardRow || isOutOfBoardColumn) {
         newRow = Math.floor(Math.random() * 10);
         newColumn = Math.floor(Math.random() * 10);
         coordinatesString = `${newRow},${newColumn}`;
 
-        isOnBoard = shipsOnBoard.has(coordinatesString);
+        occupied = shipsOnBoard.has(coordinatesString);
         isOutOfBoardRow = newRow + (length - 1) > 9;
         isOutOfBoardColumn = newColumn + (length - 1) > 9;
       }
@@ -108,7 +94,7 @@ const renderShipStorage = (shipStorage, boardUI) => {
       }
 
       if (
-        !isOnBoard &&
+        !occupied &&
         !isOutOfBoardRow &&
         !isOutOfBoardColumn &&
         availableFields.length === Number(length)
@@ -123,7 +109,7 @@ const renderShipStorage = (shipStorage, boardUI) => {
         newColumn = Math.floor(Math.random() * 10);
         coordinatesString = `${newRow},${newColumn}`;
 
-        isOnBoard = shipsOnBoard.has(coordinatesString);
+        occupied = shipsOnBoard.has(coordinatesString);
         isOutOfBoardRow = newRow + (length - 1) > 9;
         isOutOfBoardColumn = newColumn + (length - 1) > 9;
         availableFields = [];
@@ -132,6 +118,7 @@ const renderShipStorage = (shipStorage, boardUI) => {
 
     const selector = `div[data-row='${newRow}'][data-column='${newColumn}']`;
     const newField = boardUI.querySelector(selector);
+    shipsOnBoard.add(coordinatesString);
     newShip.dataset.row = newRow;
     newShip.dataset.column = newColumn;
     newField.append(newShip);

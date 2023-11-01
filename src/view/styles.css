@@ -85,6 +85,8 @@ body {
 }
 
 .ship {
+  z-index: 10;
+  position: relative;
   display: flex;
   width: min-content;
   height: min-content;
@@ -137,6 +139,7 @@ div[data-direction='horizontal'] {
   background-color: white;
   opacity: 0.3;
   height: 25px;
+  pointer-events: none;
 }
 
 .miss {
@@ -197,4 +200,8 @@ div[data-direction='horizontal'] {
 
 .not-available {
   background-color: red;
+}
+
+.startBtn {
+  grid-row: 1;
 }
