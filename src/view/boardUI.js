@@ -1,89 +1,13 @@
 import PubSub from '../modules/pubsub';
+import {
+  handleDragDrop,
+  handleDragOver,
+  handleDragLeave,
+} from './drag-and-drop';
 
 const handleClickField = (event) => {
   const { row, column } = event.target.dataset;
   PubSub.publish('field-click', [row, column]);
-};
-
-const handleDragDrop = (event) => {
-  event.preventDefault();
-  const dragged = document.querySelector('.dragging');
-  const [type] = dragged.classList;
-  const { length, direction } = dragged.dataset;
-  const { row, column } = event.target.dataset;
-  const isVertical = direction === 'vertical';
-
-  const dynamicDir = isVertical ? Number(row) : Number(column);
-  const shipEnd = dynamicDir + Number(length - 1);
-  const coordinates = [Number(row), Number(column), isVertical];
-  const availableFields = [];
-
-  if (shipEnd <= 9 && shipEnd >= 0) {
-    for (let i = dynamicDir; i <= shipEnd; i += 1) {
-      const rowDir = isVertical ? i : Number(row);
-      const columnDir = isVertical ? Number(column) : i;
-      const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
-      const element = document.querySelector(selector);
-      const { ship, offset } = element.dataset;
-      if (ship !== 'true') availableFields.push(element);
-      // if (!ship && !offset) availableFields += 1;
-    }
-  }
-
-  if (availableFields.length === Number(length)) {
-    event.target.append(dragged);
-    dragged.dataset.row = row;
-    dragged.dataset.column = column;
-    availableFields.forEach((field) => {
-      field.dataset.ship = true;
-    });
-
-    // PubSub.publish('field-ship-drag', type, coordinates);
-    // dragged.remove();
-  }
-};
-
-const handleDragOver = (event) => {
-  event.preventDefault();
-  const dragged = document.querySelector('.dragging');
-  const { length, direction } = dragged.dataset;
-  const { row, column } = event.target.dataset;
-  const isVertical = direction === 'vertical';
-  const dynamicDir = isVertical ? Number(row) : Number(column);
-  const shipEnd = dynamicDir + Number(length - 1);
-
-  if (shipEnd <= 9 && shipEnd >= 0) {
-    for (let i = dynamicDir; i <= shipEnd; i += 1) {
-      const rowDir = isVertical ? i : row;
-      const columnDir = isVertical ? column : i;
-      const selector = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
-      const element = document.querySelector(selector);
-      const { ship, offset } = element.dataset;
-
-      if (ship !== 'true' && !offset) {
-        element.classList.add('available');
-      } else {
-        element.classList.add('not-available');
-      }
-    }
-  }
-};
-
-const handleDragLeave = (event) => {
-  event.preventDefault();
-  const over = document.querySelectorAll('.draggingOver');
-  const available = document.querySelectorAll('.available');
-  const notAvailable = document.querySelectorAll('.not-available');
-
-  over.forEach((element) => {
-    element.classList.remove('draggingOver');
-  });
-  available.forEach((element) => {
-    element.classList.remove('available');
-  });
-  notAvailable.forEach((element) => {
-    element.classList.remove('not-available');
-  });
 };
 
 const createFieldUI = (field, isEnemy) => {
