@@ -17,6 +17,8 @@ const createFieldUI = (field, isEnemy) => {
   fieldButton.classList.add('board-field');
   fieldButton.dataset.column = column;
   fieldButton.dataset.row = row;
+  fieldButton.dataset.ship = false;
+  
 
   PubSub.subscribe('field-mark', (coordinates, mark) => {
     if (coordinates === field.coordinates) fieldButton.classList.add(mark);

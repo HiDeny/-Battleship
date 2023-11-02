@@ -6,23 +6,34 @@ const handleClickShipRotate = (event) => {
   const newDir = isVertical ? 'horizontal' : 'vertical';
 
   const fieldsToClear = getFields(row, column, length, direction);
+  const fieldsToClearCore = fieldsToClear.coreFields;
+  const fieldsToClearOffset = fieldsToClear.offsetFields;
+
   const fieldsToPopulate = getFields(row, column, length, newDir);
+  const fieldsToPopulateCore = fieldsToPopulate.coreFields;
+  const fieldsToPopulateOffset = fieldsToPopulate.offsetFields;
+
   let allAvailable = true;
 
-  if (fieldsToPopulate.length > Number(length) * 3) {
-    fieldsToPopulate.forEach((div) => {
+  if (fieldsToPopulate.length > Number(length)) {
+    fieldsToClearCore.forEach((div) => {
       const oldRow = Number(div.dataset.row);
       const oldColumn = Number(div.dataset.column);
       const isSame = oldRow === Number(row) && oldColumn === Number(column);
 
       const { ship, offset } = div.dataset;
-      if (ship === 'true' && !isSame) allAvailable = false;
+      if ((ship === 'true' || offset === 'true') && !isSame) {
+        allAvailable = false;
+      }
     });
 
     if (allAvailable) {
       event.target.dataset.direction = newDir;
-      fieldsToClear.forEach((div) => (div.dataset.ship = false));
-      fieldsToPopulate.forEach((div) => (div.dataset.ship = true));
+      fieldsToClearCore.forEach((div) => (div.dataset.ship = 'false'));
+      fieldsToClearOffset.forEach((div) => (div.dataset.offset = 'false'));
+
+      fieldsToPopulateCore.forEach((div) => (div.dataset.ship = 'true'));
+      fieldsToPopulateOffset.forEach((div) => (div.dataset.offset = 'true'));
     }
   }
 };
@@ -54,74 +65,86 @@ const renderShip = (newShip) => {
 };
 
 const renderShipStorage = (shipStorage, boardUI) => {
-  const shipsOnBoard = new Set();
+  const occupiedFields = [];
 
   Object.keys(shipStorage).forEach((shipType) => {
     const newShip = renderShip(shipStorage[shipType]);
     const { length, direction } = newShip.dataset;
-    const isVertical = direction === 'vertical';
 
-    let newRow = Math.floor(Math.random() * 10);
-    let newColumn = Math.floor(Math.random() * 10);
-    let coordinatesString = `${newRow},${newColumn}`;
-    let occupied = shipsOnBoard.has(coordinatesString);
-    let isOutOfBoardRow = newRow + (length - 1) > 9;
-    let isOutOfBoardColumn = newColumn + (length - 1) > 9;
-    let availableFields = [];
+    let newRow;
+    let newColumn;
+    let newPosition;
     let keepGoing = true;
 
     while (keepGoing) {
-      while (occupied || isOutOfBoardRow || isOutOfBoardColumn) {
-        newRow = Math.floor(Math.random() * 10);
-        newColumn = Math.floor(Math.random() * 10);
-        coordinatesString = `${newRow},${newColumn}`;
+      newRow = Math.floor(Math.random() * 10);
+      newColumn = Math.floor(Math.random() * 10);
+      let newLocationStr = `${newRow}, ${newColumn}`;
 
-        occupied = shipsOnBoard.has(coordinatesString);
-        isOutOfBoardRow = newRow + (length - 1) > 9;
-        isOutOfBoardColumn = newColumn + (length - 1) > 9;
-      }
-
-      const dynamicDir = isVertical ? Number(newRow) : Number(newColumn);
-      const shipEnd = dynamicDir + Number(length - 1);
-
-      for (let i = dynamicDir; i <= shipEnd; i += 1) {
-        const rowDir = isVertical ? i : Number(newRow);
-        const columnDir = isVertical ? Number(newColumn) : i;
-        const fieldToCheck = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
-        const currentField = boardUI.querySelector(fieldToCheck);
-        const { ship, offset } = currentField.dataset;
-        if (ship !== 'true') availableFields.push(currentField);
-      }
-
-      if (
-        !occupied &&
-        !isOutOfBoardRow &&
-        !isOutOfBoardColumn &&
-        availableFields.length === Number(length)
+      while (
+        newRow + (length - 1) > 9 ||
+        newColumn + (length - 1) > 9 ||
+        occupiedFields.includes(newLocationStr)
       ) {
-        availableFields.forEach((currentField) => {
-          currentField.dataset.ship = 'true';
-        });
-        availableFields = [];
-        keepGoing = false;
-      } else {
         newRow = Math.floor(Math.random() * 10);
         newColumn = Math.floor(Math.random() * 10);
-        coordinatesString = `${newRow},${newColumn}`;
+        newLocationStr = `${newRow}, ${newColumn}`;
+      }
 
-        occupied = shipsOnBoard.has(coordinatesString);
-        isOutOfBoardRow = newRow + (length - 1) > 9;
-        isOutOfBoardColumn = newColumn + (length - 1) > 9;
-        availableFields = [];
+      newPosition = getFields(newRow, newColumn, length, direction, boardUI);
+      const { coreFields, offsetFields } = newPosition;
+
+      if (coreFields.length === Number(length) && !coreFields.includes(null)) {
+        keepGoing = false;
+
+        // eslint-disable-next-line no-loop-func
+        coreFields.forEach((div) => {
+          const { ship, offset } = div.dataset;
+          if (ship === 'true' || offset === 'true') keepGoing = true;
+        });
+
+        // eslint-disable-next-line no-loop-func
+        offsetFields.forEach((div) => {
+          if (div) {
+            const { ship } = div.dataset;
+            if (ship === 'true') keepGoing = true;
+          }
+        });
       }
     }
 
-    const selector = `div[data-row='${newRow}'][data-column='${newColumn}']`;
-    const newField = boardUI.querySelector(selector);
-    shipsOnBoard.add(coordinatesString);
+    const { coreFields, offsetFields } = newPosition;
     newShip.dataset.row = newRow;
     newShip.dataset.column = newColumn;
-    newField.append(newShip);
+    const baseField = coreFields.find(
+      (div) =>
+        Number(div.dataset.row) === newRow &&
+        Number(div.dataset.column) === newColumn
+    );
+
+    baseField.append(newShip);
+
+    coreFields.forEach((div) => {
+      div.dataset.ship = 'true';
+      // const { row, column } = div.dataset;
+      // const newLocationStr = `${row}, ${column}`;
+
+      // if (!occupiedFields.includes(newLocationStr)) {
+      //   occupiedFields.push(newLocationStr);
+      // }
+    });
+
+    offsetFields.forEach((div) => {
+      if (div) {
+        div.dataset.offset = 'true';
+        // const { row, column } = div.dataset;
+        // const newLocationStr = `${row}, ${column}`;
+
+        // if (!occupiedFields.includes(newLocationStr)) {
+        //   occupiedFields.push(newLocationStr);
+        // }
+      }
+    });
   });
 };
 
