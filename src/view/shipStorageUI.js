@@ -5,26 +5,28 @@ const handleClickShipRotate = (event) => {
   const isVertical = direction === 'vertical';
   const newDir = isVertical ? 'horizontal' : 'vertical';
 
-  const fieldsToClear = getFields(row, column, length, direction);
-  const fieldsToClearCore = fieldsToClear.coreFields;
-  const fieldsToClearOffset = fieldsToClear.offsetFields;
-
   const fieldsToPopulate = getFields(row, column, length, newDir);
   const fieldsToPopulateCore = fieldsToPopulate.coreFields;
   const fieldsToPopulateOffset = fieldsToPopulate.offsetFields;
 
+  const fieldsToClear = getFields(row, column, length, direction);
+  const fieldsToClearCore = fieldsToClear.coreFields;
+  const fieldsToClearOffset = fieldsToClear.offsetFields;
+
   let allAvailable = true;
 
-  if (fieldsToPopulate.length > Number(length)) {
-    fieldsToClearCore.forEach((div) => {
-      const oldRow = Number(div.dataset.row);
-      const oldColumn = Number(div.dataset.column);
-      const isSame = oldRow === Number(row) && oldColumn === Number(column);
+  if (
+    fieldsToPopulateCore.length === Number(length) &&
+    !fieldsToPopulateCore.includes(null)
+  ) {
+    fieldsToClearCore.forEach((div) => (div.dataset.ship = 'false'));
 
-      const { ship, offset } = div.dataset;
-      if ((ship === 'true' || offset === 'true') && !isSame) {
-        allAvailable = false;
-      }
+    fieldsToPopulateCore.forEach((div) => {
+      if (!div || div.dataset.ship === 'true') allAvailable = false;
+    });
+
+    fieldsToPopulateOffset.forEach((div) => {
+      if (div && div.dataset.ship === 'true') allAvailable = false;
     });
 
     if (allAvailable) {
@@ -34,7 +36,19 @@ const handleClickShipRotate = (event) => {
 
       fieldsToPopulateCore.forEach((div) => (div.dataset.ship = 'true'));
       fieldsToPopulateOffset.forEach((div) => (div.dataset.offset = 'true'));
+    } else {
+      fieldsToClearCore.forEach((div) => (div.dataset.ship = 'true'));
+      console.log('Else');
+      event.target.classList.add('no-rotate');
+      setTimeout(() => {
+        event.target.classList.remove('no-rotate');
+      }, 1000);
     }
+  } else {
+    event.target.classList.add('no-rotate');
+    setTimeout(() => {
+      event.target.classList.remove('no-rotate');
+    }, 1000);
   }
 };
 
@@ -65,8 +79,6 @@ const renderShip = (newShip) => {
 };
 
 const renderShipStorage = (shipStorage, boardUI) => {
-  const occupiedFields = [];
-
   Object.keys(shipStorage).forEach((shipType) => {
     const newShip = renderShip(shipStorage[shipType]);
     const { length, direction } = newShip.dataset;
@@ -79,16 +91,10 @@ const renderShipStorage = (shipStorage, boardUI) => {
     while (keepGoing) {
       newRow = Math.floor(Math.random() * 10);
       newColumn = Math.floor(Math.random() * 10);
-      let newLocationStr = `${newRow}, ${newColumn}`;
 
-      while (
-        newRow + (length - 1) > 9 ||
-        newColumn + (length - 1) > 9 ||
-        occupiedFields.includes(newLocationStr)
-      ) {
+      while (newRow + (length - 1) > 9 || newColumn + (length - 1) > 9) {
         newRow = Math.floor(Math.random() * 10);
         newColumn = Math.floor(Math.random() * 10);
-        newLocationStr = `${newRow}, ${newColumn}`;
       }
 
       newPosition = getFields(newRow, newColumn, length, direction, boardUI);
@@ -126,23 +132,11 @@ const renderShipStorage = (shipStorage, boardUI) => {
 
     coreFields.forEach((div) => {
       div.dataset.ship = 'true';
-      // const { row, column } = div.dataset;
-      // const newLocationStr = `${row}, ${column}`;
-
-      // if (!occupiedFields.includes(newLocationStr)) {
-      //   occupiedFields.push(newLocationStr);
-      // }
     });
 
     offsetFields.forEach((div) => {
       if (div) {
         div.dataset.offset = 'true';
-        // const { row, column } = div.dataset;
-        // const newLocationStr = `${row}, ${column}`;
-
-        // if (!occupiedFields.includes(newLocationStr)) {
-        //   occupiedFields.push(newLocationStr);
-        // }
       }
     });
   });

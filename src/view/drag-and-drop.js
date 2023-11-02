@@ -92,6 +92,7 @@ export const handleDragStart = (event) => {
 };
 
 export const handleDragEnd = (event) => {
+  console.log(event.target);
   const draggedFrom = document.querySelectorAll('.draggedFrom');
   const available = document.querySelectorAll('.available');
   const notAvailable = document.querySelectorAll('.not-available');
@@ -112,6 +113,7 @@ export const handleDragEnd = (event) => {
 };
 
 export const handleDragDrop = (event) => {
+  console.log(event.target);
   event.preventDefault();
   const dragged = document.querySelector('.dragging');
   // const [type] = dragged.classList;

@@ -62,6 +62,7 @@ body {
 
 .board-field {
   /* display: flex; */
+  position: relative;
   border: 0.5px solid gray;
   width: 25px;
   height: 25px;
@@ -87,6 +88,7 @@ body {
 .ship {
   z-index: 10;
   position: relative;
+
   display: flex;
   width: min-content;
   height: min-content;
@@ -124,19 +126,11 @@ div[data-direction='horizontal'] {
   background-color: aqua;
 }
 
-.ship-storage {
-  display: flex;
-  width: fit-content;
-  gap: 1px;
-
-  border: 1px solid whitesmoke;
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
 .ship-block {
+  position: relative;
+  z-index: -10;
+
   aspect-ratio: 1/1;
-  background-color: white;
   opacity: 0.3;
   height: 25px;
   pointer-events: none;
@@ -184,24 +178,44 @@ div[data-direction='horizontal'] {
 .dragging {
   opacity: 0.1;
   border-radius: 1rem;
+  z-index: 0;
 }
 
 .disabled {
   pointer-events: none;
 }
 
-.offset-test {
-  background-color: plum;
-}
-
 .available {
-  background-color: greenyellow;
+  background-color: rgba(172, 255, 47, 0.5);
+  z-index: 3;
 }
 
 .not-available {
-  background-color: red;
+  background-color: rgba(255, 0, 0, 0.5);
 }
 
 .startBtn {
   grid-row: 1;
+}
+
+.no-rotate {
+  animation: horizontal-shaking 0.35s 3;
+}
+
+@keyframes horizontal-shaking {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(3px);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
