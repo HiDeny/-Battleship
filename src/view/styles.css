@@ -178,7 +178,7 @@ div[data-direction='horizontal'] {
 .dragging {
   opacity: 0.1;
   border-radius: 1rem;
-  z-index: 0;
+  /* z-index: 0; */
 }
 
 .disabled {
@@ -187,7 +187,7 @@ div[data-direction='horizontal'] {
 
 .available {
   background-color: rgba(172, 255, 47, 0.5);
-  z-index: 3;
+  z-index: 15;
 }
 
 .not-available {

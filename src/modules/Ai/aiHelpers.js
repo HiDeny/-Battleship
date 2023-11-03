@@ -60,7 +60,7 @@ export const saveSunk = (markedFields, fieldHits, shot) => {
   fieldHits.set(shotStr, shot);
   markedFields.add(shotStr);
 
-  fieldHits.values().forEach((position) => {
+  fieldHits.forEach((position) => {
     const offsetFields = possibleShots(position);
 
     Object.values(offsetFields).forEach((offset) => {

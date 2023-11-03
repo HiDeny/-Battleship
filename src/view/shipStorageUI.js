@@ -32,10 +32,14 @@ const handleClickShipRotate = (event) => {
     if (allAvailable) {
       event.target.dataset.direction = newDir;
       fieldsToClearCore.forEach((div) => (div.dataset.ship = 'false'));
-      fieldsToClearOffset.forEach((div) => (div.dataset.offset = 'false'));
+      fieldsToClearOffset.forEach((div) => {
+        div ? (div.dataset.offset = 'false') : null;
+      });
 
       fieldsToPopulateCore.forEach((div) => (div.dataset.ship = 'true'));
-      fieldsToPopulateOffset.forEach((div) => (div.dataset.offset = 'true'));
+      fieldsToPopulateOffset.forEach((div) => {
+        div ? (div.dataset.offset = 'true') : null;
+      });
     } else {
       fieldsToClearCore.forEach((div) => (div.dataset.ship = 'true'));
       console.log('Else');
