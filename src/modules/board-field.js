@@ -46,6 +46,7 @@ export const field = (coordinates) => {
   };
 };
 
+// Fix offset + 1 - 1
 const offsetFront = (board, newShip, coordinates) => {
   const [row, column, isVertical] = coordinates;
   const dynamicDir = isVertical ? row : column;
@@ -60,6 +61,7 @@ const offsetFront = (board, newShip, coordinates) => {
   }
 };
 
+// Fix offset + 1 - 1
 const offsetBack = (board, newShip, coordinates) => {
   const [row, column, isVertical] = coordinates;
   const { length } = newShip;

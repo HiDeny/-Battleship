@@ -4,14 +4,15 @@ const handleClickStart = () => {
   const ships = document.querySelectorAll('.ship');
 
   ships.forEach((ship) => {
+    ship.classList.add('ship-set');
     const type = ship.classList[1];
     const { row, column, direction } = ship.dataset;
     const isVertical = direction === 'vertical';
     const coordinates = [Number(row), Number(column), isVertical];
-    console.log(type);
-    console.log(coordinates);
     PubSub.publish('field-ship-drag', type, coordinates);
   });
+
+  PubSub.publish('game-start', true);
 };
 
 export const crateStartButton = () => {

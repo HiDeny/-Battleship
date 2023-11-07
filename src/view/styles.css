@@ -30,7 +30,6 @@ body {
 
 /* GAMEBOARD */
 .gameboard {
-  position: relative;
   grid-column: 1/-1;
   width: 100%;
   height: 90%;
@@ -41,19 +40,20 @@ body {
 
   justify-items: center;
   align-items: center;
-
-  grid-row: 3;
 }
 
 .board {
   grid-column: 2;
 
   position: relative;
+  z-index: 2;
+
   display: grid;
   grid-template-columns: repeat(10, 10%);
   grid-template-rows: repeat(10, 10%);
 
-  border: 1rem solid gray;
+  background-color: #3db1ff;
+  border: 0.5rem solid rgb(208 219 255);
   border-radius: 1rem;
 
   height: 250px;
@@ -61,12 +61,13 @@ body {
 }
 
 .board-field {
-  /* display: flex; */
   position: relative;
-  border: 0.5px solid gray;
+  /* z-index: 0; */
+  border: 1px solid #ffffff33;
   width: 25px;
   height: 25px;
   overflow: visible;
+  background-color: transparent;
 }
 
 .board-ships {
@@ -89,11 +90,12 @@ body {
   z-index: 10;
   position: relative;
 
+  background-color: rgb(220 220 220);
   display: flex;
   width: min-content;
   height: min-content;
   flex-direction: column;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
 }
 
 div[data-direction='horizontal'] {
@@ -105,35 +107,29 @@ div[data-direction='horizontal'] {
 }
 
 .AircraftCarrier {
-  background-color: yellow;
 }
 
 .Battleship {
-  background-color: yellowgreen;
 }
 
 .Cruiser {
-  background-color: green;
 }
 
 .Destroyer1,
 .Destroyer2 {
-  background-color: blue;
 }
 
 .Submarine1,
 .Submarine2 {
-  background-color: aqua;
 }
 
 .ship-block {
-  position: relative;
-  z-index: -10;
-
   aspect-ratio: 1/1;
-  opacity: 0.3;
+
   height: 25px;
   pointer-events: none;
+  position: relative;
+  z-index: 3;
 }
 
 .miss {
@@ -151,10 +147,11 @@ div[data-direction='horizontal'] {
 
 .user > .board::before {
   content: attr(name);
-  top: -1rem;
+  top: -2.2rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 1.1rem;
 }
 
 /* ENEMY */
@@ -169,29 +166,31 @@ div[data-direction='horizontal'] {
 
 .enemy > .board::before {
   content: attr(name);
-  top: -1rem;
+  top: -2.2rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  font-size: 1.1rem;
 }
 
 .dragging {
-  opacity: 0.1;
-  border-radius: 1rem;
-  /* z-index: 0; */
+  z-index: 12;
 }
 
 .disabled {
   pointer-events: none;
 }
 
-.available {
-  background-color: rgba(172, 255, 47, 0.5);
-  z-index: 15;
+.available-ship {
+  background-color: rgb(103, 171, 2);
+}
+
+.available-offset {
+  background-color: rgba(172, 255, 47, 0.465);
 }
 
 .not-available {
-  background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 0, 0, 0.7);
 }
 
 .startBtn {
@@ -218,4 +217,8 @@ div[data-direction='horizontal'] {
   100% {
     transform: translateX(0);
   }
+}
+
+.ship-set {
+  z-index: -1;
 }

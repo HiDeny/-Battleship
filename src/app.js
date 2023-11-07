@@ -26,21 +26,15 @@ document.body.append(startBtn);
 document.body.append(player1GameBoard);
 document.body.append(player2GameBoard);
 
-testGame.setShips();
+// testGame.setShips();
 
-// const playQuickGame = (round = 0) => {
-//   const currentRound = testGame.playRound(null, true);
-//   if (
-//     currentRound !== 'hit' &&
-//     currentRound !== 'miss' &&
-//     currentRound !== 'ship sunk'
-//   )
-//     return false;
+PubSub.subscribe('field-ship-drag', (type, coordinates) => {
+  player1.placeShip(type, coordinates);
+});
 
-//   playQuickGame(round);
-// };
-
-// playQuickGame();
+PubSub.subscribe('game-start', () => {
+  testGame.startGame();
+});
 
 PubSub.subscribe('field-click', (coordinates) => {
   testGame.playRound(coordinates);
@@ -51,6 +45,3 @@ PubSub.subscribe('field-click', (coordinates) => {
 });
 
 // player2.placeShipsAtRandom();
-PubSub.subscribe('field-ship-drag', (type, coordinates) => {
-  player1.placeShip(type, coordinates);
-});

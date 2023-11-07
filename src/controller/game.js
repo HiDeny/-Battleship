@@ -9,8 +9,11 @@ const GameController = (twoPlayers = false) => {
     ? createPlayer('Player2')
     : createAiPlayer('Enemy');
 
-  let activePlayer = player1;
-  let opponentPlayer = player2;
+  // let activePlayer = player1;
+  // let opponentPlayer = player2;
+
+  let activePlayer = player2;
+  let opponentPlayer = player1;
 
   const switchTurns = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
@@ -28,6 +31,10 @@ const GameController = (twoPlayers = false) => {
     player1,
     player2,
     round,
+    startGame() {
+      player2.placeShips();
+      this.playRound(null, true);
+    },
     setShips() {
       // player1.placeShipsAtRandom();
       player2.placeShips();
