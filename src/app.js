@@ -4,14 +4,11 @@ import './view/styles.css';
 import GameController from './controller/game';
 import renderGameboard from './view/gameBoardUI';
 
-import { createResultUI, createRoundsUI } from './view/hudUI';
-import { crateStartButton } from './view/start';
+import createHud from './view/hudUI';
 
 import PubSub from './modules/pubsub';
 
-const rounds = createRoundsUI();
-const result = createResultUI();
-const startBtn = crateStartButton();
+const hud = createHud();
 
 const testGame = GameController();
 const { player1, player2 } = testGame;
@@ -19,14 +16,10 @@ const { player1, player2 } = testGame;
 const player1GameBoard = renderGameboard(player1);
 const player2GameBoard = renderGameboard(player2, true);
 
-document.body.append(rounds);
-document.body.append(result);
-document.body.append(startBtn);
+document.body.append(hud);
 
 document.body.append(player1GameBoard);
 document.body.append(player2GameBoard);
-
-// testGame.setShips();
 
 PubSub.subscribe('field-ship-drag', (type, coordinates) => {
   player1.placeShip(type, coordinates);
@@ -36,12 +29,26 @@ PubSub.subscribe('game-start', () => {
   testGame.startGame();
 });
 
-PubSub.subscribe('field-click', (coordinates) => {
-  testGame.playRound(coordinates);
+const aiPlay = async () =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(testGame.playRound(null, true));
+    }, 500);
+  });
 
-  setTimeout(() => {
-    testGame.playRound(null, true);
-  }, 500);
+PubSub.subscribe('field-click', async (coordinates) => {
+  let shotResult = testGame.playRound(coordinates);
+
+  if (shotResult === 'miss') {
+    let shots = 1;
+
+    for (let i = 0; i < shots; i += 1) {
+      shotResult = await aiPlay();
+      if (shotResult === 'ship sunk' || shotResult === 'hit') {
+        shots += 1;
+      }
+    }
+  }
 });
 
 // player2.placeShipsAtRandom();

@@ -1,15 +1,48 @@
 import PubSub from '../modules/pubsub';
 
-const createRoundsUI = () => {
-  const rounds = document.createElement('h2');
-  rounds.textContent = 0;
-  rounds.classList.add('hud-rounds');
+const handleClickStart = () => {
+  const ships = document.querySelectorAll('.ship');
 
-  PubSub.subscribe('game-round', (round) => {
-    rounds.textContent = round;
+  ships.forEach((ship) => {
+    ship.classList.add('ship-set');
+    const type = ship.classList[1];
+    const { row, column, direction } = ship.dataset;
+    const isVertical = direction === 'vertical';
+    const coordinates = [Number(row), Number(column), isVertical];
+    PubSub.publish('field-ship-drag', type, coordinates);
   });
 
-  return rounds;
+  PubSub.publish('game-start', true);
+};
+
+const crateStartButton = () => {
+  const button = document.createElement('button');
+  button.textContent = 'Start';
+  button.classList.add('startBtn');
+  button.addEventListener('click', handleClickStart);
+
+  return button;
+};
+
+const createRoundsUI = () => {
+  const container = document.createElement('div');
+  container.classList.add('hud-round-container');
+
+  const name = document.createElement('p');
+  name.textContent = 'Round: ';
+  name.classList.add('hud-round-name');
+
+  const round = document.createElement('h2');
+  round.textContent = 0;
+  round.classList.add('hud-round');
+
+  PubSub.subscribe('game-round', (currentRound) => {
+    round.textContent = currentRound;
+  });
+
+  container.append(name, round);
+
+  return container;
 };
 
 const createResultUI = () => {
@@ -35,4 +68,17 @@ const createResultUI = () => {
   return result;
 };
 
-export { createRoundsUI, createResultUI };
+const crateHud = () => {
+  const hud = document.createElement('div');
+  hud.classList.add('hud');
+
+  const startButton = crateStartButton();
+  const rounds = createRoundsUI();
+  const result = createResultUI();
+
+  hud.append(startButton, result, rounds);
+
+  return hud;
+};
+
+export default crateHud;

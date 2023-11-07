@@ -11,8 +11,8 @@ body {
   height: 100vh;
 
   display: grid;
-  grid-template-rows: 20% 40% 40%;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 45% 10% 45%;
+  grid-template-columns: 1fr;
   gap: 0.25rem;
   align-items: center;
   justify-items: center;
@@ -21,11 +21,28 @@ body {
 }
 
 /* HUD */
+.hud {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
 
-.hud-rounds {
+.hud-round-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.hud-round-name {
+  
+}
+.hud-round {
   grid-column: 2;
   font-size: 2rem;
   font-family: Helvetica;
+}
+
+.startBtn {
+  grid-row: 2;
 }
 
 /* GAMEBOARD */
@@ -57,6 +74,7 @@ body {
   border-radius: 1rem;
 
   height: 250px;
+  padding: 0.5rem;
   aspect-ratio: 1/1;
 }
 
@@ -87,6 +105,7 @@ body {
 }
 
 .ship {
+  cursor: grab;
   z-index: 10;
   position: relative;
 
@@ -104,23 +123,6 @@ div[data-direction='horizontal'] {
 
 .horizontal {
   flex-direction: row;
-}
-
-.AircraftCarrier {
-}
-
-.Battleship {
-}
-
-.Cruiser {
-}
-
-.Destroyer1,
-.Destroyer2 {
-}
-
-.Submarine1,
-.Submarine2 {
 }
 
 .ship-block {
@@ -157,11 +159,11 @@ div[data-direction='horizontal'] {
 /* ENEMY */
 
 .gameboard.enemy {
-  grid-row: 2;
+  grid-row: 1;
 }
 
 .enemy > .board > .board-field {
-  cursor: pointer;
+  cursor: crosshair;
 }
 
 .enemy > .board::before {
@@ -174,7 +176,7 @@ div[data-direction='horizontal'] {
 }
 
 .dragging {
-  z-index: 12;
+  cursor: grabbing;
 }
 
 .disabled {
@@ -191,10 +193,6 @@ div[data-direction='horizontal'] {
 
 .not-available {
   background-color: rgba(255, 0, 0, 0.7);
-}
-
-.startBtn {
-  grid-row: 1;
 }
 
 .no-rotate {

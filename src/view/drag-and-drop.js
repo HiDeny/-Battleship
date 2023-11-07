@@ -108,6 +108,10 @@ export const handleDragEnd = (event) => {
   });
 };
 
+export const handleDragEnter = (event) => {
+  event.preventDefault();
+};
+
 export const handleDragDrop = (event) => {
   event.preventDefault();
   const dragged = document.querySelector('.dragging');

@@ -3,6 +3,7 @@ import {
   handleDragDrop,
   handleDragOver,
   handleDragLeave,
+  handleDragEnter,
 } from './drag-and-drop';
 
 const handleClickField = (event) => {
@@ -18,7 +19,6 @@ const createFieldUI = (field, isEnemy) => {
   fieldButton.dataset.column = column;
   fieldButton.dataset.row = row;
   fieldButton.dataset.ship = false;
-  
 
   PubSub.subscribe('field-mark', (coordinates, mark) => {
     if (coordinates === field.coordinates) fieldButton.classList.add(mark);
@@ -26,6 +26,7 @@ const createFieldUI = (field, isEnemy) => {
 
   if (isEnemy) fieldButton.onclick = handleClickField;
   if (!isEnemy) {
+    fieldButton.addEventListener('dragenter', handleDragEnter);
     fieldButton.addEventListener('dragover', handleDragOver);
     fieldButton.addEventListener('dragleave', handleDragLeave);
     fieldButton.addEventListener('drop', handleDragDrop);
@@ -52,6 +53,7 @@ const createFieldUI = (field, isEnemy) => {
 const renderBoard = (board, name, isEnemy) => {
   const boardUI = document.createElement('div');
   boardUI.classList.add('board');
+  if (isEnemy) boardUI.classList.add('disabled');
   boardUI.setAttribute('name', name);
 
   board.forEach((row) => {

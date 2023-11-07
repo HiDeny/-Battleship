@@ -56,7 +56,9 @@ const GameController = (twoPlayers = false) => {
         return gameResult;
       }
 
-      switchTurns();
+      if (currentAttack === 'miss') {
+        switchTurns();
+      }
 
       round += 1;
       PubSub.publish('game-round', round);
