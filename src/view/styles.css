@@ -32,9 +32,13 @@ body {
   align-items: center;
   gap: 0.25rem;
 }
-.hud-round-name {
-  
+
+.hud-result {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
+
 .hud-round {
   grid-column: 2;
   font-size: 2rem;
@@ -115,6 +119,16 @@ body {
   height: min-content;
   flex-direction: column;
   border-radius: 0.5rem;
+}
+
+.AircraftCarrier,
+.Battleship,
+.Cruiser,
+.Submarine1,
+.Submarine2,
+.Destroyer1,
+.Destroyer2 {
+  background-color: green;
 }
 
 div[data-direction='horizontal'] {

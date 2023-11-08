@@ -32,20 +32,20 @@ const createFieldUI = (field, isEnemy) => {
     fieldButton.addEventListener('drop', handleDragDrop);
   }
   // Remove isEnemy
-  if (!isEnemy) {
-    PubSub.subscribe('field-ship', (coordinates, type) => {
-      if (coordinates === field.coordinates) {
-        fieldButton.dataset.ship = true;
-        fieldButton.classList.add(type);
-      }
-    });
+  // if (!isEnemy) {
+  PubSub.subscribe('field-ship', (coordinates, type) => {
+    if (coordinates === field.coordinates) {
+      fieldButton.dataset.ship = true;
+      fieldButton.classList.add(type);
+    }
+  });
 
-    PubSub.subscribe('field-ship-offset', (coordinates) => {
-      if (coordinates === field.coordinates) {
-        fieldButton.dataset.offset = true;
-      }
-    });
-  }
+  PubSub.subscribe('field-ship-offset', (coordinates) => {
+    if (coordinates === field.coordinates) {
+      fieldButton.dataset.offset = true;
+    }
+  });
+  // }
 
   return fieldButton;
 };

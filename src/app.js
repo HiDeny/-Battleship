@@ -10,25 +10,31 @@ import PubSub from './modules/pubsub';
 
 const hud = createHud();
 
-const testGame = GameController();
-const { player1, player2 } = testGame;
-
-const player1GameBoard = renderGameboard(player1);
-const player2GameBoard = renderGameboard(player2, true);
+let currentGame = GameController();
 
 document.body.append(hud);
-
-document.body.append(player1GameBoard);
-document.body.append(player2GameBoard);
+document.body.append(renderGameboard(currentGame.player1));
+document.body.append(renderGameboard(currentGame.player2, true));
 
 PubSub.subscribe('game-status', async (phase) => {
-  if (phase === 'start') {
-    testGame.setShips();
-    testGame.playRound(null);
+  if (phase === 'Start') {
+    currentGame.setShips();
+    currentGame.playRound(null);
+  }
+  if (phase === 'Restart') {
+    currentGame = GameController();
+
+    const oldGameBoardP1 = document.querySelector('.gameboard.user');
+    const oldGameBoardP2 = document.querySelector('.gameboard.enemy');
+
+    oldGameBoardP1.replaceWith(renderGameboard(currentGame.player1));
+    oldGameBoardP2.replaceWith(renderGameboard(currentGame.player2, true));
+
+    PubSub.publish('game-round', 0);
   }
 });
 
 PubSub.subscribe('field-click', async (coordinates) => {
-  const shotResult = await testGame.playRound(coordinates);
-  if (shotResult === 'miss') await testGame.playRound(null);
+  const shotResult = await currentGame.playRound(coordinates);
+  if (shotResult === 'miss') await currentGame.playRound(null);
 });

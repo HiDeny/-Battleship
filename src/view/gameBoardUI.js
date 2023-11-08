@@ -2,10 +2,6 @@ import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
 import renderShipStorage from './shipStorageUI';
 
-// const handleClickRotateButton = ({ target }) => {
-//   target.dataset;
-// };
-
 const renderGameboard = (player, isEnemy = false) => {
   const { name, shipStorage, gameboard } = player;
   const { board } = gameboard;

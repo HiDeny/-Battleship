@@ -9,9 +9,6 @@ const GameController = (twoPlayers = false) => {
     ? createPlayer('Player2')
     : createAiPlayer('Enemy');
 
-  // let activePlayer = player1;
-  // let opponentPlayer = player2;
-
   let activePlayer = player2;
   let opponentPlayer = player1;
 

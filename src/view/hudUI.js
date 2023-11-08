@@ -1,18 +1,26 @@
 import PubSub from '../modules/pubsub';
 
+const handleClickStart = ({ target }) => {
+  target.disabled = true;
+  PubSub.publish('game-status', 'Start');
+};
+const handleClickRestart = ({ target }) => {
+  PubSub.publish('game-status', 'Restart');
+  target.onclick = handleClickStart;
+  target.textContent = 'Start';
+};
+
 const crateStartButton = () => {
   const button = document.createElement('button');
   button.textContent = 'Start';
   button.classList.add('startBtn');
-  button.addEventListener('click', () => {
-    button.disabled = true;
-    PubSub.publish('game-status', 'start');
-  });
+  button.onclick = handleClickStart;
 
   PubSub.subscribe('game-status', (phase) => {
-    if (phase === 'gameOver') {
+    if (phase === 'Game Over') {
       button.disabled = false;
       button.textContent = 'Restart';
+      button.onclick = handleClickRestart;
     }
   });
 
@@ -61,8 +69,9 @@ const createResultUI = () => {
   });
 
   PubSub.subscribe('game-status', (phase, gameResult) => {
+    coordinatesDisplay.textContent = phase;
+
     if (phase === 'Game Over') {
-      coordinatesDisplay.textContent = phase;
       shotResult.textContent = `${gameResult.toUpperCase()}!`;
     }
   });
