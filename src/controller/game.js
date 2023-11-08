@@ -19,8 +19,12 @@ const GameController = (twoPlayers = false) => {
   };
 
   const gameOver = () => {
-    if (player1.gameboard.activeShips() < 1) return 'Player 2 WIN!';
-    if (player2.gameboard.activeShips() < 1) return 'Player 1 WIN!';
+    const activeShipsP1 = player1.gameboard.activeShips();
+    const activeShipsP2 = player2.gameboard.activeShips();
+    PubSub.publish('ships-left', [activeShipsP1, activeShipsP2]);
+
+    if (activeShipsP1 < 1) return 'Player 2 WIN!';
+    if (activeShipsP2 < 1) return 'Player 1 WIN!';
     return false;
   };
 

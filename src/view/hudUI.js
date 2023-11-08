@@ -27,24 +27,41 @@ const crateStartButton = () => {
   return button;
 };
 
-const createRoundsUI = () => {
+const createShipsLeftUI = () => {
+  const shipsLeft = document.createElement('p');
+  shipsLeft.classList.add('ships-left');
+  shipsLeft.textContent = `Active Ships: 0`;
+
+  return shipsLeft;
+};
+
+const createRoundUI = () => {
+  const round = document.createElement('p');
+  round.classList.add('hud-round');
+  round.textContent = `Round: 0`;
+
+  PubSub.subscribe('game-round', (currentRound) => {
+    round.textContent = `Round: ${currentRound}`;
+  });
+
+  return round;
+};
+
+const createStatsUI = () => {
   const container = document.createElement('div');
   container.classList.add('hud-round-container');
 
-  const name = document.createElement('p');
-  name.textContent = 'Round: ';
-  name.classList.add('hud-round-name');
+  const shipsLeftP1 = createShipsLeftUI();
+  const round = createRoundUI();
+  const shipsLeftP2 = createShipsLeftUI();
 
-  const round = document.createElement('h2');
-  round.textContent = 0;
-  round.classList.add('hud-round');
-
-  PubSub.subscribe('game-round', (currentRound) => {
-    round.textContent = currentRound;
+  PubSub.subscribe('ships-left', (arr) => {
+    const [shipsP1, shipsP2] = arr;
+    shipsLeftP1.textContent = `Active Ships: ${shipsP1}`;
+    shipsLeftP2.textContent = `Active Ships: ${shipsP2}`;
   });
 
-  container.append(name, round);
-
+  container.append(shipsLeftP1, round, shipsLeftP2);
   return container;
 };
 
@@ -84,7 +101,7 @@ const crateHud = () => {
   hud.classList.add('hud');
 
   const startButton = crateStartButton();
-  const rounds = createRoundsUI();
+  const rounds = createStatsUI();
   const result = createResultUI();
 
   hud.append(startButton, result, rounds);

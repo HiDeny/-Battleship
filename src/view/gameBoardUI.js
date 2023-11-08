@@ -1,6 +1,6 @@
 import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
-import renderShipStorage from './shipStorageUI';
+import renderShipStorage from './shipUI';
 
 const renderGameboard = (player, isEnemy = false) => {
   const { name, shipStorage, gameboard } = player;

@@ -1,6 +1,10 @@
 /* eslint-disable no-param-reassign */
 
-import { handleDragStart, handleDragEnd, getFields } from './drag-and-drop';
+import {
+  handleDragStart,
+  handleDragEnd,
+  getFields,
+} from '../controller/drag-and-drop';
 
 const handleClickShipRotate = (event) => {
   const { direction, row, column, length } = event.target.dataset;

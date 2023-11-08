@@ -29,20 +29,25 @@ body {
 
 .hud-round-container {
   display: flex;
+  flex-direction: column-reverse;
   align-items: center;
   gap: 0.25rem;
+}
+
+.ships-left {
+  margin: 0;
+}
+
+.hud-round {
+  display: flex;
+  font-size: 1.3rem;
+  font-family: Helvetica;
 }
 
 .hud-result {
   display: flex;
   align-items: center;
   flex-direction: column;
-}
-
-.hud-round {
-  grid-column: 2;
-  font-size: 2rem;
-  font-family: Helvetica;
 }
 
 .startBtn {

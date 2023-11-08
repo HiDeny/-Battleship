@@ -4,7 +4,7 @@ import {
   handleDragOver,
   handleDragLeave,
   handleDragEnter,
-} from './drag-and-drop';
+} from '../controller/drag-and-drop';
 
 const handleClickField = (event) => {
   const { row, column } = event.target.dataset;
