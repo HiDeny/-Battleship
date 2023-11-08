@@ -21,34 +21,34 @@ document.body.append(hud);
 document.body.append(player1GameBoard);
 document.body.append(player2GameBoard);
 
-PubSub.subscribe('field-ship-drag', (type, coordinates) => {
-  player1.placeShip(type, coordinates);
-});
-
-PubSub.subscribe('game-start', () => {
-  testGame.startGame();
-});
-
-const aiPlay = async () =>
+const aiShot = async () =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve(testGame.playRound(null, true));
     }, 500);
   });
 
-PubSub.subscribe('field-click', async (coordinates) => {
-  let shotResult = testGame.playRound(coordinates);
+const aiPlay = async () => {
+  let shots = 1;
 
-  if (shotResult === 'miss') {
-    let shots = 1;
-
-    for (let i = 0; i < shots; i += 1) {
-      shotResult = await aiPlay();
-      if (shotResult === 'ship sunk' || shotResult === 'hit') {
-        shots += 1;
-      }
+  for (let i = 0; i < shots; i += 1) {
+    const shotResult = await aiShot();
+    if (shotResult === 'ship sunk' || shotResult === 'hit') {
+      shots += 1;
     }
   }
+};
+
+PubSub.subscribe('game-status', async (phase) => {
+  if (phase === 'start') {
+    testGame.setShips();
+    await aiPlay();
+  }
+});
+
+PubSub.subscribe('field-click', async (coordinates) => {
+  let shotResult = testGame.playRound(coordinates);
+  if (shotResult === 'miss') await aiPlay();
 });
 
 // player2.placeShipsAtRandom();

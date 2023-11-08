@@ -27,6 +27,18 @@ const createPlayer = (name, isComputer = false) => {
       gameboard.placeShip(completeShip, coordinates);
       return completeShip;
     },
+    placeShips() {
+      const ships = document.querySelectorAll('.ship');
+
+      ships.forEach((ship) => {
+        ship.classList.add('ship-set');
+        const type = ship.classList[1];
+        const { row, column, direction } = ship.dataset;
+        const isVertical = direction === 'vertical';
+        const coordinates = [Number(row), Number(column), isVertical];
+        this.placeShip(type, coordinates);
+      });
+    },
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);
     },

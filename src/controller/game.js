@@ -31,12 +31,8 @@ const GameController = (twoPlayers = false) => {
     player1,
     player2,
     round,
-    startGame() {
-      player2.placeShips();
-      this.playRound(null, true);
-    },
     setShips() {
-      // player1.placeShipsAtRandom();
+      player1.placeShips();
       player2.placeShips();
     },
     playRound(coordinates, aiPlayer = false) {
