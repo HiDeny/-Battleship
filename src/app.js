@@ -21,34 +21,14 @@ document.body.append(hud);
 document.body.append(player1GameBoard);
 document.body.append(player2GameBoard);
 
-const aiShot = async () =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(testGame.playRound(null, true));
-    }, 500);
-  });
-
-const aiPlay = async () => {
-  let shots = 1;
-
-  for (let i = 0; i < shots; i += 1) {
-    const shotResult = await aiShot();
-    if (shotResult === 'ship sunk' || shotResult === 'hit') {
-      shots += 1;
-    }
-  }
-};
-
 PubSub.subscribe('game-status', async (phase) => {
   if (phase === 'start') {
     testGame.setShips();
-    await aiPlay();
+    testGame.playRound(null);
   }
 });
 
 PubSub.subscribe('field-click', async (coordinates) => {
-  let shotResult = testGame.playRound(coordinates);
-  if (shotResult === 'miss') await aiPlay();
+  const shotResult = await testGame.playRound(coordinates);
+  if (shotResult === 'miss') await testGame.playRound(null);
 });
-
-// player2.placeShipsAtRandom();

@@ -60,6 +60,13 @@ const createResultUI = () => {
     shotResult.textContent = `${mark.toUpperCase()}!`;
   });
 
+  PubSub.subscribe('game-status', (phase, gameResult) => {
+    if (phase === 'Game Over') {
+      coordinatesDisplay.textContent = phase;
+      shotResult.textContent = `${gameResult.toUpperCase()}!`;
+    }
+  });
+
   return result;
 };
 

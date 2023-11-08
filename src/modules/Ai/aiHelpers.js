@@ -69,3 +69,10 @@ export const saveSunk = (markedFields, fieldHits, shot) => {
     });
   });
 };
+
+export const shotDelay = async (enemyBoard, currentShot) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(enemyBoard.receiveAttack(currentShot));
+    }, 600);
+  });

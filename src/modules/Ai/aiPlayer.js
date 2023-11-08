@@ -6,7 +6,7 @@ import {
   checkShipCoordinates,
   getRandomNextShot,
 } from '../coordinates';
-import { saveHit, saveMiss, saveSunk } from './aiHelpers';
+import { saveHit, saveMiss, saveSunk, shotDelay } from './aiHelpers';
 
 const createAiPlayer = (name) => {
   const gameboard = createGameboard();
@@ -76,12 +76,20 @@ const createAiPlayer = (name) => {
 
       return shipsOnBoard;
     },
-    attack(enemyBoard) {
-      const currentShot = getNextShot();
-      const result = enemyBoard.receiveAttack(currentShot);
-      saveShotResult(currentShot, result);
+    async attack(enemyBoard) {
+      let shots = 1;
 
-      return result;
+      for (let i = 0; i < shots; i += 1) {
+        const currentShot = getNextShot();
+        const result = await shotDelay(enemyBoard, currentShot);
+        saveShotResult(currentShot, result);
+
+        if (result === 'hit' || result === 'ship sunk') {
+          shots += 1;
+        }
+      }
+
+      return 'miss';
     },
   };
 };

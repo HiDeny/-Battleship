@@ -35,25 +35,18 @@ const GameController = (twoPlayers = false) => {
       player1.placeShips();
       player2.placeShips();
     },
-    playRound(coordinates, aiPlayer = false) {
-      let currentAttack;
-      if (aiPlayer) {
-        currentAttack = activePlayer.attack(opponentPlayer.gameboard);
-      } else {
-        currentAttack = activePlayer.attack(
-          opponentPlayer.gameboard,
-          coordinates
-        );
-      }
+    async playRound(coordinates) {
+      const currentAttack = await activePlayer.attack(
+        opponentPlayer.gameboard,
+        coordinates
+      );
+
+      if (currentAttack === 'miss') switchTurns();
 
       if (gameOver()) {
         const gameResult = gameOver();
-        PubSub.publish('game-round', gameResult);
+        PubSub.publish('game-status', 'Game Over', gameResult);
         return gameResult;
-      }
-
-      if (currentAttack === 'miss') {
-        switchTurns();
       }
 
       round += 1;
