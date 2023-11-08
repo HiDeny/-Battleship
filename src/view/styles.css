@@ -119,6 +119,9 @@ body {
   height: min-content;
   flex-direction: column;
   border-radius: 0.5rem;
+  flex-direction: column;
+
+  transition: flex-direction 1s;
 }
 
 .AircraftCarrier,
@@ -190,7 +193,7 @@ div[data-direction='horizontal'] {
 }
 
 .dragging {
-  cursor: grabbing;
+  cursor: grabbing !important;
 }
 
 .disabled {
@@ -210,24 +213,24 @@ div[data-direction='horizontal'] {
 }
 
 .no-rotate {
-  animation: horizontal-shaking 0.35s 3;
+  animation: tilt-shaking 0.35s 3;
 }
 
-@keyframes horizontal-shaking {
+@keyframes tilt-shaking {
   0% {
-    transform: translateX(0);
+    transform: rotate(0deg);
   }
   25% {
-    transform: translateX(3px);
+    transform: rotate(5deg);
   }
   50% {
-    transform: translateX(-3px);
+    transform: rotate(0eg);
   }
   75% {
-    transform: translateX(3px);
+    transform: rotate(-5deg);
   }
   100% {
-    transform: translateX(0);
+    transform: rotate(0deg);
   }
 }
 

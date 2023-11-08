@@ -60,6 +60,7 @@ export const getFields = (
 
 export const handleDragStart = (event) => {
   event.target.classList.add('dragging');
+  document.body.classList.add('draggingCursor');
 
   const { length, direction, row, column } = event.target.dataset;
 
@@ -77,6 +78,8 @@ export const handleDragStart = (event) => {
 };
 
 export const handleDragEnd = (event) => {
+  document.body.classList.remove('draggingCursor');
+
   const draggedFrom = document.querySelectorAll('.draggedFrom');
   const availableShip = document.querySelectorAll('.available-ship');
   const availableOffset = document.querySelectorAll('.available-offset');
