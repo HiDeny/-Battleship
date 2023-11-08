@@ -18,7 +18,7 @@ const renderGameboard = (player, isEnemy = false) => {
     renderShipStorage(shipStorage, boardUI);
   }
 
-  PubSub.subscribe('game-currentPlayer', (activePlayer) => {
+  PubSub.subscribe('game-turn', (activePlayer) => {
     if (activePlayer === player) boardUI.classList.add('disabled');
     if (activePlayer !== player) boardUI.classList.remove('disabled');
   });

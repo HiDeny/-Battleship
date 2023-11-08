@@ -1,27 +1,15 @@
 import PubSub from '../modules/pubsub';
 
-const handleClickStart = ({ target }) => {
-  target.disabled = true;
-  PubSub.publish('game-status', 'Start');
-};
-const handleClickRestart = ({ target }) => {
-  PubSub.publish('game-status', 'Restart');
-  target.onclick = handleClickStart;
-  target.textContent = 'Start';
-};
-
 const crateStartButton = () => {
   const button = document.createElement('button');
-  button.textContent = 'Start';
-  button.classList.add('startBtn');
-  button.onclick = handleClickStart;
+  let stage = 'Start';
 
-  PubSub.subscribe('game-status', (phase) => {
-    if (phase === 'Game Over') {
-      button.disabled = false;
-      button.textContent = 'Restart';
-      button.onclick = handleClickRestart;
-    }
+  button.textContent = stage;
+  button.classList.add('startBtn');
+  button.addEventListener('click', () => {
+    PubSub.publish('game-status', stage);
+    stage = stage === 'Start' ? 'Restart' : 'Start';
+    button.textContent = stage;
   });
 
   return button;
@@ -47,12 +35,16 @@ const createRoundUI = () => {
   return round;
 };
 
-const createStatsUI = () => {
+const createStageUI = () => {
   const container = document.createElement('div');
-  container.classList.add('hud-round-container');
+  container.classList.add('hud-stage');
 
   const shipsLeftP1 = createShipsLeftUI();
-  const round = createRoundUI();
+
+  const currentStage = document.createElement('h3');
+  currentStage.classList.add('hud-stage');
+  currentStage.textContent = 'Setup Ships';
+
   const shipsLeftP2 = createShipsLeftUI();
 
   PubSub.subscribe('ships-left', (arr) => {
@@ -61,39 +53,35 @@ const createStatsUI = () => {
     shipsLeftP2.textContent = `Active Ships: ${shipsP2}`;
   });
 
-  container.append(shipsLeftP1, round, shipsLeftP2);
+  PubSub.subscribe('game-status', (phase) => {
+    currentStage.textContent = phase;
+  });
+
+  PubSub.subscribe('game-turn', (player) => {
+    currentStage.textContent = `${player.name}'s turn!`;
+  });
+
+  container.append(shipsLeftP1, currentStage, shipsLeftP2);
   return container;
 };
 
-const createResultUI = () => {
-  const result = document.createElement('div');
-  result.classList.add('hud-result');
+const createManual = () => {
+  const container = document.createElement('div');
+  container.classList.add('hud-manual');
+  container.classList.add('hide');
 
-  const coordinatesDisplay = document.createElement('p');
-  coordinatesDisplay.classList.add('hud-position');
-  coordinatesDisplay.textContent = 'Coordinates';
+  const title = document.createElement('h3');
+  title.textContent = 'ORGANIZE YOUR SHIPS';
 
-  const shotResult = document.createElement('p');
-  shotResult.classList.add('hud-shotResult');
-  shotResult.textContent = 'Shot Result';
+  const rotateHint = document.createElement('p');
+  rotateHint.textContent = 'Click to rotate';
 
-  result.append(coordinatesDisplay);
-  result.append(shotResult);
+  const dragHint = document.createElement('p');
+  dragHint.textContent = 'Drag to move';
 
-  PubSub.subscribe('field-mark', (coordinates, mark) => {
-    coordinatesDisplay.textContent = `Row: ${coordinates[0]} , Column: ${coordinates[1]}`;
-    shotResult.textContent = `${mark.toUpperCase()}!`;
-  });
+  container.append(title, rotateHint, dragHint);
 
-  PubSub.subscribe('game-status', (phase, gameResult) => {
-    coordinatesDisplay.textContent = phase;
-
-    if (phase === 'Game Over') {
-      shotResult.textContent = `${gameResult.toUpperCase()}!`;
-    }
-  });
-
-  return result;
+  return container;
 };
 
 const crateHud = () => {
@@ -101,10 +89,11 @@ const crateHud = () => {
   hud.classList.add('hud');
 
   const startButton = crateStartButton();
-  const rounds = createStatsUI();
-  const result = createResultUI();
+  const gameStage = createStageUI();
+  const manual = createManual();
+  const round = createRoundUI();
 
-  hud.append(startButton, result, rounds);
+  hud.append(startButton, manual, gameStage, round);
 
   return hud;
 };

@@ -4,10 +4,12 @@ import PubSub from '../modules/pubsub';
 
 const GameController = (twoPlayers = false) => {
   let round = 0;
-  const player1 = createPlayer('You');
-  const player2 = twoPlayers
-    ? createPlayer('Player2')
-    : createAiPlayer('Enemy');
+  const player1 = createPlayer('Player 1');
+  const player2 = createAiPlayer('Player 2');
+
+  // const player2 = twoPlayers
+  //   ? createPlayer('Player 2')
+  //   : createAiPlayer('Player 2');
 
   let activePlayer = player2;
   let opponentPlayer = player1;
@@ -15,7 +17,7 @@ const GameController = (twoPlayers = false) => {
   const switchTurns = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
     opponentPlayer = opponentPlayer === player2 ? player1 : player2;
-    PubSub.publish('game-currentPlayer', activePlayer);
+    PubSub.publish('game-turn', activePlayer);
   };
 
   const gameOver = () => {
