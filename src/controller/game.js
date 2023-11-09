@@ -21,8 +21,8 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
     const activeShipsP2 = player2.gameboard.activeShips();
     PubSub.publish('ships-left', [activeShipsP1, activeShipsP2]);
 
-    if (activeShipsP1 < 1) return 'Player 2 WIN!';
-    if (activeShipsP2 < 1) return 'Player 1 WIN!';
+    if (activeShipsP1 < 1) return `${player2.name} WIN!`;
+    if (activeShipsP2 < 1) return `${player1.name} WIN!`;
     return false;
   };
 

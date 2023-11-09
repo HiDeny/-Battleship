@@ -8,12 +8,14 @@ import PubSub from './modules/pubsub';
 
 const screenController = ScreenController();
 let currentGame;
+let nameP1;
+let nameP2;
 
 screenController.displayWelcome();
 screenController.displayHUD();
 
 PubSub.subscribe('game-setup', (names) => {
-  const [nameP1, nameP2] = names;
+  [nameP1, nameP2] = names;
   currentGame = GameController(nameP1, nameP2);
   screenController.displayGame(currentGame);
 });
@@ -25,7 +27,7 @@ PubSub.subscribe('game-status', (phase) => {
     currentGame.playRound(null);
   }
   if (phase === 'Restart') {
-    currentGame = GameController();
+    currentGame = GameController(nameP1, nameP2);
     screenController.displayRestartGame(currentGame);
     PubSub.publish('game-round', 0);
   }

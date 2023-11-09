@@ -2,7 +2,7 @@ import PubSub from '../modules/pubsub';
 
 const switchHudInfo = () => {
   document.querySelector('.hud-manual').classList.toggle('hide');
-  document.querySelector('.hud-stage').classList.toggle('hide');
+  document.querySelector('.hud-stage-container').classList.toggle('hide');
 };
 
 const crateStartButton = () => {
@@ -44,13 +44,13 @@ const createRoundUI = () => {
 
 const createStageUI = () => {
   const container = document.createElement('div');
-  container.classList.add('hud-stage');
+  container.classList.add('hud-stage-container');
   container.classList.add('hide');
 
   const shipsLeftP1 = createShipsLeftUI();
 
   const currentStage = document.createElement('h3');
-  currentStage.classList.add('hud-stage');
+  currentStage.classList.add('hud-stage-text');
   currentStage.textContent = 'Setup Ships';
 
   const shipsLeftP2 = createShipsLeftUI();
@@ -63,6 +63,10 @@ const createStageUI = () => {
 
   PubSub.subscribe('game-turn', (player) => {
     currentStage.textContent = `${player.name}'s turn!`;
+  });
+
+  PubSub.subscribe('game-status', (phase, result) => {
+    if (phase === 'Game Over') currentStage.textContent = result;
   });
 
   container.append(shipsLeftP1, currentStage, shipsLeftP2);

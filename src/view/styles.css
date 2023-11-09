@@ -6,7 +6,7 @@ body {
   height: 100vh;
 
   display: grid;
-  grid-template-rows: 45% 10% 45%;
+  grid-template-rows: 42% 13% 42%;
   grid-template-columns: 1fr;
   gap: 0.25rem;
   align-items: center;
@@ -156,15 +156,23 @@ body {
   align-items: center;
   justify-items: center;
   width: 100%;
+  height: 100%;
 }
 
-.hud-stage {
+.hud-stage-container {
   display: flex;
   flex-direction: column-reverse;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+
+  height: 100%;
 
   transition: opacity 300ms ease;
+}
+
+.hud-stage-text {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
 .hud-manual {
@@ -181,6 +189,7 @@ body {
 
 .hide {
   opacity: 0;
+  pointer-events: none;
 }
 
 .hud-manual > h3,
@@ -188,9 +197,16 @@ body {
   margin: 0;
 }
 
+.hud-manual > h3 {
+  justify-self: center;
+}
+
 .hud-round {
   display: flex;
   align-items: center;
+
+  margin: 0;
+  font-size: 1.3rem;
 }
 
 .ships-left {
@@ -383,7 +399,7 @@ div[data-direction='horizontal'] {
     transform: rotate(5deg);
   }
   50% {
-    transform: rotate(0eg);
+    transform: rotate(0deg);
   }
   75% {
     transform: rotate(-5deg);

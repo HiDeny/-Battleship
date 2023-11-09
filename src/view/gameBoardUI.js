@@ -23,6 +23,10 @@ const renderGameboard = (player, isEnemy = false) => {
     if (activePlayer !== player) boardUI.classList.remove('disabled');
   });
 
+  PubSub.subscribe('game-status', (phase) => {
+    if (phase === 'Game Over') boardUI.classList.add('disabled');
+  });
+
   return gameboardUI;
 };
 

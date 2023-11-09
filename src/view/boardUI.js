@@ -31,7 +31,7 @@ const createFieldUI = (field, isEnemy) => {
     fieldButton.addEventListener('dragleave', handleDragLeave);
     fieldButton.addEventListener('drop', handleDragDrop);
   }
-  // Remove isEnemy
+
   // if (!isEnemy) {
   PubSub.subscribe('field-ship', (coordinates, type) => {
     if (coordinates === field.coordinates) {
