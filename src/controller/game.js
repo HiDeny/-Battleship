@@ -2,14 +2,10 @@ import createPlayer from '../modules/player';
 import createAiPlayer from '../modules/Ai/aiPlayer';
 import PubSub from '../modules/pubsub';
 
-const GameController = (twoPlayers = false) => {
+const GameController = (playerOne = 'User', playerTwo = false) => {
   let round = 0;
-  const player1 = createPlayer('User');
-  const player2 = createAiPlayer('Enemy');
-
-  // const player2 = twoPlayers
-  //   ? createPlayer('Player 2')
-  //   : createAiPlayer('Player 2');
+  const player1 = createPlayer(playerOne);
+  const player2 = playerTwo ? createPlayer(playerTwo) : createAiPlayer('Enemy');
 
   let activePlayer = player2;
   let opponentPlayer = player1;

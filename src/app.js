@@ -2,21 +2,23 @@ import 'normalize.css';
 import './view/styles.css';
 
 import GameController from './controller/game';
-import renderGameboard from './view/gameBoardUI';
-
-import createHud from './view/hudUI';
+import ScreenController from './controller/screenController';
 
 import PubSub from './modules/pubsub';
 
-const hud = createHud();
+const screenController = ScreenController();
+let currentGame;
 
-let currentGame = GameController();
+screenController.displayWelcome();
+screenController.displayHUD();
 
-document.body.append(hud);
-document.body.append(renderGameboard(currentGame.player1));
-document.body.append(renderGameboard(currentGame.player2, true));
+PubSub.subscribe('game-setup', (names) => {
+  const [nameP1, nameP2] = names;
+  currentGame = GameController(nameP1, nameP2);
+  screenController.displayGame(currentGame);
+});
 
-PubSub.subscribe('game-status', async (phase) => {
+PubSub.subscribe('game-status', (phase) => {
   if (phase === 'Start') {
     currentGame.setShips();
     PubSub.publish('game-turn', currentGame.player2);
@@ -24,13 +26,7 @@ PubSub.subscribe('game-status', async (phase) => {
   }
   if (phase === 'Restart') {
     currentGame = GameController();
-
-    const oldGameBoardP1 = document.querySelector('.gameboard.user');
-    const oldGameBoardP2 = document.querySelector('.gameboard.enemy');
-
-    oldGameBoardP1.replaceWith(renderGameboard(currentGame.player1));
-    oldGameBoardP2.replaceWith(renderGameboard(currentGame.player2, true));
-
+    screenController.displayRestartGame(currentGame);
     PubSub.publish('game-round', 0);
   }
 });

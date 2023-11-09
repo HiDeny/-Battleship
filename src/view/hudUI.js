@@ -11,6 +11,7 @@ const crateStartButton = () => {
 
   button.textContent = stage;
   button.classList.add('startBtn');
+  button.classList.add('buttonStyle1');
   button.addEventListener('click', () => {
     PubSub.publish('game-status', stage);
     stage = stage === 'Start' ? 'Restart' : 'Start';
