@@ -333,6 +333,7 @@ div[data-direction='horizontal'] {
   background-size: 70%;
   background-position: center;
   animation: markField 1s 1;
+  pointer-events: none;
 }
 
 .hit {
@@ -342,6 +343,7 @@ div[data-direction='horizontal'] {
   background-size: 70%;
   background-position: center;
   animation: markField 1s 1;
+  pointer-events: none;
 }
 
 @keyframes markField {
@@ -446,6 +448,51 @@ div[data-direction='horizontal'] {
   }
   100% {
     transform: rotate(0deg);
+  }
+}
+
+.celebration {
+  animation: celebration-text infinite 1s;
+}
+
+@keyframes celebration-text {
+  0% {
+    font-size: 2.5rem;
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+
+  50% {
+    font-size: 1.5rem;
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    font-size: 2.5rem;
+    transform: rotate(0deg);
+  }
+}
+
+.alert {
+  animation: alert-text 1 1s;
+}
+
+@keyframes alert-text {
+  0% {
+    font-size: 1rem;
+  }
+
+  50% {
+    font-size: 1.5rem;
+  }
+
+  100% {
+    font-size: 1rem;
   }
 }
 

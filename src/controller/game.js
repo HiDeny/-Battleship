@@ -33,6 +33,11 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
     setShips() {
       player1.placeShips();
       player2.placeShips();
+
+      const activeShipsP1 = player1.gameboard.activeShips();
+      const activeShipsP2 = player2.gameboard.activeShips();
+
+      PubSub.publish('ships-left', [activeShipsP1, activeShipsP2]);
     },
     async playRound(coordinates) {
       const currentAttack = await activePlayer.attack(
