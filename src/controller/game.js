@@ -4,8 +4,8 @@ import PubSub from '../modules/pubsub';
 
 const GameController = (twoPlayers = false) => {
   let round = 0;
-  const player1 = createPlayer('Player 1');
-  const player2 = createAiPlayer('Player 2');
+  const player1 = createPlayer('User');
+  const player2 = createAiPlayer('Enemy');
 
   // const player2 = twoPlayers
   //   ? createPlayer('Player 2')

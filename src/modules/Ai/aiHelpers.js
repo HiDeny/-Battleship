@@ -74,5 +74,5 @@ export const shotDelay = async (enemyBoard, currentShot) =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve(enemyBoard.receiveAttack(currentShot));
-    }, 600);
+    }, 1200);
   });

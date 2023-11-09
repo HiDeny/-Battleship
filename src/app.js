@@ -19,6 +19,7 @@ document.body.append(renderGameboard(currentGame.player2, true));
 PubSub.subscribe('game-status', async (phase) => {
   if (phase === 'Start') {
     currentGame.setShips();
+    PubSub.publish('game-turn', currentGame.player2);
     currentGame.playRound(null);
   }
   if (phase === 'Restart') {

@@ -36,6 +36,8 @@ body {
   flex-direction: column-reverse;
   align-items: center;
   gap: 1rem;
+
+  transition: opacity 300ms ease;
 }
 
 .hud-manual {
@@ -46,6 +48,8 @@ body {
 
   height: 100%;
   justify-content: space-evenly;
+
+  transition: opacity 300ms ease;
 }
 
 .hide {

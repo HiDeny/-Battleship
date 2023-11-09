@@ -1,5 +1,10 @@
 import PubSub from '../modules/pubsub';
 
+const switchHudInfo = () => {
+  document.querySelector('.hud-manual').classList.toggle('hide');
+  document.querySelector('.hud-stage').classList.toggle('hide');
+};
+
 const crateStartButton = () => {
   const button = document.createElement('button');
   let stage = 'Start';
@@ -10,6 +15,7 @@ const crateStartButton = () => {
     PubSub.publish('game-status', stage);
     stage = stage === 'Start' ? 'Restart' : 'Start';
     button.textContent = stage;
+    switchHudInfo();
   });
 
   return button;
@@ -38,6 +44,7 @@ const createRoundUI = () => {
 const createStageUI = () => {
   const container = document.createElement('div');
   container.classList.add('hud-stage');
+  container.classList.add('hide');
 
   const shipsLeftP1 = createShipsLeftUI();
 
@@ -53,10 +60,6 @@ const createStageUI = () => {
     shipsLeftP2.textContent = `Active Ships: ${shipsP2}`;
   });
 
-  PubSub.subscribe('game-status', (phase) => {
-    currentStage.textContent = phase;
-  });
-
   PubSub.subscribe('game-turn', (player) => {
     currentStage.textContent = `${player.name}'s turn!`;
   });
@@ -68,7 +71,6 @@ const createStageUI = () => {
 const createManual = () => {
   const container = document.createElement('div');
   container.classList.add('hud-manual');
-  container.classList.add('hide');
 
   const title = document.createElement('h3');
   title.textContent = 'ORGANIZE YOUR SHIPS';
