@@ -327,11 +327,51 @@ div[data-direction='horizontal'] {
 }
 
 .miss {
-  background-color: rgb(19, 154, 244);
+  /* background-color: rgb(19, 154, 244); */
+  background-image: url('./assets/cross.png');
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+  animation: markField 1s 1;
 }
 
 .hit {
-  background-color: red;
+  /* background-color: rgb(241, 101, 101); */
+  background-image: url('./assets/output-onlinegiftools.gif');
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+  animation: markField 1s 1;
+}
+
+@keyframes markField {
+  0% {
+    background-size: 110%;
+  }
+  50% {
+    background-size: 40%;
+  }
+  100% {
+    background-size: 70%;
+  }
+}
+
+@keyframes tilt-shaking {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 /** USER */

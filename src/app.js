@@ -12,11 +12,11 @@ let nameP1;
 let nameP2;
 
 screenController.displayWelcome();
-screenController.displayHUD();
 
 PubSub.subscribe('game-setup', (names) => {
   [nameP1, nameP2] = names;
   currentGame = GameController(nameP1, nameP2);
+  screenController.displayHUD();
   screenController.displayGame(currentGame);
 });
 
