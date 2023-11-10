@@ -1,3 +1,32 @@
+@font-face {
+  font-family: 'Special-Elite';
+  src: url('./assets/fonts/Special_Elite/SpecialElite-Regular.ttf')
+    format('truetype');
+}
+
+@font-face {
+  font-family: 'Stardos-Stencil';
+  src: url('./assets/fonts/Stardos_Stencil/StardosStencil-Regular.ttf')
+    format('truetype');
+}
+
+@font-face {
+  font-family: 'Stardos-Stencil-Bold';
+  src: url('./assets/fonts/Stardos_Stencil/StardosStencil-Bold.ttf')
+    format('truetype');
+}
+
+@font-face {
+  font-family: 'Rock-Salt';
+  src: url('./assets/fonts/Rock_Salt/RockSalt-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Homemade-Apple';
+  src: url('./assets/fonts/Homemade_Apple/HomemadeApple-Regular.ttf')
+    format('truetype');
+}
+
 html {
   font-family: Helvetica;
   text-transform: uppercase;
@@ -124,6 +153,10 @@ body {
   align-self: center;
 
   font-size: 4.5rem;
+  font-family: 'Stardos-Stencil-Bold';
+  color: #D4FAFF;
+
+
   margin: 0;
 }
 
@@ -166,12 +199,16 @@ body {
 /** HUD */
 .hud {
   position: relative;
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   justify-items: center;
+
   width: 100%;
   height: 100%;
+
+  backdrop-filter: blur(2rem);
 }
 
 .hud-stage-container {
