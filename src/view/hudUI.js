@@ -26,7 +26,7 @@ const crateStartButton = () => {
 const createShipsLeftUI = () => {
   const shipsLeft = document.createElement('p');
   shipsLeft.classList.add('ships-left');
-  shipsLeft.textContent = `Active Ships: 0`;
+  shipsLeft.textContent = `SHIPS REMAINING - 0`;
 
   return shipsLeft;
 };
@@ -61,7 +61,7 @@ const createStageUI = () => {
   PubSub.subscribe('ships-left', (arr) => {
     const [shipsP1, shipsP2] = arr;
     if (shipsP1 !== currentShips1) {
-      shipsLeftP1.textContent = `Active Ships: ${shipsP1}`;
+      shipsLeftP1.textContent = `SHIPS REMAINING - ${shipsP1}`;
       shipsLeftP1.classList.add('alert');
       currentShips1 = shipsP1;
 
@@ -71,7 +71,7 @@ const createStageUI = () => {
     }
 
     if (shipsP2 !== currentShips2) {
-      shipsLeftP2.textContent = `Active Ships: ${shipsP2}`;
+      shipsLeftP2.textContent = `SHIPS REMAINING - ${shipsP2}`;
       shipsLeftP2.classList.add('alert');
       currentShips2 = shipsP2;
 

@@ -4,5 +4,12 @@ favicon
 fire
 <a target="_blank" href="https://icons8.com/icon/houGsYyNpCbu/fire">Fire</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
-cross
+cross - dotted
 <a target="_blank" href="https://icons8.com/icon/C0TqG8rAieHs/close">Close</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+cross - small
+<a target="_blank" href="https://icons8.com/icon/6483/multiply">Multiply</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+background dark 
+Photo by <a href="https://unsplash.com/@catrionaobrian?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Ekaterina Novitskaya</a> on <a href="https://unsplash.com/photos/black-textile-on-white-textile-gLroHoWh_as?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+  

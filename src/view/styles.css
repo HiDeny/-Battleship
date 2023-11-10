@@ -1,5 +1,6 @@
 html {
   font-family: Helvetica;
+  text-transform: uppercase;
 }
 
 body {
@@ -11,8 +12,12 @@ body {
   gap: 0.25rem;
   align-items: center;
   justify-items: center;
-
   margin: auto;
+
+  background-image: url('./assets/background-1.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /** Button */
@@ -94,14 +99,24 @@ body {
   position: absolute;
   width: 90vw;
   height: 70vh;
-  background: #01990a69;
+  background: #ffffff3d;
   z-index: 50;
   display: grid;
   grid-template-rows: 40% 35% 25%;
   justify-content: center;
   align-content: center;
   border-radius: 1rem;
-  backdrop-filter: blur(5rem);
+  backdrop-filter: blur(2rem);
+
+  max-width: 45rem;
+  max-height: 50rem;
+}
+
+/* Inline #1 | http://127.0.0.1:5500/dist/ */
+
+.welcome-container {
+  /* background: #01990a69; */
+  /* backdrop-filter: blur(5rem); */
 }
 
 .welcome-title {
@@ -247,11 +262,22 @@ body {
   border: 0.5rem solid rgb(208 219 255);
   border-radius: 1rem;
 
-  height: 250px;
+  height: 315px;
   padding: 0.5rem;
   aspect-ratio: 1/1;
 
   transition: opacity 1s ease;
+}
+
+.video-container {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: -10;
+  object-fit: cover;
+  border-radius: 0.5rem;
 }
 
 .board.disabled {
@@ -260,11 +286,15 @@ body {
 
 .board-field {
   position: relative;
-  border: 1px solid #ffffff33;
-  width: 25px;
-  height: 25px;
+  border: 0.1px solid #ffffff4d;
+  width: 30px;
+  height: 30px;
   overflow: visible;
   background-color: transparent;
+}
+
+.board-field:hover {
+  background-color: #2d8ccc;
 }
 
 .board-ships {
@@ -328,7 +358,7 @@ div[data-direction='horizontal'] {
 
 .miss {
   /* background-color: rgb(19, 154, 244); */
-  background-image: url('./assets/cross.png');
+  background-image: url('./assets/icons8-multiply-100.png');
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
@@ -484,18 +514,26 @@ div[data-direction='horizontal'] {
 
 @keyframes alert-text {
   0% {
+    color: black;
     font-size: 1rem;
   }
 
   50% {
+    color: red;
     font-size: 1.5rem;
   }
 
   100% {
+    color: black;
     font-size: 1rem;
   }
 }
 
 .ship-set {
   z-index: -1;
+}
+
+.ship-block {
+  /* height: 25px; */
+  height: 30px;
 }
