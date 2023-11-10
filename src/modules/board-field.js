@@ -33,6 +33,7 @@ export const field = (coordinates) => {
         ship.hit();
 
         if (ship.isSunk()) {
+          PubSub.publish('game-ships-check');
           ship.offset.forEach((offsetField) => offsetField.markField(true));
           return 'ship sunk';
         }

@@ -201,9 +201,10 @@ body {
   align-items: center;
   justify-items: center;
 
-  width: 100%;
+  width: 80%;
   height: 100%;
 
+  border-radius: 1rem;
   backdrop-filter: blur(2rem);
 
   font-family: 'Special-Elite';
@@ -211,18 +212,13 @@ body {
 }
 
 .hud-stage-container {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-between;
   align-items: center;
-
   height: 100%;
-
   transition: opacity 300ms ease;
 }
 
 .hud-stage-text {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin: 0;
 }
 
@@ -257,7 +253,7 @@ body {
   align-items: center;
 
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .ships-left {
@@ -317,6 +313,30 @@ body {
 
 .board-stats > p {
   margin: 0;
+  align-self: center;
+}
+
+.board-stats-ships {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.board-stats-ships > p {
+  margin: 0;
+}
+
+.board-stats-ships-text {
+  font-size: 0.8rem;
+}
+
+.board-stats-ships-count {
+  font-size: 1.5rem;
+  font-family: 'Homemade-Apple';
+}
+
+.board-stats-name {
+  font-size: 1.1rem;
 }
 
 .video-container {
@@ -460,28 +480,6 @@ div[data-direction='horizontal'] {
   grid-row: 3;
 }
 
-/* .user > .board::before {
-  content: attr(name);
-  top: -2.2rem;
-  position: absolute;
-
-  font-size: 1.1rem;
-  color: #cbf0ff;
-  font-family: 'Special-Elite';
-} */
-
-/* .user > .board::after {
-  content: 'REMAINING SHIPS: ' + attr(ships-P1);
-  top: -2.2rem;
-  right: -1rem;
-  position: absolute;
-
-  font-size: 1.1rem;
-  color: #cbf0ff;
-  font-family: 'Special-Elite';
-}
- */
-
 /** ENEMY */
 
 .gameboard.enemy {
@@ -492,26 +490,7 @@ div[data-direction='horizontal'] {
   cursor: crosshair;
 }
 
-/* .enemy > .board::before {
-  content: attr(name);
-  bottom: -2rem;
-  position: absolute;
-
-  font-size: 1.1rem;
-  color: #cbf0ff;
-  font-family: 'Special-Elite';
-}
-
-.enemy > .board::after {
-  content: 'REMAINING SHIPS: ' + attr(ships-P2);
-  top: -2.2rem;
-  right: -1rem;
-  position: absolute;
-
-  font-size: 1.1rem;
-  color: #cbf0ff;
-  font-family: 'Special-Elite';
-} */
+/** OTHER */
 
 .dragging {
   cursor: grabbing !important;
@@ -589,18 +568,16 @@ div[data-direction='horizontal'] {
 
 @keyframes alert-text {
   0% {
-    color: black;
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 
   50% {
     color: red;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
 
   100% {
-    color: black;
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
 }
 

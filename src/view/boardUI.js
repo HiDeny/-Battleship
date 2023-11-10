@@ -64,10 +64,9 @@ const createVideoBackground = () => {
   return video;
 };
 
-const renderBoard = (board, name, isEnemy) => {
+const renderBoard = (board, isEnemy) => {
   const boardUI = document.createElement('div');
   boardUI.classList.add('board');
-  boardUI.setAttribute('name', name);
 
   boardUI.append(createVideoBackground());
 

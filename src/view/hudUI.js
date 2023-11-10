@@ -3,7 +3,9 @@ import PubSub from '../modules/pubsub';
 const switchHudInfo = () => {
   document.querySelector('.hud-manual').classList.toggle('hide');
   document.querySelector('.hud-stage-container').classList.toggle('hide');
-  document.querySelector('.celebration').classList.remove('celebration');
+
+  const isCelebrating = document.querySelector('.celebration');
+  if (isCelebrating) isCelebrating.classList.remove('celebration');
 };
 
 const crateStartButton = () => {
@@ -23,14 +25,6 @@ const crateStartButton = () => {
   return button;
 };
 
-const createShipsLeftUI = () => {
-  const shipsLeft = document.createElement('p');
-  shipsLeft.classList.add('ships-left');
-  shipsLeft.textContent = `SHIPS REMAINING - 0`;
-
-  return shipsLeft;
-};
-
 const createRoundUI = () => {
   const round = document.createElement('p');
   round.classList.add('hud-round');
@@ -48,38 +42,9 @@ const createStageUI = () => {
   container.classList.add('hud-stage-container');
   container.classList.add('hide');
 
-  let currentShips1 = 0;
-  const shipsLeftP1 = createShipsLeftUI();
-
   const currentStage = document.createElement('h3');
   currentStage.classList.add('hud-stage-text');
   currentStage.textContent = 'Setup Ships';
-
-  let currentShips2 = 0;
-  const shipsLeftP2 = createShipsLeftUI();
-
-  PubSub.subscribe('ships-left', (arr) => {
-    const [shipsP1, shipsP2] = arr;
-    if (shipsP1 !== currentShips1) {
-      shipsLeftP1.textContent = `SHIPS REMAINING - ${shipsP1}`;
-      shipsLeftP1.classList.add('alert');
-      currentShips1 = shipsP1;
-
-      setTimeout(() => {
-        shipsLeftP1.classList.remove('alert');
-      }, 700);
-    }
-
-    if (shipsP2 !== currentShips2) {
-      shipsLeftP2.textContent = `SHIPS REMAINING - ${shipsP2}`;
-      shipsLeftP2.classList.add('alert');
-      currentShips2 = shipsP2;
-
-      setTimeout(() => {
-        shipsLeftP2.classList.remove('alert');
-      }, 1000);
-    }
-  });
 
   PubSub.subscribe('game-turn', (player) => {
     currentStage.textContent = `${player.name}'s turn!`;
@@ -92,7 +57,7 @@ const createStageUI = () => {
     }
   });
 
-  container.append(shipsLeftP1, currentStage, shipsLeftP2);
+  container.append(currentStage);
   return container;
 };
 

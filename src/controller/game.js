@@ -19,7 +19,6 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
   const gameOver = () => {
     const activeShipsP1 = player1.gameboard.activeShips();
     const activeShipsP2 = player2.gameboard.activeShips();
-    PubSub.publish('ships-left', [activeShipsP1, activeShipsP2]);
 
     if (activeShipsP1 < 1) return `${player2.name} WIN!`;
     if (activeShipsP2 < 1) return `${player1.name} WIN!`;
@@ -34,10 +33,7 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
       player1.placeShips();
       player2.placeShips();
 
-      const activeShipsP1 = player1.gameboard.activeShips();
-      const activeShipsP2 = player2.gameboard.activeShips();
-
-      PubSub.publish('ships-left', [activeShipsP1, activeShipsP2]);
+      PubSub.publish('game-ships-check');
     },
     async playRound(coordinates) {
       const currentAttack = await activePlayer.attack(
