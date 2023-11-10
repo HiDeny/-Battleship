@@ -67,7 +67,6 @@ const createVideoBackground = () => {
 const renderBoard = (board, name, isEnemy) => {
   const boardUI = document.createElement('div');
   boardUI.classList.add('board');
-  if (isEnemy) boardUI.classList.add('disabled');
   boardUI.setAttribute('name', name);
 
   boardUI.append(createVideoBackground());
