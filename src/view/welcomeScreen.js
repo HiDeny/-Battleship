@@ -2,19 +2,23 @@ import PubSub from '../modules/pubsub';
 
 // Select Name
 const createNameInput = (placeholder) => {
+  const container = document.createElement('div');
+  container.classList.add('welcome-name-container');
+
   const label = document.createElement('label');
   label.setAttribute('for', 'name');
   label.textContent = placeholder;
 
-  const nameInput = document.createElement('input');
-  nameInput.classList.add('welcome-name-input');
-  nameInput.type = 'text';
-  nameInput.name = 'name';
-  nameInput.autocomplete = false;
-  nameInput.placeholder = 'NAME';
+  const input = document.createElement('input');
+  input.classList.add('welcome-name-input');
+  input.type = 'text';
+  input.name = 'name';
+  input.autocomplete = false;
+  input.placeholder = 'NAME';
 
-  label.append(nameInput);
-  return label;
+  label.append(input);
+  container.append(label);
+  return container;
 };
 
 const createStartButton = () => {
@@ -28,7 +32,7 @@ const createStartButton = () => {
 
 const createNameSelect = (twoPlayers = false) => {
   const container = document.createElement('div');
-  container.classList.add('welcome-name-container');
+  container.classList.add('welcome-name-select');
 
   const nameP1 = createNameInput('Player 1');
   container.append(nameP1);
@@ -77,7 +81,7 @@ const createModeSelect = () => {
 
   const pvp = createModeButton('Player VS Player');
   // Two players update
-  // pvp.disabled = true;
+  pvp.disabled = true;
   pvp.addEventListener('click', () => {
     container.replaceWith(createNameSelect(true));
   });
