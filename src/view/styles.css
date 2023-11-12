@@ -212,6 +212,7 @@ body {
   justify-items: center;
 
   width: 80%;
+  min-width: 60rem;
   height: 100%;
 
   border-radius: 1rem;
@@ -397,15 +398,46 @@ body {
   z-index: 10;
   position: relative;
 
-  background-color: #d0e5f2;
   display: flex;
   width: min-content;
   height: min-content;
   flex-direction: column;
-  border-radius: 0.5rem;
-  flex-direction: column;
+}
 
-  transition: flex-direction 1s;
+.ship > div:first-child {
+  border-radius: 1rem 1rem 0 0;
+}
+
+.ship > div:last-child {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.ship[data-direction='horizontal'] > div:first-child {
+  border-radius: 1rem 0rem 0rem 1rem;
+}
+
+.ship[data-direction='horizontal'] > div:last-child {
+  border-radius: 0rem 0.5rem 0.5rem 0rem;
+}
+
+.Submarine1 > div:first-child,
+.Submarine2 > div:first-child {
+  border-radius: 1rem 1rem 0.5rem 0.5rem;
+}
+
+.Submarine1[data-direction='horizontal'] > div:first-child,
+.Submarine2[data-direction='horizontal'] > div:first-child {
+  border-radius: 1rem 0.5rem 0.5rem 1rem;
+}
+
+.ship-block {
+  aspect-ratio: 1/1;
+
+  background-color: #d0e5f2;
+  height: 30px;
+  pointer-events: none;
+  position: relative;
+  z-index: 3;
 }
 
 /* .AircraftCarrier,
@@ -421,19 +453,10 @@ body {
 div[data-direction='horizontal'] {
   flex-direction: row;
 }
-
+/* 
 .horizontal {
   flex-direction: row;
-}
-
-.ship-block {
-  aspect-ratio: 1/1;
-
-  height: 30px;
-  pointer-events: none;
-  position: relative;
-  z-index: 3;
-}
+} */
 
 .miss {
   /* background-color: rgb(19, 154, 244); */

@@ -23,10 +23,17 @@ const createFieldUI = (field, isEnemy) => {
   fieldButton.dataset.ship = false;
 
   PubSub.subscribe('field-mark', (coordinates, mark) => {
-    if (coordinates === field.coordinates) fieldButton.classList.add(mark);
+    if (coordinates === field.coordinates) {
+      fieldButton.classList.add(mark);
+      if (mark === 'hit' && isEnemy) {
+        fieldButton.classList.add('ship-block');
+      }
+    }
   });
 
-  if (isEnemy) fieldButton.onclick = handleClickField;
+  if (isEnemy) {
+    fieldButton.onclick = handleClickField;
+  }
   if (!isEnemy) {
     fieldButton.addEventListener('dragenter', handleDragEnter);
     fieldButton.addEventListener('dragover', handleDragOver);
