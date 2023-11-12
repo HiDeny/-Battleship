@@ -1,4 +1,4 @@
-import videoFile from './assets/backvid.mp4';
+import videoFile from './assets/back-video.mp4';
 
 import PubSub from '../modules/pubsub';
 import {
