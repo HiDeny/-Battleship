@@ -41,7 +41,11 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
         coordinates
       );
 
-      if (currentAttack === 'miss') switchTurns();
+      if (currentAttack === 'miss') {
+        switchTurns();
+        round += 1;
+        PubSub.publish('game-round', round);
+      }
 
       if (gameOver()) {
         const gameResult = gameOver();
@@ -49,8 +53,6 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
         return gameResult;
       }
 
-      round += 1;
-      PubSub.publish('game-round', round);
       return currentAttack;
     },
   };
