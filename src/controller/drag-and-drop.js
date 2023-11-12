@@ -172,26 +172,21 @@ export const handleDragOver = (event) => {
       if (ship === 'true' || offset === 'true') correctClass = 'not-available';
       div.classList.add(correctClass);
     });
-
-    offsetFields.forEach((div) => {
-      if (!div) return;
-
-      let correctClass = 'available-offset';
-      if (div.dataset.ship === 'true') correctClass = 'not-available';
-
-      div.classList.add(correctClass);
-    });
   } else {
     coreFields.forEach((div) => {
       if (!div) return;
       div.classList.add('not-available');
     });
-
-    offsetFields.forEach((div) => {
-      if (!div) return;
-      div.classList.add('not-available');
-    });
   }
+
+  offsetFields.forEach((div) => {
+    if (!div) return;
+
+    let correctClass = 'available-offset';
+    if (div.dataset.ship === 'true') correctClass = 'not-available';
+
+    div.classList.add(correctClass);
+  });
 };
 
 export const handleDragLeave = (event) => {
