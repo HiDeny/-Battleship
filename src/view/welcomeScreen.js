@@ -45,10 +45,10 @@ const createNameSelect = (twoPlayers = false) => {
 
   const startButton = createStartButton();
   startButton.addEventListener('click', () => {
-    const name1 = nameP1.children[0].value || 'Player 1';
+    const name1 = nameP1.children[0].children[0].value || 'Player 1';
     let name2 = nameP2;
     if (twoPlayers) {
-      name2 = nameP2.children[0].value || 'Player 2';
+      name2 = name2.children[0].children[0].value || 'Player 2';
     }
 
     PubSub.publish('game-setup', [name1, name2]);
