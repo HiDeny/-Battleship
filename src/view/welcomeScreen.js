@@ -4,13 +4,14 @@ import PubSub from '../modules/pubsub';
 const createNameInput = (placeholder) => {
   const label = document.createElement('label');
   label.setAttribute('for', 'name');
-  label.textContent = 'Your name';
+  label.textContent = placeholder;
 
   const nameInput = document.createElement('input');
   nameInput.classList.add('welcome-name-input');
   nameInput.type = 'text';
   nameInput.name = 'name';
-  nameInput.placeholder = placeholder;
+  nameInput.autocomplete = false;
+  nameInput.placeholder = 'NAME';
 
   label.append(nameInput);
   return label;
@@ -40,10 +41,10 @@ const createNameSelect = (twoPlayers = false) => {
 
   const startButton = createStartButton();
   startButton.addEventListener('click', () => {
-    const name1 = nameP1.children[0].value || nameP1.children[0].placeholder;
+    const name1 = nameP1.children[0].value || 'Player 1';
     let name2 = nameP2;
     if (twoPlayers) {
-      name2 = nameP2.children[0].value || nameP2.children[0].placeholder;
+      name2 = nameP2.children[0].value || 'Player 2';
     }
 
     PubSub.publish('game-setup', [name1, name2]);
@@ -76,7 +77,7 @@ const createModeSelect = () => {
 
   const pvp = createModeButton('Player VS Player');
   // Two players update
-  pvp.disabled = true;
+  // pvp.disabled = true;
   pvp.addEventListener('click', () => {
     container.replaceWith(createNameSelect(true));
   });
