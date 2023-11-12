@@ -128,20 +128,23 @@ body {
 /** Welcome Screen */
 
 .welcome-container {
-  position: absolute;
-  width: 90vw;
-  height: 70vh;
-  background: #ffffff3d;
   z-index: 50;
+  position: absolute;
+
   display: grid;
-  grid-template-rows: 40% 35% 25%;
+  grid-template-rows: 2fr 2fr 1fr;
   justify-content: center;
   align-content: center;
-  border-radius: 1rem;
-  backdrop-filter: blur(2rem);
 
   max-width: 45rem;
   max-height: 50rem;
+  min-width: 40rem;
+  min-height: 40rem;
+
+  background: #ffffff3d;
+  backdrop-filter: blur(2rem);
+  border-radius: 1rem;
+
   font-family: 'Special-Elite';
 }
 
@@ -402,38 +405,18 @@ body {
   width: min-content;
   height: min-content;
   flex-direction: column;
-}
+  background-color: #d0e5f2;
 
-.ship > div:first-child {
-  border-radius: 1rem 1rem 0 0;
-}
-
-.ship > div:last-child {
-  border-radius: 0 0 0.5rem 0.5rem;
-}
-
-.ship[data-direction='horizontal'] > div:first-child {
-  border-radius: 1rem 0rem 0rem 1rem;
-}
-
-.ship[data-direction='horizontal'] > div:last-child {
-  border-radius: 0rem 0.5rem 0.5rem 0rem;
-}
-
-.Submarine1 > div:first-child,
-.Submarine2 > div:first-child {
   border-radius: 1rem 1rem 0.5rem 0.5rem;
 }
 
-.Submarine1[data-direction='horizontal'] > div:first-child,
-.Submarine2[data-direction='horizontal'] > div:first-child {
+.ship[data-direction='horizontal'] {
   border-radius: 1rem 0.5rem 0.5rem 1rem;
 }
 
 .ship-block {
   aspect-ratio: 1/1;
 
-  background-color: #d0e5f2;
   height: 30px;
   pointer-events: none;
   position: relative;
@@ -453,13 +436,8 @@ body {
 div[data-direction='horizontal'] {
   flex-direction: row;
 }
-/* 
-.horizontal {
-  flex-direction: row;
-} */
 
 .miss {
-  /* background-color: rgb(19, 154, 244); */
   background-image: url('./assets/icons8-multiply-100.png');
   background-repeat: no-repeat;
   background-size: 70%;
@@ -469,13 +447,17 @@ div[data-direction='horizontal'] {
 }
 
 .hit {
-  /* background-color: rgb(241, 101, 101); */
   background-image: url('./assets/output-onlinegiftools.gif');
   background-repeat: no-repeat;
   background-size: 70%;
   background-position: center;
   animation: markField 1s 1;
   pointer-events: none;
+}
+
+.hit-enemy {
+  background-color: #abbdc8;
+  border-radius: 0.25rem;
 }
 
 @keyframes markField {

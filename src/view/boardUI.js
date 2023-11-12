@@ -26,7 +26,7 @@ const createFieldUI = (field, isEnemy) => {
     if (coordinates === field.coordinates) {
       fieldButton.classList.add(mark);
       if (mark === 'hit' && isEnemy) {
-        fieldButton.classList.add('ship-block');
+        fieldButton.classList.add('hit-enemy');
       }
     }
   });
