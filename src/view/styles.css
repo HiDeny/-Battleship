@@ -167,6 +167,7 @@ body {
 }
 
 /* Name Select */
+
 .welcome-name-container {
   display: grid;
   grid-row: 2 / 4;
@@ -175,12 +176,20 @@ body {
 
 .welcome-name-input {
   width: 100%;
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.5rem;
-  border: #939393 1px solid;
-  background-color: #ffffff5e;
-  font-size: 1.3rem;
+  padding: 0.55rem 0.5rem;
+  border: none;
+  border-bottom: #656565 1px solid;
+  background-color: transparent;
   box-sizing: border-box;
+
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.welcome-name-input:focus-visible {
+  border-radius: 0.25rem;
+  outline: #656565 1px solid;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 }
 
 .welcome-name-container > label {
@@ -194,10 +203,11 @@ body {
 
 /** HUD */
 .hud {
+  grid-row: 2;
   position: relative;
 
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 20% 60% 20%;
   align-items: center;
   justify-items: center;
 
@@ -212,6 +222,7 @@ body {
 }
 
 .hud-stage-container {
+  display: flex;
   align-items: center;
   height: 100%;
   transition: opacity 300ms ease;
@@ -397,7 +408,7 @@ body {
   transition: flex-direction 1s;
 }
 
-.AircraftCarrier,
+/* .AircraftCarrier,
 .Battleship,
 .Cruiser,
 .Submarine1,
@@ -405,7 +416,7 @@ body {
 .Destroyer1,
 .Destroyer2 {
   background-color: #d0e5f2;
-}
+} */
 
 div[data-direction='horizontal'] {
   flex-direction: row;
@@ -502,15 +513,17 @@ div[data-direction='horizontal'] {
 }
 
 .available-ship {
-  background-color: rgb(103, 171, 2);
+  background-color: rgb(77, 128, 1);
 }
 
 .available-offset {
-  background-color: rgba(172, 255, 47, 0.465);
+  background-color: rgba(168, 251, 44, 0.4);
 }
 
-.not-available {
-  background-color: rgba(255, 0, 0, 0.7);
+.not-available,
+.not-available > * {
+  z-index: 10;
+  background-color: rgba(255, 0, 0, 0.83);
 }
 
 .no-rotate {
@@ -541,24 +554,27 @@ div[data-direction='horizontal'] {
 
 @keyframes celebration-text {
   0% {
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     transform: rotate(0deg);
+    color: orange;
   }
   25% {
     transform: rotate(3deg);
   }
 
   50% {
-    font-size: 3rem;
+    font-size: 2rem;
     transform: rotate(0deg);
+    color: yellow;
   }
   75% {
     transform: rotate(-3deg);
   }
 
   100% {
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     transform: rotate(0deg);
+    color: orange;
   }
 }
 
