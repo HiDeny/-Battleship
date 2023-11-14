@@ -42,6 +42,7 @@ const createPlayer = (name, isComputer = false) => {
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);
     },
+    // Remove ? 
     placeShipsAtRandom() {
       const shipsOnBoard = [];
 

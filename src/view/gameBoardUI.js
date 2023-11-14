@@ -22,9 +22,9 @@ const createShipsLeft = (gameboard) => {
       count.textContent = currentShips;
       count.classList.add('alert');
 
-      setTimeout(() => {
-        count.classList.remove('alert');
-      }, 700);
+      // setTimeout(() => {
+      //   count.classList.remove('alert');
+      // }, 700);
 
       activeShips = currentShips;
     }

@@ -40,8 +40,10 @@ const createAiPlayer = (name) => {
     if (result === 'hit') {
       saveHit(markedFields, fieldHits, possibleHits, highProbabilityShot, shot);
     }
-    if (result === 'ship sunk') {
-      saveSunk(markedFields, fieldHits, shot);
+
+    // Ship sunk
+    if (Array.isArray(result)) {
+      saveSunk(markedFields, fieldHits, shot, result);
       possibleHits = [];
       highProbabilityShot = [];
     }

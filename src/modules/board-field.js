@@ -35,7 +35,7 @@ export const field = (coordinates) => {
         if (ship.isSunk()) {
           PubSub.publish('game-ships-check');
           ship.offset.forEach((offsetField) => offsetField.markField(true));
-          return 'ship sunk';
+          return ['ship sunk', ship];
         }
       }
 
@@ -53,12 +53,29 @@ const offsetFront = (board, newShip, coordinates) => {
   const dynamicDir = isVertical ? row : column;
 
   if (dynamicDir - 1 > -1) {
-    const oneBefore = isVertical
-      ? board[dynamicDir - 1][column]
-      : board[row][dynamicDir - 1];
+    let oneBefore = board[row][dynamicDir - 1];
+    let oneUpField = row + 1 <= 9 ? board[row + 1][dynamicDir - 1] : false;
+    let oneDownField = row - 1 >= 0 ? board[row - 1][dynamicDir - 1] : false;
+
+    if (isVertical === true) {
+      oneBefore = board[dynamicDir - 1][column];
+      oneUpField = column + 1 <= 9 ? board[dynamicDir - 1][column + 1] : false;
+      oneDownField =
+        column - 1 >= 0 ? board[dynamicDir - 1][column - 1] : false;
+    }
 
     oneBefore.offset = true;
     newShip.offset.push(oneBefore);
+
+    if (oneUpField) {
+      oneUpField.offset = true;
+      newShip.offset.push(oneUpField);
+    }
+
+    if (oneDownField) {
+      oneDownField.offset = true;
+      newShip.offset.push(oneDownField);
+    }
   }
 };
 
@@ -71,12 +88,29 @@ const offsetBack = (board, newShip, coordinates) => {
   const dynamicPlusShip = dynamicDir + length;
 
   if (dynamicPlusShip < 10) {
-    const oneAfter = isVertical
-      ? board[dynamicPlusShip][column]
-      : board[row][dynamicPlusShip];
+    let oneAfter = board[row][dynamicPlusShip];
+    let oneUpField = row + 1 <= 9 ? board[row + 1][dynamicPlusShip] : false;
+    let oneDownField = row - 1 >= 0 ? board[row - 1][dynamicPlusShip] : false;
+
+    if (isVertical === true) {
+      oneAfter = board[dynamicPlusShip][column];
+      oneUpField = column + 1 <= 9 ? board[dynamicPlusShip][column + 1] : false;
+      oneDownField =
+        column - 1 >= 0 ? board[dynamicPlusShip][column - 1] : false;
+    }
 
     oneAfter.offset = true;
     newShip.offset.push(oneAfter);
+
+    if (oneUpField) {
+      oneUpField.offset = true;
+      newShip.offset.push(oneUpField);
+    }
+
+    if (oneDownField) {
+      oneDownField.offset = true;
+      newShip.offset.push(oneDownField);
+    }
   }
 };
 

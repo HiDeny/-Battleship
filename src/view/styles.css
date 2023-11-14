@@ -340,7 +340,7 @@ body {
   padding: 0.9rem;
   aspect-ratio: 1/1;
 
-  transition: opacity 1s ease;
+  transition: opacity 1s ease, filter 1s ease;
 }
 
 .board-stats {
@@ -542,6 +542,7 @@ div[data-direction='horizontal'] {
 .disabled {
   pointer-events: none;
   opacity: 0.3;
+  filter: grayscale(70%);
 }
 
 .available-ship {

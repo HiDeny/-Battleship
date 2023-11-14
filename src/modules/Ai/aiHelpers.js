@@ -55,18 +55,17 @@ export const saveMiss = (markedFields, shot) => {
   markedFields.add(shotStr);
 };
 
-export const saveSunk = (markedFields, fieldHits, shot) => {
+export const saveSunk = (markedFields, fieldHits, shot, result) => {
+  const sunkenShip = result[1];
   const shotStr = `${shot[0]},${shot[1]}`;
   fieldHits.set(shotStr, shot);
   markedFields.add(shotStr);
 
-  fieldHits.forEach((position) => {
-    const offsetFields = possibleShots(position);
-
-    Object.values(offsetFields).forEach((offset) => {
-      const offsetStr = `${offset[0]},${offset[1]}`;
-      if (!markedFields.has(offsetStr)) markedFields.add(offsetStr);
-    });
+  sunkenShip.offset.forEach((field) => {
+    const { coordinates } = field;
+    const [row, column] = coordinates;
+    const offsetStr = `${row},${column}`;
+    if (!markedFields.has(offsetStr)) markedFields.add(offsetStr);
   });
 };
 
