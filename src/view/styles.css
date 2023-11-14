@@ -450,7 +450,7 @@ body {
   z-index: 3;
 }
 
-/* .AircraftCarrier,
+.AircraftCarrier,
 .Battleship,
 .Cruiser,
 .Submarine1,
@@ -458,7 +458,7 @@ body {
 .Destroyer1,
 .Destroyer2 {
   background-color: #d0e5f2;
-} */
+}
 
 div[data-direction='horizontal'] {
   flex-direction: row;

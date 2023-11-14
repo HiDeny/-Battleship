@@ -5,7 +5,6 @@ import {
   handleDragDrop,
   handleDragOver,
   handleDragLeave,
-  handleDragEnter,
 } from '../controller/drag-and-drop';
 
 const handleClickField = (event) => {
@@ -35,20 +34,19 @@ const createFieldUI = (field, isEnemy) => {
     fieldButton.onclick = handleClickField;
   }
   if (!isEnemy) {
-    fieldButton.addEventListener('dragenter', handleDragEnter);
     fieldButton.addEventListener('dragover', handleDragOver);
     fieldButton.addEventListener('dragleave', handleDragLeave);
     fieldButton.addEventListener('drop', handleDragDrop);
   }
 
+  // if (!isEnemy) {
+  PubSub.subscribe('field-ship', (coordinates, type) => {
+    if (coordinates === field.coordinates) {
+      fieldButton.dataset.ship = true;
+      fieldButton.classList.add(type);
+    }
+  });
   if (!isEnemy) {
-    PubSub.subscribe('field-ship', (coordinates, type) => {
-      if (coordinates === field.coordinates) {
-        fieldButton.dataset.ship = true;
-        fieldButton.classList.add(type);
-      }
-    });
-
     PubSub.subscribe('field-ship-offset', (coordinates) => {
       if (coordinates === field.coordinates) {
         fieldButton.dataset.offset = true;

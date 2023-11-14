@@ -1,7 +1,7 @@
-import renderGameboard from '../view/gameBoardUI';
+import PubSub from '../modules/pubsub';
 import createHud from '../view/hudUI';
 import createWelcomeScreen from '../view/welcomeScreen';
-import PubSub from '../modules/pubsub';
+import renderGameboard from '../view/gameBoardUI';
 
 const cleanOldBoards = () => {
   const oldHud = document.querySelector('.hud');

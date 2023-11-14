@@ -1,10 +1,5 @@
-export const getFields = (
-  row,
-  column,
-  length,
-  direction,
-  container = document
-) => {
+export const getFields = (...args) => {
+  const [row, column, length, direction, container = document] = args;
   const isVertical = direction === 'vertical';
 
   const rowNum = Number(row);
@@ -60,7 +55,6 @@ export const getFields = (
 
 export const handleDragStart = (event) => {
   event.target.classList.add('dragging');
-  document.body.classList.add('draggingCursor');
 
   const { length, direction, row, column } = event.target.dataset;
 
@@ -77,13 +71,18 @@ export const handleDragStart = (event) => {
   });
 };
 
-export const handleDragEnd = (event) => {
-  document.body.classList.remove('draggingCursor');
-
-  const draggedFrom = document.querySelectorAll('.draggedFrom');
+const clearGuides = () => {
   const availableShip = document.querySelectorAll('.available-ship');
   const availableOffset = document.querySelectorAll('.available-offset');
   const notAvailable = document.querySelectorAll('.not-available');
+
+  availableShip.forEach((div) => div.classList.remove('available-ship'));
+  availableOffset.forEach((div) => div.classList.remove('available-offset'));
+  notAvailable.forEach((div) => div.classList.remove('not-available'));
+};
+
+export const handleDragEnd = (event) => {
+  const draggedFrom = document.querySelectorAll('.draggedFrom');
 
   const { row, column } = event.target.dataset;
   const oldX = Number(draggedFrom[0].dataset.row);
@@ -95,24 +94,13 @@ export const handleDragEnd = (event) => {
     div.classList.remove('draggedFrom');
   });
 
-  availableShip.forEach((div) => div.classList.remove('available-ship'));
-  availableOffset.forEach((div) => div.classList.remove('available-offset'));
-  notAvailable.forEach((div) => div.classList.remove('not-available'));
+  clearGuides();
   event.target.classList.remove('dragging');
-
-  availableShip.forEach((element) => {
-    element.classList.remove('available-ship');
-  });
-  availableOffset.forEach((element) => {
-    element.classList.remove('available-offset');
-  });
-  notAvailable.forEach((element) => {
-    element.classList.remove('not-available');
-  });
 };
 
-export const handleDragEnter = (event) => {
+export const handleDragLeave = (event) => {
   event.preventDefault();
+  clearGuides();
 };
 
 export const handleDragDrop = (event) => {
@@ -158,8 +146,6 @@ export const handleDragOver = (event) => {
   const dragged = document.querySelector('.dragging');
   const { length, direction } = dragged.dataset;
 
-  // Drop one lower where the ship is.
-
   const { row, column } = event.target.dataset;
   const currentFields = getFields(row, column, length, direction);
   const { coreFields, offsetFields } = currentFields;
@@ -181,21 +167,9 @@ export const handleDragOver = (event) => {
 
   offsetFields.forEach((div) => {
     if (!div) return;
+    const { ship } = div.dataset;
+    const style = ship === 'true' ? 'not-available' : 'available-offset';
 
-    let correctClass = 'available-offset';
-    if (div.dataset.ship === 'true') correctClass = 'not-available';
-
-    div.classList.add(correctClass);
+    div.classList.add(style);
   });
-};
-
-export const handleDragLeave = (event) => {
-  event.preventDefault();
-  const availableShip = document.querySelectorAll('.available-ship');
-  const availableOffset = document.querySelectorAll('.available-offset');
-  const notAvailable = document.querySelectorAll('.not-available');
-
-  availableShip.forEach((div) => div.classList.remove('available-ship'));
-  availableOffset.forEach((div) => div.classList.remove('available-offset'));
-  notAvailable.forEach((div) => div.classList.remove('not-available'));
 };
