@@ -1,11 +1,7 @@
-import createPlayer from '../modules/player';
-import createAiPlayer from '../modules/Ai/aiPlayer';
-import PubSub from '../modules/pubsub';
+import PubSub from './pubsub';
 
-const GameController = (playerOne = 'User', playerTwo = false) => {
+const createGameLoop = (player1, player2) => {
   let round = 0;
-  const player1 = createPlayer(playerOne);
-  const player2 = playerTwo ? createPlayer(playerTwo) : createAiPlayer('Enemy');
 
   let activePlayer = player2;
   let opponentPlayer = player1;
@@ -28,7 +24,6 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
   return {
     player1,
     player2,
-    round,
     setShips() {
       player1.placeShips();
       player2.placeShips();
@@ -58,4 +53,4 @@ const GameController = (playerOne = 'User', playerTwo = false) => {
   };
 };
 
-export default GameController;
+export default createGameLoop;

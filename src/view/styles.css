@@ -517,19 +517,19 @@ div[data-direction='horizontal'] {
   }
 }
 
-/** USER */
-.gameboard.user {
+/** Player 1 */
+.gameboard.player1 {
   flex-direction: column-reverse;
   grid-row: 3;
 }
 
-/** ENEMY */
+/** Player 2 */
 
-.gameboard.enemy {
+.gameboard.player2 {
   grid-row: 1;
 }
 
-.enemy > .board > .board-field {
+.player2 > .board > .board-field {
   cursor: crosshair;
 }
 

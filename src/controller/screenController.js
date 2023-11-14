@@ -1,31 +1,31 @@
 import renderGameboard from '../view/gameBoardUI';
 import createHud from '../view/hudUI';
 import createWelcomeScreen from '../view/welcomeScreen';
+import PubSub from '../modules/pubsub';
+
+const cleanOldBoards = () => {
+  const oldHud = document.querySelector('.hud');
+  const oldGameBoardP1 = document.querySelector('.gameboard.player1');
+  const oldGameBoardP2 = document.querySelector('.gameboard.player2');
+
+  if (oldHud) oldHud.remove();
+  if (oldGameBoardP1) oldGameBoardP1.remove();
+  if (oldGameBoardP2) oldGameBoardP2.remove();
+};
 
 const ScreenController = () => {
-  const hello = 'hey';
+  const welcomeScreen = createWelcomeScreen();
+  document.body.append(welcomeScreen);
 
-  return {
-    displayWelcome() {
-      const welcomeScreen = createWelcomeScreen();
-      document.body.append(welcomeScreen);
-    },
-    displayHUD() {
-      const hud = createHud();
-      document.body.append(hud);
-    },
-    displayGame(game) {
-      document.body.append(renderGameboard(game.player1));
-      document.body.append(renderGameboard(game.player2, true));
-    },
-    displayRestartGame(game) {
-      const oldGameBoardP1 = document.querySelector('.gameboard.user');
-      const oldGameBoardP2 = document.querySelector('.gameboard.enemy');
+  PubSub.subscribe('game-ready', (game) => {
+    cleanOldBoards();
 
-      oldGameBoardP1.replaceWith(renderGameboard(game.player1));
-      oldGameBoardP2.replaceWith(renderGameboard(game.player2, true));
-    },
-  };
+    const hud = createHud();
+    const gameboard1 = renderGameboard(game.player1);
+    const gameboard2 = renderGameboard(game.player2, true);
+
+    document.body.append(hud, gameboard1, gameboard2);
+  });
 };
 
 export default ScreenController;

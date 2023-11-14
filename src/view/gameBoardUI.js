@@ -54,7 +54,7 @@ const renderGameboard = (player, isEnemy = false) => {
   const { name, shipStorage, gameboard } = player;
   const { board } = gameboard;
   const gameboardUI = document.createElement('div');
-  const playerClass = isEnemy ? 'enemy' : 'user';
+  const playerClass = isEnemy ? 'player2' : 'player1';
 
   gameboardUI.classList.add('gameboard');
   gameboardUI.classList.add(playerClass);

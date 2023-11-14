@@ -17,9 +17,13 @@ const crateStartButton = () => {
   button.classList.add('buttonStyle1');
   button.addEventListener('click', () => {
     PubSub.publish('game-status', stage);
-    stage = stage === 'Start' ? 'Restart' : 'Start';
+    if (stage === 'Start') {
+      stage = 'Restart';
+      switchHudInfo();
+    } else {
+      stage = 'Start';
+    }
     button.textContent = stage;
-    switchHudInfo();
   });
 
   return button;
