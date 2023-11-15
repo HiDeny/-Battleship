@@ -78,7 +78,8 @@ const createAiPlayer = (name) => {
         const result = await shotDelay(enemyBoard, currentShot);
         saveShotResult(currentShot, result);
 
-        if (result === 'hit' || result === 'ship sunk') {
+        // Array = Ship sunk
+        if (result === 'hit' || Array.isArray(result)) {
           shots += 1;
         }
       }
