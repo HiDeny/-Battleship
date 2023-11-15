@@ -24,6 +24,7 @@ const createGameLoop = (player1, player2) => {
   return {
     player1,
     player2,
+    activePlayer,
     setShips() {
       player1.placeShips();
       player2.placeShips();

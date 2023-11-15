@@ -4,9 +4,9 @@ const createShip = (length, shipType) => {
   let hits = 0;
 
   return {
+    type,
     length,
     offset,
-    type,
     get health() {
       return length - hits;
     },

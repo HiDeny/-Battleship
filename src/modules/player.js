@@ -19,11 +19,12 @@ const createPlayer = (name) => {
       const ships = document.querySelectorAll('.ship');
 
       ships.forEach((ship) => {
-        ship.classList.add('ship-set');
         const type = ship.classList[1];
         const { row, column, direction } = ship.dataset;
         const isVertical = direction === 'vertical';
         const coordinates = [Number(row), Number(column), isVertical];
+        
+        ship.classList.add('ship-set');
         this.placeShip(type, coordinates);
       });
     },
