@@ -16,6 +16,7 @@ const crateStartButton = () => {
   button.classList.add('startBtn');
   button.classList.add('buttonStyle1');
   button.addEventListener('click', () => {
+    button.disabled = true;
     PubSub.publish('game-status', stage);
     if (stage === 'Start') {
       stage = 'Restart';
@@ -23,6 +24,9 @@ const crateStartButton = () => {
     } else {
       stage = 'Start';
     }
+    setTimeout(() => {
+      button.disabled = false;
+    }, 600);
     button.textContent = stage;
   });
 

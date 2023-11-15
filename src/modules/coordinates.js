@@ -8,35 +8,44 @@ export const getRandomCoordinates = () => {
 
 const checkOutOfBoard = (row, column, isVertical, shipLength) => {
   const dynamicDir = isVertical ? Number(row) : Number(column);
-
-  if (row > 9 || column > 9 || dynamicDir + shipLength - 1 > 9) {
-    return true;
-  }
-  return false;
+  return row > 9 || column > 9 || dynamicDir + shipLength - 1 > 9;
 };
 
 const checkOffset = (row, column, isVertical, shipLength, board) => {
   const dynamicDir = isVertical ? Number(row) : Number(column);
 
-  if (dynamicDir - 1 > -1) {
-    const oneBefore = isVertical
-      ? board[dynamicDir - 1][column]
-      : board[row][dynamicDir - 1];
+  const oneBefore = dynamicDir - 1;
+  if (oneBefore > -1) {
+    let currentField = board[row][oneBefore];
+    let oneUpField = row + 1 <= 9 ? board[row + 1][oneBefore] : false;
+    let oneDownField = row - 1 >= 0 ? board[row - 1][oneBefore] : false;
 
-    if (oneBefore.ship !== null || oneBefore.offset === true) {
-      return true;
+    if (isVertical === true) {
+      currentField = board[oneBefore][column];
+      oneUpField = column + 1 <= 9 ? board[oneBefore][column + 1] : false;
+      oneDownField = column - 1 >= 0 ? board[oneBefore][column - 1] : false;
     }
+
+    if (currentField.ship !== null) return true;
+    if (oneUpField.ship !== null) return true;
+    if (oneDownField.ship !== null) return true;
   }
 
-  const dynamicPlusShip = dynamicDir + shipLength;
-  if (dynamicPlusShip < 10) {
-    const oneAfter = isVertical
-      ? board[dynamicPlusShip][column]
-      : board[row][dynamicPlusShip];
+  const oneAfter = dynamicDir + shipLength;
+  if (oneAfter < 10) {
+    let currentField = board[row][oneAfter];
+    let oneUpField = row + 1 <= 9 ? board[row + 1][oneAfter] : false;
+    let oneDownField = row - 1 >= 0 ? board[row - 1][oneAfter] : false;
 
-    if (oneAfter.ship !== null || oneAfter.offset === true) {
-      return true;
+    if (isVertical === true) {
+      currentField = board[oneAfter][column];
+      oneUpField = column + 1 <= 9 ? board[oneAfter][column + 1] : false;
+      oneDownField = column - 1 >= 0 ? board[oneAfter][column - 1] : false;
     }
+
+    if (currentField.ship !== null) return true;
+    if (oneUpField.ship !== null) return true;
+    if (oneDownField.ship !== null) return true;
   }
 
   return false;
@@ -52,19 +61,13 @@ const checkFields = (row, column, isVertical, shipLength, board) => {
 
     if (isVertical === true) {
       currentField = board[i][column];
-      oneUpField = column + 1 <= 8 ? board[i][column + 1] : false;
+      oneUpField = column + 1 <= 9 ? board[i][column + 1] : false;
       oneDownField = column - 1 >= 0 ? board[i][column - 1] : false;
     }
 
-    if (currentField.ship !== null) {
-      return true;
-    }
-    if (oneUpField.ship !== null || oneDownField.offset === true) {
-      return true;
-    }
-    if (oneDownField.ship !== null || oneDownField.offset === true) {
-      return true;
-    }
+    if (currentField.ship !== null || oneDownField.offset === true) return true;
+    if (oneUpField.ship !== null) return true;
+    if (oneDownField.ship !== null) return true;
   }
 
   return false;

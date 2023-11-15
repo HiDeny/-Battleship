@@ -1,20 +1,10 @@
 import createGameboard from './gameboard';
-import createShip from './ship';
-
-import { getRandomCoordinates, checkShipCoordinates } from './coordinates';
+import createShipStorage from './ship';
 
 const createPlayer = (name, isComputer = false) => {
   const gameboard = createGameboard();
 
-  const shipStorage = {
-    AircraftCarrier: createShip(5, 'AircraftCarrier'),
-    Battleship: createShip(4, 'Battleship'),
-    Cruiser: createShip(3, 'Cruiser'),
-    Destroyer1: createShip(2, 'Destroyer1'),
-    Destroyer2: createShip(2, 'Destroyer2'),
-    Submarine1: createShip(1, 'Submarine1'),
-    Submarine2: createShip(1, 'Submarine2'),
-  };
+  const shipStorage = createShipStorage();
 
   return {
     name,
@@ -41,31 +31,6 @@ const createPlayer = (name, isComputer = false) => {
     },
     attack(enemyBoard, coordinates) {
       return enemyBoard.receiveAttack(coordinates);
-    },
-    // Remove ? 
-    placeShipsAtRandom() {
-      const shipsOnBoard = [];
-
-      Object.keys(shipStorage).forEach((shipType) => {
-        const ship = shipStorage[shipType];
-        const { length } = ship;
-
-        let newCoordinates = getRandomCoordinates();
-        const toCheck = {
-          coordinates: newCoordinates,
-          board: gameboard.board,
-          shipLength: length,
-        };
-
-        while (!checkShipCoordinates(toCheck)) {
-          newCoordinates = getRandomCoordinates();
-          toCheck.coordinates = newCoordinates;
-        }
-
-        return this.placeShip(shipType, newCoordinates);
-      });
-
-      return shipsOnBoard;
     },
   };
 };

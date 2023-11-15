@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 export const getFields = (...args) => {
   const [row, column, length, direction, container = document] = args;
   const isVertical = direction === 'vertical';
