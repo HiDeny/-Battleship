@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
-import createGameboard from '../modules/gameboard';
+import createBoard from '../modules/gameboard';
 import createShip from '../modules/ship';
 
 test('Gameboard: Place ships at specific coordinates (horizontal)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip = createShip(3);
 
   const coordinates = [8, 1, false];
@@ -17,7 +17,7 @@ test('Gameboard: Place ships at specific coordinates (horizontal)', () => {
 });
 
 test('Gameboard: Place ships at specific coordinates (vertical)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip = createShip(3);
   const coordinates = [5, 1, true];
   const { board } = testGameboard;
@@ -30,7 +30,7 @@ test('Gameboard: Place ships at specific coordinates (vertical)', () => {
 });
 
 // test('Gameboard: Place ships at specific coordinates (fail)', () => {
-//   const testGameboard = createGameboard();
+//   const testGameboard = createBoard();
 //   const testShip1 = { ship: createShip(3) };
 //   const testShip2 = { ship: createShip(3) };
 //   const coordinates = [6, 0];
@@ -40,7 +40,7 @@ test('Gameboard: Place ships at specific coordinates (vertical)', () => {
 // });
 
 test('Gameboard: receiveAttack (Hit)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip1 = createShip(3);
   const coordinates = [6, 0];
   testGameboard.placeShip(testShip1, coordinates);
@@ -48,7 +48,7 @@ test('Gameboard: receiveAttack (Hit)', () => {
 });
 
 test('Gameboard: receiveAttack (Miss)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip1 = createShip(3);
   const coordinates = [6, 0];
   testGameboard.placeShip(testShip1, coordinates);
@@ -57,7 +57,7 @@ test('Gameboard: receiveAttack (Miss)', () => {
 });
 
 test('Gameboard: receiveAttack (Error - already hit)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip1 = createShip(3);
   const coordinates = [6, 0];
   testGameboard.placeShip(testShip1, coordinates);
@@ -67,7 +67,7 @@ test('Gameboard: receiveAttack (Error - already hit)', () => {
 });
 
 test('Gameboard: receiveAttack (Error - out Of Board)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip1 = createShip(3);
   const coordinates = [6, 0];
   testGameboard.placeShip(testShip1, coordinates);
@@ -76,12 +76,12 @@ test('Gameboard: receiveAttack (Error - out Of Board)', () => {
 });
 
 test('Gameboard: report whether if all ships sunk (no ships)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   expect(testGameboard.activeShips()).toBe(0);
 });
 
 test('Gameboard: report whether if all sunk (not all sunk)', () => {
-  const testGameboard = createGameboard();
+  const testGameboard = createBoard();
   const testShip1 = createShip(3);
   const coordinates = [6, 0];
   const testShip2 = createShip(3);
@@ -99,7 +99,7 @@ test('Gameboard: report whether if all sunk (not all sunk)', () => {
 });
 
 test('Gameboard: report whether if all sunk (all sunk)', () => {
-  const isSunkTest = createGameboard();
+  const isSunkTest = createBoard();
   isSunkTest.placeShip(createShip(2), [8, 1, false]);
   isSunkTest.placeShip(createShip(1), [1, 1, false]);
   isSunkTest.placeShip(createShip(1), [5, 1, false]);

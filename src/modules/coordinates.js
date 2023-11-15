@@ -6,7 +6,7 @@ export const getRandomCoordinates = () => {
   return [randomRow, randomColumn, isVertical];
 };
 
-const getFields = (coordinates, isVertical, board) => {
+export const getFields = (coordinates, isVertical, board) => {
   const [row, column] = coordinates;
   const dynamicDir = isVertical ? Number(column) : Number(row);
   const insideBoardUp = dynamicDir + 1 <= 9;

@@ -1,4 +1,4 @@
-import createGameboard from '../gameboard';
+import createBoard from '../board';
 import createShipStorage from '../ship';
 
 import { getRandomCoordinates, checkShipCoordinates } from '../coordinates';
@@ -11,7 +11,7 @@ import {
 } from './aiHelpers';
 
 const createAiPlayer = (name) => {
-  const gameboard = createGameboard();
+  const gameboard = createBoard();
   const fieldHits = new Map();
   const markedFields = new Set();
   let possibleHits = [];

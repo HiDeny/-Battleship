@@ -1,8 +1,8 @@
-import createGameboard from './gameboard';
+import createBoard from './board';
 import createShipStorage from './ship';
 
 const createPlayer = (name) => {
-  const gameboard = createGameboard();
+  const gameboard = createBoard();
   const shipStorage = createShipStorage();
 
   return {
