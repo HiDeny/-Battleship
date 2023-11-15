@@ -38,6 +38,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "favicons-webpack-plugin": "^6.0.1",
     "normalize.css": "^8.0.1"
   }
 }

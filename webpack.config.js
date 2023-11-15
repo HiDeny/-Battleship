@@ -1,6 +1,7 @@
-const webpack = require('webpack');
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const config = {
   entry: './src/app.js',
@@ -36,6 +37,7 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'BattleShip',
     }),
+    new FaviconsWebpackPlugin('./src/view/assets/Battleship-icon.png'),
   ],
 };
 
