@@ -1,12 +1,14 @@
 import createGameboard from '../gameboard';
 import createShipStorage from '../ship';
 
+import { getRandomCoordinates, checkShipCoordinates } from '../coordinates';
 import {
-  getRandomCoordinates,
-  checkShipCoordinates,
+  saveHit,
+  saveMiss,
+  saveSunk,
+  shotDelay,
   getRandomNextShot,
-} from '../coordinates';
-import { saveHit, saveMiss, saveSunk, shotDelay } from './aiHelpers';
+} from './aiHelpers';
 
 const createAiPlayer = (name) => {
   const gameboard = createGameboard();
@@ -32,7 +34,6 @@ const createAiPlayer = (name) => {
     if (result === 'hit') {
       saveHit(markedFields, fieldHits, possibleHits, highProbabilityShot, shot);
     }
-
     // Ship sunk
     if (Array.isArray(result)) {
       saveSunk(markedFields, fieldHits, shot, result);
@@ -75,6 +76,7 @@ const createAiPlayer = (name) => {
 
       for (let i = 0; i < shots; i += 1) {
         const currentShot = getNextShot();
+        // eslint-disable-next-line no-await-in-loop
         const result = await shotDelay(enemyBoard, currentShot);
         saveShotResult(currentShot, result);
 

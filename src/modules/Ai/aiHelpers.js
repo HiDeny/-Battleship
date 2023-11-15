@@ -1,12 +1,40 @@
-import { checkNextShot, possibleShots } from '../coordinates';
+import { getRandomCoordinates } from '../coordinates';
 
-export const getOppositeDirection = (direction) => {
+const checkNextShot = (markedFields, nextMark) => {
+  const [markX, markY] = nextMark;
+  const nextMarkStr = `${markX},${markY}`;
+
+  const isInsideX = markX >= 0 && markX <= 9;
+  const isInsideY = markY >= 0 && markY <= 9;
+  const isInside = isInsideX && isInsideY;
+
+  const alreadyMarked = markedFields.has(nextMarkStr);
+
+  return !alreadyMarked && isInside;
+};
+
+export const getRandomNextShot = (markedFields) => {
+  let randomShot = getRandomCoordinates();
+  while (!checkNextShot(markedFields, randomShot)) {
+    randomShot = getRandomCoordinates();
+  }
+  return randomShot;
+};
+
+const getOppositeDirection = (direction) => {
   if (direction === 'up') return 'down';
   if (direction === 'left') return 'right';
   if (direction === 'right') return 'left';
   if (direction === 'down') return 'up';
   return false;
 };
+
+const possibleShots = (coordinates) => ({
+  down: [coordinates[0] - 1, coordinates[1]],
+  left: [coordinates[0], coordinates[1] - 1],
+  up: [coordinates[0] + 1, coordinates[1]],
+  right: [coordinates[0], coordinates[1] + 1],
+});
 
 export const saveHit = (
   markedFields,

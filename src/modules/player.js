@@ -1,16 +1,14 @@
 import createGameboard from './gameboard';
 import createShipStorage from './ship';
 
-const createPlayer = (name, isComputer = false) => {
+const createPlayer = (name) => {
   const gameboard = createGameboard();
-
   const shipStorage = createShipStorage();
 
   return {
     name,
     shipStorage,
     gameboard,
-    isComputer,
     placeShip(shipType, coordinates) {
       const completeShip = shipStorage[shipType];
 
