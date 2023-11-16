@@ -1,6 +1,6 @@
 import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
-import renderShipStorage from './shipUI';
+import renderShips from './shipUI';
 import createStatsUI from './boardStatsUI';
 
 const renderGameboard = (player, isEnemy = false) => {
@@ -17,9 +17,8 @@ const renderGameboard = (player, isEnemy = false) => {
 
   gameboardUI.append(boardUI, stats);
 
-  if (!isEnemy) {
-    renderShipStorage(shipStorage, boardUI);
-  }
+  if (!isEnemy) renderShips(shipStorage, boardUI);
+
   if (isEnemy) {
     boardUI.classList.add('disabled');
     stats.classList.add('disabled');
