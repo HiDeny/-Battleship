@@ -1,36 +1,20 @@
 /* eslint-disable no-param-reassign */
 
+import { handleDragStart, handleDragEnd } from '../controller/drag-and-drop';
 import {
-  handleDragStart,
-  handleDragEnd,
+  clearFields,
   getFields,
-} from '../controller/drag-and-drop';
+  getRandomEmptyFields,
+  populateFields,
+  isAvailableFields,
+  updateFieldsShip,
+} from './fieldsHelper';
 
 const noRotateAnimation = (div) => {
   div.classList.add('no-rotate');
   setTimeout(() => {
     div.classList.remove('no-rotate');
   }, 700);
-};
-
-const clearFields = (coreFields, offsetFields) => {
-  coreFields.forEach((div) => {
-    div.dataset.ship = 'false';
-  });
-  offsetFields.forEach((div) => {
-    if (!div) return;
-    div.dataset.offset = 'false';
-  });
-};
-
-const populateFields = (coreFields, offsetFields) => {
-  coreFields.forEach((div) => {
-    div.dataset.ship = 'true';
-  });
-  offsetFields.forEach((div) => {
-    if (!div) return;
-    div.dataset.offset = 'true';
-  });
 };
 
 const handleClickShipRotate = ({ target }) => {
@@ -44,7 +28,6 @@ const handleClickShipRotate = ({ target }) => {
 
   const currentFields = getFields(row, column, length, direction);
   const currentFieldsCore = currentFields.coreFields;
-  const currentFieldsOffset = currentFields.offsetFields;
 
   let allAvailable = true;
 
@@ -54,31 +37,17 @@ const handleClickShipRotate = ({ target }) => {
   }
 
   // Remove ship from current fields to not mess with the check
-  currentFieldsCore.forEach((div) => {
-    div.dataset.ship = 'false';
-  });
-
-  // Check New fields
-  newFieldsCore.forEach((div) => {
-    if (!div || div.dataset.ship === 'true') allAvailable = false;
-  });
-
-  newFieldsOffset.forEach((div) => {
-    if (!div) return;
-    if (div.dataset.ship === 'true') allAvailable = false;
-  });
+  updateFieldsShip(currentFieldsCore, 'false');
+  allAvailable = isAvailableFields(newFieldsCore, newFieldsOffset);
 
   if (!allAvailable) {
-    currentFieldsCore.forEach((div) => {
-      div.dataset.ship = 'true';
-    });
-
+    updateFieldsShip(currentFieldsCore, 'true');
     noRotateAnimation(target);
     return;
   }
 
-  clearFields(currentFieldsCore, currentFieldsOffset);
-  populateFields(newFieldsCore, newFieldsOffset);
+  clearFields(currentFields);
+  populateFields(newFields);
   target.dataset.direction = newDir;
 };
 
@@ -107,61 +76,21 @@ const renderShip = ({ length, type }) => {
   return shipContainer;
 };
 
-const getRandomEmptyFields = (newShip, boardUI) => {
-  const { length, direction } = newShip.dataset;
-  let newRow;
-  let newColumn;
-  let newFields;
-  let keepGoing = true;
-
-  while (keepGoing) {
-    newRow = Math.floor(Math.random() * 10);
-    newColumn = Math.floor(Math.random() * 10);
-
-    while (newRow + (length - 1) > 9 || newColumn + (length - 1) > 9) {
-      newRow = Math.floor(Math.random() * 10);
-      newColumn = Math.floor(Math.random() * 10);
-    }
-
-    newFields = getFields(newRow, newColumn, length, direction, boardUI);
-    const { coreFields, offsetFields } = newFields;
-
-    if (coreFields.length === Number(length) && !coreFields.includes(null)) {
-      keepGoing = false;
-
-      // eslint-disable-next-line no-loop-func
-      coreFields.forEach((div) => {
-        const { ship, offset } = div.dataset;
-        if (ship === 'true' || offset === 'true') keepGoing = true;
-      });
-
-      // eslint-disable-next-line no-loop-func
-      offsetFields.forEach((div) => {
-        if (!div) return;
-        if (div.dataset.ship === 'true') keepGoing = true;
-      });
-    }
-  }
-
-  return { fields: newFields, row: newRow, column: newColumn };
-};
-
 const renderShips = (shipStorage, boardUI) => {
   Object.keys(shipStorage).forEach((shipType) => {
     const newShip = renderShip(shipStorage[shipType]);
     const { fields, row, column } = getRandomEmptyFields(newShip, boardUI);
 
-    const { coreFields, offsetFields } = fields;
     newShip.dataset.row = row;
     newShip.dataset.column = column;
 
-    const baseField = coreFields.find(
-      (div) =>
-        Number(div.dataset.row) === row && Number(div.dataset.column) === column
+    const baseField = fields.coreFields.find(
+      ({ dataset }) =>
+        Number(dataset.row) === row && Number(dataset.column) === column
     );
-    baseField.append(newShip);
 
-    populateFields(coreFields, offsetFields);
+    baseField.append(newShip);
+    populateFields(fields);
   });
 };
 

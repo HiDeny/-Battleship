@@ -1,7 +1,7 @@
 import createBoard from '../board';
 import createShipStorage from '../ship';
 
-import { getRandomCoordinates, checkShipCoordinates } from '../coordinates';
+import { getRandomCoordinates, checkShipCoordinates } from '../coordHelper';
 import {
   saveHit,
   saveMiss,

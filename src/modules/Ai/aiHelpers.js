@@ -1,4 +1,4 @@
-import { getRandomCoordinates } from '../coordinates';
+import { getRandomCoordinates } from '../coordHelper';
 
 const checkNextShot = (markedFields, nextMark) => {
   const [markX, markY] = nextMark;

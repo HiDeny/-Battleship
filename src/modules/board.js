@@ -1,5 +1,5 @@
 import createBoardField from './board-field';
-import { getFields } from './coordinates';
+import { getFields } from './coordHelper';
 
 const setOffset = (currentField, ship) => {
   if (!currentField) return;

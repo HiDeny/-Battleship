@@ -1,75 +1,19 @@
-/* eslint-disable no-param-reassign */
-export const getFields = (...args) => {
-  const [row, column, length, direction, container = document] = args;
-  const isVertical = direction === 'vertical';
+import {
+  clearFields,
+  getFields,
+  isAvailableFields,
+  populateFields,
+  updateFieldsShip,
+} from '../view/fieldsHelper';
 
-  const rowNum = Number(row);
-  const columnNum = Number(column);
-  const lengthNum = Number(length);
+export const handleDragStart = ({ target }) => {
+  target.classList.add('dragging');
 
-  const dynamicDir = isVertical ? rowNum : columnNum;
-  const shipEnd = dynamicDir + lengthNum - 1;
-
-  const coreFields = [];
-  const offsetFields = [];
-
-  const getField = (rowDir, columnDir) => {
-    const selectorBase = `[data-row='${rowDir}'][data-column='${columnDir}']`;
-    return container.querySelector(selectorBase);
-  };
-
-  const getSet = (baseRow, baseColumn) => ({
-    base: getField(baseRow, baseColumn),
-    oneUp: isVertical
-      ? getField(baseRow, baseColumn + 1)
-      : getField(baseRow + 1, baseColumn),
-    oneDown: isVertical
-      ? getField(baseRow, baseColumn - 1)
-      : getField(baseRow - 1, baseColumn),
-  });
-
-  if (dynamicDir - 1 > -1) {
-    const set = isVertical
-      ? getSet(rowNum - 1, columnNum)
-      : getSet(rowNum, columnNum - 1);
-
-    offsetFields.push(set.base, set.oneUp, set.oneDown);
-  }
-
-  if (shipEnd + 1 < 10) {
-    const set = isVertical
-      ? getSet(shipEnd + 1, columnNum)
-      : getSet(rowNum, shipEnd + 1);
-
-    offsetFields.push(set.base, set.oneUp, set.oneDown);
-  }
-
-  for (let i = dynamicDir; i <= shipEnd; i += 1) {
-    const set = isVertical ? getSet(i, columnNum) : getSet(rowNum, i);
-
-    coreFields.push(set.base);
-    offsetFields.push(set.oneUp, set.oneDown);
-  }
-
-  return { coreFields, offsetFields };
-};
-
-export const handleDragStart = (event) => {
-  event.target.classList.add('dragging');
-
-  const { length, direction, row, column } = event.target.dataset;
-
+  const { length, direction, row, column } = target.dataset;
   const occupiedFields = getFields(row, column, length, direction);
-  const { coreFields, offsetFields } = occupiedFields;
-  coreFields.forEach((div) => {
-    div.classList.add('draggedFrom');
-    div.dataset.ship = false;
-  });
 
-  offsetFields.forEach((div) => {
-    if (!div) return;
-    div.dataset.offset = false;
-  });
+  clearFields(occupiedFields);
+  occupiedFields.coreFields.forEach((div) => div.classList.add('draggedFrom'));
 };
 
 const clearGuides = () => {
@@ -82,21 +26,19 @@ const clearGuides = () => {
   notAvailable.forEach((div) => div.classList.remove('not-available'));
 };
 
-export const handleDragEnd = (event) => {
+export const handleDragEnd = ({ target }) => {
   const draggedFrom = document.querySelectorAll('.draggedFrom');
 
-  const { row, column } = event.target.dataset;
+  const { row, column } = target.dataset;
   const oldX = Number(draggedFrom[0].dataset.row);
   const oldY = Number(draggedFrom[0].dataset.column);
   const isSame = oldX === Number(row) && oldY === Number(column);
 
-  draggedFrom.forEach((div) => {
-    if (isSame) div.dataset.ship = true;
-    div.classList.remove('draggedFrom');
-  });
+  if (isSame) updateFieldsShip(draggedFrom, 'true');
 
+  draggedFrom.forEach((div) => div.classList.remove('draggedFrom'));
+  target.classList.remove('dragging');
   clearGuides();
-  event.target.classList.remove('dragging');
 };
 
 export const handleDragLeave = (event) => {
@@ -114,31 +56,16 @@ export const handleDragDrop = (event) => {
   const { coreFields, offsetFields } = newPosition;
   let allAvailable = true;
 
-  if (!coreFields.includes(null) && coreFields.length === Number(length)) {
-    coreFields.forEach((div) => {
-      const { ship, offset } = div.dataset;
-      if (ship === 'true' || offset === 'true') allAvailable = false;
-    });
+  if (coreFields.length !== Number(length) || coreFields.includes(null)) return;
 
-    offsetFields.forEach((div) => {
-      if (!div) return;
-      if (div.dataset.ship === 'true') allAvailable = false;
-    });
+  allAvailable = isAvailableFields(coreFields, offsetFields);
 
-    if (allAvailable) {
-      event.target.append(dragged);
-      dragged.dataset.row = row;
-      dragged.dataset.column = column;
+  if (allAvailable) {
+    event.target.append(dragged);
+    dragged.dataset.row = row;
+    dragged.dataset.column = column;
 
-      coreFields.forEach((div) => {
-        div.dataset.ship = true;
-      });
-
-      offsetFields.forEach((div) => {
-        if (!div) return;
-        div.dataset.offset = true;
-      });
-    }
+    populateFields(coreFields, offsetFields);
   }
 };
 
@@ -151,26 +78,27 @@ export const handleDragOver = (event) => {
   const currentFields = getFields(row, column, length, direction);
   const { coreFields, offsetFields } = currentFields;
 
-  if (!coreFields.includes(null) && coreFields.length === Number(length)) {
-    coreFields.forEach((div) => {
-      let correctClass = 'available-ship';
-      const { ship, offset } = div.dataset;
-
-      if (ship === 'true' || offset === 'true') correctClass = 'not-available';
-      div.classList.add(correctClass);
-    });
-  } else {
-    coreFields.forEach((div) => {
-      if (!div) return;
-      div.classList.add('not-available');
-    });
-  }
-
   offsetFields.forEach((div) => {
     if (!div) return;
     const { ship } = div.dataset;
     const style = ship === 'true' ? 'not-available' : 'available-offset';
 
     div.classList.add(style);
+  });
+
+  if (coreFields.length !== Number(length) || coreFields.includes(null)) {
+    coreFields.forEach((div) => {
+      if (!div) return;
+      div.classList.add('not-available');
+    });
+    return;
+  }
+
+  coreFields.forEach((div) => {
+    let correctClass = 'available-ship';
+    const { ship, offset } = div.dataset;
+
+    if (ship === 'true' || offset === 'true') correctClass = 'not-available';
+    div.classList.add(correctClass);
   });
 };
