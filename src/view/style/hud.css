@@ -1,0 +1,85 @@
+.hud {
+  grid-row: 2;
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  align-items: center;
+  justify-items: center;
+
+  width: 75rem;
+  min-width: 60rem;
+  height: 100%;
+
+  border-radius: 1rem;
+  backdrop-filter: saturate(180%) blur(1.5rem);
+  border: #32485e6e 0.2rem solid;
+
+  font-family: 'Special-Elite';
+  color: #dff6ff;
+}
+
+.hud-stage-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 90%;
+  width: 95%;
+
+  border-radius: 0.3rem;
+  border: #32485e6e 0.2rem solid;
+  border-top: none;
+  border-bottom: none;
+
+  transition: opacity 300ms ease;
+}
+
+.hud-stage-text {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.hud-manual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+
+  height: 100%;
+  justify-content: space-evenly;
+
+  transition: opacity 300ms ease;
+}
+
+.hud-manual > h3,
+.hud-manual > p {
+  margin: 0;
+}
+
+.hud-manual > h3 {
+  justify-self: center;
+}
+
+.hud-round {
+  display: flex;
+  align-items: center;
+
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.ships-left {
+  margin: 0;
+}
+
+.startBtn {
+  grid-row: 1;
+  grid-column: 1;
+  width: 10rem;
+}
+
+.hide {
+  opacity: 0;
+  pointer-events: none;
+}

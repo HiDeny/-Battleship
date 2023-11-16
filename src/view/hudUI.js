@@ -1,4 +1,5 @@
 import PubSub from '../modules/pubsub';
+import './style/hud.css';
 
 const switchHudInfo = () => {
   document.querySelector('.hud-manual').classList.toggle('hide');
@@ -24,7 +25,7 @@ const crateStartButton = () => {
     } else {
       stage = 'Start';
     }
-    
+
     setTimeout(() => {
       button.disabled = false;
     }, 600);

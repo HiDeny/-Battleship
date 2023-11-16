@@ -1,3 +1,5 @@
+import './style/gameboard.css';
+
 import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
 import renderShips from './shipUI';

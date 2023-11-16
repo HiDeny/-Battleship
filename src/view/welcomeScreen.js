@@ -1,4 +1,5 @@
 import PubSub from '../modules/pubsub';
+import './style/welcome.css';
 
 const submitNames = () => {
   const inputP1 = document.querySelector(`input[data-player='Player 1']`);
