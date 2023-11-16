@@ -16,8 +16,8 @@ const createGameLoop = (player1, player2) => {
     const activeShipsP1 = player1.gameboard.activeShips();
     const activeShipsP2 = player2.gameboard.activeShips();
 
-    if (activeShipsP1 < 1) return `${player2.name} WIN!`;
-    if (activeShipsP2 < 1) return `${player1.name} WIN!`;
+    if (activeShipsP1 < 1) return `${player2.name} WINS!`;
+    if (activeShipsP2 < 1) return `${player1.name} WINS!`;
     return false;
   };
 

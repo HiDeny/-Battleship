@@ -24,6 +24,7 @@ const crateStartButton = () => {
     } else {
       stage = 'Start';
     }
+    
     setTimeout(() => {
       button.disabled = false;
     }, 600);

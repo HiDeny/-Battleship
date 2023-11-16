@@ -1,13 +1,31 @@
 import PubSub from '../modules/pubsub';
 
+const submitNames = () => {
+  const inputP1 = document.querySelector(`input[data-player='Player 1']`);
+  const inputP2 = document.querySelector(`input[data-player='Player 2']`);
+
+  const name1 = inputP1.value || 'Player 1';
+  const name2 = inputP2 ? inputP2.value || 'Player2' : false;
+
+  PubSub.publish('game-setup', [name1, name2]);
+  document.querySelector('.welcome-container').remove();
+};
+
+const handleKeyPressEnter = ({ key }) => {
+  if (key === 'Enter') {
+    submitNames();
+    document.removeEventListener('keypress', handleKeyPressEnter);
+  }
+};
+
 // Select Name
-const createNameInput = (placeholder) => {
+const createNameInput = (player) => {
   const container = document.createElement('div');
   container.classList.add('welcome-name-container');
 
   const label = document.createElement('label');
   label.setAttribute('for', 'name');
-  label.textContent = placeholder;
+  label.textContent = player;
 
   const input = document.createElement('input');
   input.classList.add('welcome-name-input');
@@ -15,6 +33,7 @@ const createNameInput = (placeholder) => {
   input.name = 'name';
   input.autocomplete = false;
   input.placeholder = 'NAME';
+  input.dataset.player = player;
 
   label.append(input);
   container.append(label);
@@ -44,18 +63,10 @@ const createNameSelect = (twoPlayers = false) => {
   }
 
   const startButton = createStartButton();
-  startButton.addEventListener('click', () => {
-    const name1 = nameP1.children[0].children[0].value || 'Player 1';
-    let name2 = nameP2;
-    if (twoPlayers) {
-      name2 = name2.children[0].children[0].value || 'Player 2';
-    }
-
-    PubSub.publish('game-setup', [name1, name2]);
-    document.querySelector('.welcome-container').remove();
-  });
-
+  startButton.onclick = submitNames;
   container.append(startButton);
+
+  document.addEventListener('keypress', handleKeyPressEnter);
 
   return container;
 };
