@@ -3,42 +3,43 @@ import renderBoard from './boardUI';
 import renderShips from './shipUI';
 import createStatsUI from './boardStatsUI';
 
-const renderGameboard = (player, isEnemy = false) => {
-  const { name, shipStorage, gameboard } = player;
-  const { board } = gameboard;
-  const gameboardUI = document.createElement('div');
+const createGameboardUI = (isEnemy) => {
   const playerClass = isEnemy ? 'player2' : 'player1';
 
+  const gameboardUI = document.createElement('div');
   gameboardUI.classList.add('gameboard');
   gameboardUI.classList.add(playerClass);
 
+  return gameboardUI;
+};
+
+const renderGameboard = (player, isEnemy = false) => {
+  const { name, shipStorage, gameboard } = player;
+  const { board } = gameboard;
+
+  const gameboardUI = createGameboardUI(isEnemy);
   const boardUI = renderBoard(board, isEnemy);
   const stats = createStatsUI(name);
 
   gameboardUI.append(boardUI, stats);
 
-  if (!isEnemy) renderShips(shipStorage, boardUI);
-
   if (isEnemy) {
-    boardUI.classList.add('disabled');
-    stats.classList.add('disabled');
+    gameboardUI.classList.add('disabled');
+  } else {
+    renderShips(shipStorage, boardUI);
   }
 
   PubSub.subscribe('game-turn', (activePlayer) => {
     if (activePlayer === player) {
-      boardUI.classList.add('disabled');
-      stats.classList.add('disabled');
-    }
-    if (activePlayer !== player) {
-      boardUI.classList.remove('disabled');
-      stats.classList.remove('disabled');
+      gameboardUI.classList.add('disabled');
+    } else {
+      gameboardUI.classList.remove('disabled');
     }
   });
 
   PubSub.subscribe('game-status', (phase) => {
     if (phase === 'Game Over') {
-      boardUI.classList.add('disabled');
-      stats.classList.add('disabled');
+      gameboardUI.classList.add('disabled');
     }
   });
 

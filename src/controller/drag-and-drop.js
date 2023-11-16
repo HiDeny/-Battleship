@@ -52,8 +52,8 @@ export const handleDragDrop = (event) => {
   const { length, direction } = dragged.dataset;
   const { row, column } = event.target.dataset;
 
-  const newPosition = getFields(row, column, length, direction);
-  const { coreFields, offsetFields } = newPosition;
+  const newFields = getFields(row, column, length, direction);
+  const { coreFields, offsetFields } = newFields;
   let allAvailable = true;
 
   if (coreFields.length !== Number(length) || coreFields.includes(null)) return;
@@ -65,7 +65,7 @@ export const handleDragDrop = (event) => {
     dragged.dataset.row = row;
     dragged.dataset.column = column;
 
-    populateFields(coreFields, offsetFields);
+    populateFields(newFields);
   }
 };
 

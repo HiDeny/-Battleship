@@ -318,6 +318,10 @@ body {
   padding: 0.9rem;
   border-radius: 1rem;
   background: #32485e;
+
+  transition:
+    opacity 1s ease,
+    filter 1s ease;
 }
 
 .board {
@@ -334,10 +338,6 @@ body {
   height: 315px;
   padding: 0.9rem;
   aspect-ratio: 1/1;
-
-  transition:
-    opacity 1s ease,
-    filter 1s ease;
 }
 
 .board-stats {
@@ -540,7 +540,7 @@ div[data-direction='horizontal'] {
 
 .disabled {
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.6;
   filter: grayscale(70%);
 }
 
