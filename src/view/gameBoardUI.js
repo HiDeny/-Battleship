@@ -1,54 +1,7 @@
 import PubSub from '../modules/pubsub';
 import renderBoard from './boardUI';
 import renderShipStorage from './shipUI';
-
-const createShipsLeft = (gameboard) => {
-  const container = document.createElement('div');
-  container.classList.add('board-stats-ships');
-
-  const text = document.createElement('p');
-  text.classList.add('board-stats-ships-text');
-  text.textContent = 'Remaining ships: ';
-
-  let activeShips = 0;
-  const count = document.createElement('p');
-  count.classList.add('board-stats-ships-count');
-  count.textContent = activeShips;
-
-  PubSub.subscribe('game-ships-check', () => {
-    const currentShips = gameboard.activeShips();
-
-    if (activeShips !== currentShips) {
-      count.textContent = currentShips;
-      count.classList.add('alert');
-
-      setTimeout(() => {
-        count.classList.remove('alert');
-      }, 700);
-
-      activeShips = currentShips;
-    }
-  });
-
-  container.append(text, count);
-
-  return container;
-};
-
-const createStats = (name, gameboard) => {
-  const stats = document.createElement('div');
-  stats.classList.add('board-stats');
-
-  const nameTag = document.createElement('p');
-  nameTag.classList.add('board-stats-name');
-  nameTag.textContent = name;
-
-  const shipsLeft = createShipsLeft(gameboard);
-
-  stats.append(nameTag, shipsLeft);
-
-  return stats;
-};
+import createStatsUI from './boardStatsUI';
 
 const renderGameboard = (player, isEnemy = false) => {
   const { name, shipStorage, gameboard } = player;
@@ -60,7 +13,7 @@ const renderGameboard = (player, isEnemy = false) => {
   gameboardUI.classList.add(playerClass);
 
   const boardUI = renderBoard(board, isEnemy);
-  const stats = createStats(name, gameboard);
+  const stats = createStatsUI(name);
 
   gameboardUI.append(boardUI, stats);
 
