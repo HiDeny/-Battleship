@@ -11,7 +11,6 @@ const createShip = (length, shipType) => {
       return length - hits;
     },
     isSunk() {
-      if (this.health < 1) offset.forEach((field) => field.markField(true));
       return this.health < 1;
     },
     hit() {

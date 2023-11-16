@@ -14,7 +14,7 @@ export const getFields = (...args) => {
   const offsetFields = [];
 
   const getField = (rowDir, columnDir) => {
-    const selectorBase = `div[data-row='${rowDir}'][data-column='${columnDir}']`;
+    const selectorBase = `[data-row='${rowDir}'][data-column='${columnDir}']`;
     return container.querySelector(selectorBase);
   };
 

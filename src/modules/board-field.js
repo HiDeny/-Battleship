@@ -13,14 +13,12 @@ const createBoardField = (coordinates) => {
     set ship(newShip) {
       if (ship !== null) throw new Error('Field Occupied!');
       ship = newShip;
-      PubSub.publish('field-ship', coordinates, newShip.type);
     },
     get offset() {
       return offset;
     },
     set offset(value) {
       offset = value;
-      PubSub.publish('field-ship-offset', coordinates);
     },
 
     markField(isOffset = false) {
@@ -33,6 +31,7 @@ const createBoardField = (coordinates) => {
         ship.hit();
 
         if (ship.isSunk()) {
+          ship.offset.forEach((field) => field.markField(true));
           PubSub.publish('game-ships-check');
           return ['ship sunk', ship];
         }

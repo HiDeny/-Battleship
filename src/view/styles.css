@@ -396,6 +396,8 @@ body {
   border: 0.1px solid #ffffff4d;
   width: 30px;
   height: 30px;
+  padding: 0;
+
   overflow: visible;
   background-color: transparent;
 }
@@ -479,7 +481,7 @@ div[data-direction='horizontal'] {
   pointer-events: none;
 }
 
-.hit-enemy {
+.player2 > .board > .board-field.hit {
   background-color: #abbdc8;
   border-radius: 0.25rem;
 }
