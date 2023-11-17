@@ -4,8 +4,6 @@ favicon
 fire
 <a target="_blank" href="https://icons8.com/icon/houGsYyNpCbu/fire">Fire</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
-cross - dotted
-<a target="_blank" href="https://icons8.com/icon/C0TqG8rAieHs/close">Close</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
 cross - small
 <a target="_blank" href="https://icons8.com/icon/6483/multiply">Multiply</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
